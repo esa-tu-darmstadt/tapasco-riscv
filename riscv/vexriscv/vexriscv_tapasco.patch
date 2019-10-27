@@ -1,0 +1,92 @@
+diff --git a/src/main/scala/vexriscv/demo/VexRiscvAxi4WithIntegratedJtag.scala b/src/main/scala/vexriscv/demo/VexRiscvAxi4WithIntegratedJtag.scala
+index b002c06..bd9826e 100644
+--- a/src/main/scala/vexriscv/demo/VexRiscvAxi4WithIntegratedJtag.scala
++++ b/src/main/scala/vexriscv/demo/VexRiscvAxi4WithIntegratedJtag.scala
+@@ -25,57 +25,23 @@ object VexRiscvAxi4WithIntegratedJtag{
+       //CPU configuration
+       val cpuConfig = VexRiscvConfig(
+         plugins = List(
+-          new PcManagerSimplePlugin(0x00000000l, false),
+-//          new IBusSimplePlugin(
+-//            interfaceKeepData = false,
+-//            catchAccessFault = false
+-//          ),
+-//          new DBusSimplePlugin(
+-//            catchAddressMisaligned = false,
+-//            catchAccessFault = false
+-//          ),
+-          new IBusCachedPlugin(
+-            prediction = STATIC,
+-            config = InstructionCacheConfig(
+-              cacheSize = 4096,
+-              bytePerLine =32,
+-              wayCount = 1,
+-              addressWidth = 32,
+-              cpuDataWidth = 32,
+-              memDataWidth = 32,
+-              catchIllegalAccess = true,
+-              catchAccessFault = true,
+-              asyncTagMemory = false,
+-              twoCycleRam = true,
+-              twoCycleCache = true
+-            )
+-            //            askMemoryTranslation = true,
+-            //            memoryTranslatorPortConfig = MemoryTranslatorPortConfig(
+-            //              portTlbSize = 4
+-            //            )
++          new IBusSimplePlugin(
++            resetVector = 0,
++            cmdForkOnSecondStage = false,
++            cmdForkPersistence = true,
++            prediction = NONE,
++            catchAccessFault = false,
++            compressedGen = false
+           ),
+-          new DBusCachedPlugin(
+-            config = new DataCacheConfig(
+-              cacheSize         = 4096,
+-              bytePerLine       = 32,
+-              wayCount          = 1,
+-              addressWidth      = 32,
+-              cpuDataWidth      = 32,
+-              memDataWidth      = 32,
+-              catchAccessError  = true,
+-              catchIllegal      = true,
+-              catchUnaligned    = true
+-            ),
+-            memoryTranslatorPortConfig = null
+-            //            memoryTranslatorPortConfig = MemoryTranslatorPortConfig(
+-            //              portTlbSize = 6
+-            //            )
++          new DBusSimplePlugin(
++            catchAddressMisaligned = false,
++            catchAccessFault = false
+           ),
+           new StaticMemoryTranslatorPlugin(
+-            ioRange      = _(31 downto 28) === 0xF
++            ioRange      = _(31 downto 30) === 0x0
+           ),
+           new DecoderSimplePlugin(
+-            catchIllegalInstruction = true
++            catchIllegalInstruction = false
+           ),
+           new RegFilePlugin(
+             regFileReadyKind = plugin.SYNC,
+@@ -86,7 +52,8 @@ object VexRiscvAxi4WithIntegratedJtag{
+             separatedAddSub = false,
+             executeInsertion = true
+           ),
+-          new FullBarrelShifterPlugin,
++          new LightShifterPlugin,
++//          new FullBarrelShifterPlugin,
+           new MulPlugin,
+           new DivPlugin,
+           new HazardSimplePlugin(
+@@ -98,7 +65,6 @@ object VexRiscvAxi4WithIntegratedJtag{
+             pessimisticWriteRegFile = false,
+             pessimisticAddressMatch = false
+           ),
+-          new DebugPlugin(ClockDomain.current.clone(reset = Bool().setName("debugReset"))),
+           new BranchPlugin(
+             earlyBranch = false,
+             catchAddressMisaligned = true
