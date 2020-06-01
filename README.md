@@ -24,7 +24,6 @@ If you provide a setup with these components (and their own dependencies) the pr
 
 ## Currently available PEs
 * [SpinalHDL's VexRiscv](https://github.com/SpinalHDL/VexRiscv)
-* [VectorBlox' Orca](https://github.com/VectorBlox/orca)
 * [Bluespec Inc.'s Piccolo](https://github.com/bluespec/Piccolo) in RV32ACIMU configuration
 * [Bluespec Inc.'s Flute](https://github.com/bluespec/Flute) in RV32ACIMU configuration
 * [Western Digital's SweRV](https://github.com/westerndigitalcorporation/swerv_eh1)
@@ -45,7 +44,6 @@ PE is directly imported into TaPaSCo. The corresponding names of the processors 
 | Processor                  | Target       |
 |----------------------------|--------------|
 | SpinalHDL VexRiscv         | vexriscv_pe  |
-| Vectorblox Orca            | orca_pe      |
 | Bluespec Inc. Piccolo (32 Bit) | piccolo32_pe |
 | Bluespec Inc. Flute (32 Bit) | flute32_pe |
 | PicoRV32                   | picorv32_pe  |
@@ -59,7 +57,6 @@ You can configure the build of the PEs with several parameters. These can either
 | Parameter | Effect | Applicable PEs | Default value |
 |-----------|--------|----------------|---------------|
 | BRAM_SIZE | Determines the size of one local memory block in B | all | 0x4000 |
-| CACHE | Enables the instruction/data cache of the processor | ORCA | true |
 
 So if you want to build a PE of the SpinalHDL VexRiscv processor, you would use `make vexriscv_pe`. Furthermore the size of the PE's local memory can be changed by providing
 the parameter BRAM_SIZE to the `make` command. Please note that instruction and data memory are separate, so by providing BRAM_SIZE you provide the size of each of those, 
