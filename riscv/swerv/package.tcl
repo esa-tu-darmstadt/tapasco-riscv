@@ -25,6 +25,9 @@ set_property description $name $core
 set_property version $version $core
 set_property core_revision 1 $core
 
+# Group core JTAG wires as interface port
+ipx::infer_bus_interfaces xilinx.com:interface:jtag_rtl:2.0 [ipx::current_core]
+
 ipx::create_xgui_files $core
 ipx::update_checksums $core
 ipx::save_core $core

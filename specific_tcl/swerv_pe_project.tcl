@@ -14,3 +14,7 @@
   create_bd_addr_seg -range 0x80000000 -offset 0x80000000 [get_bd_addr_spaces swerv_0/lsu_axi] [get_bd_addr_segs dmaOffset/S_AXI/reg0] SEG_dmaOffset_reg0
   create_bd_addr_seg -range $lmem -offset $lmem [get_bd_addr_spaces swerv_0/lsu_axi] [get_bd_addr_segs rv_dmem_ctrl/S_AXI/Mem0] SEG_rv_dmem_ctrl_Mem0
   create_bd_addr_seg -range $lmem -offset 0x00000000 [get_bd_addr_spaces swerv_0/ifu_axi] [get_bd_addr_segs rv_imem_ctrl/S_AXI/Mem0] SEG_rv_imem_ctrl_Mem0
+
+  # Insert JTAG interface port and connect it to the core
+  create_bd_intf_port -mode Slave -vlnv xilinx.com:interface:jtag_rtl:2.0 CoreJTAG
+  connect_bd_intf_net [get_bd_intf_ports CoreJTAG] [get_bd_intf_pins swerv_0/jtag]

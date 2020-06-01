@@ -2474,7 +2474,7 @@ index 351cf79..779c626 100644
  module swerv_wrapper  
 diff --git a/design/swerv_wrapper_verilog.v b/design/swerv_wrapper_verilog.v
 new file mode 100644
-index 0000000..6e418d4
+index 0000000..6df2b8c
 --- /dev/null
 +++ b/design/swerv_wrapper_verilog.v
 @@ -0,0 +1,491 @@
@@ -2680,11 +2680,17 @@ index 0000000..6e418d4
 +	output wire [`RV_DMA_BUS_TAG-1:0]   dma_axi_rid,
 +	output wire [63:0]                  dma_axi_rdata,
 +	output wire [1:0]                   dma_axi_rresp,
-+	output wire                         dma_axi_rlast
++	output wire                         dma_axi_rlast,
 +`endif
 +`ifdef RV_BUILD_AHB_LITE
 +	// AHB bus not available in verilog wrapper yet
 +`endif
++
++    input wire jtag_tck, // JTAG clk
++    input wire jtag_tms, // JTAG TMS
++    input wire jtag_tdi, // JTAG tdi
++    input wire jtag_trst_n, // JTAG Reset
++    input wire jtag_tdo // JTAG TDO
 +);
 +
 +wire [31:0] rv_reset_vec_w = `RV_RESET_VEC;
@@ -2715,12 +2721,6 @@ index 0000000..6e418d4
 +wire dec_tlu_perfcnt2;
 +wire dec_tlu_perfcnt3;
 +  
-+wire jtag_tck = 1'b0; // JTAG clk
-+wire jtag_tms = 1'b0; // JTAG TMS  
-+wire jtag_tdi = 1'b0; // JTAG tdi
-+wire jtag_trst_n = 1'b0; // JTAG Reset
-+wire jtag_tdo; // JTAG TDO
-+
 +wire i_cpu_halt_req = 1'b0; // Async halt req to CPU
 +wire o_cpu_halt_ack; // core response to halt
 +wire o_cpu_halt_status; // 1'b1 indicates core is halted
@@ -2943,9 +2943,9 @@ index 0000000..6e418d4
 +	.dec_tlu_perfcnt2(dec_tlu_perfcnt2),
 +	.dec_tlu_perfcnt3(dec_tlu_perfcnt3),
 +
-+	// ports added by the soc team	       
++	// ports added by the soc team
 +	.jtag_tck(jtag_tck), // JTAG clk
-+	.jtag_tms(jtag_tms), // JTAG TMS  
++	.jtag_tms(jtag_tms), // JTAG TMS
 +	.jtag_tdi(jtag_tdi), // JTAG tdi
 +	.jtag_trst_n(jtag_trst_n), // JTAG Reset
 +	.jtag_tdo(jtag_tdo), // JTAG TDO
