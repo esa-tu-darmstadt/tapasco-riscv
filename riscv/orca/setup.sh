@@ -3,7 +3,7 @@ echo "Setting up Orca IP..."
 if [ ! -d "Orca/orca" ]; then
 	mkdir Orca
 	cd Orca
-	git clone https://github.com/VectorBlox/orca.git
+	git clone https://github.com/cahz/orca.git
 	cd ..
 fi
 
