@@ -24,7 +24,7 @@ If you provide a setup with these components (and their own dependencies) the pr
 
 ## Currently available PEs
 * [SpinalHDL's VexRiscv](https://github.com/SpinalHDL/VexRiscv)
-* [VectorBlox' Orca](https://github.com/VectorBlox/orca)
+* [VectorBlox' Orca](https://github.com/cahz/orca)
 * [Bluespec Inc.'s Piccolo](https://github.com/bluespec/Piccolo) in RV32ACIMU configuration
 * [Bluespec Inc.'s Flute](https://github.com/bluespec/Flute) in RV32ACIMU configuration
 * [Western Digital's SweRV](https://github.com/westerndigitalcorporation/swerv_eh1)
