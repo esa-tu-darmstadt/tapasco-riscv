@@ -19,7 +19,7 @@ update_compile_order -fileset sources_1
 set_property top taiga_wrapper_verilog [current_fileset]
 update_compile_order -fileset sources_1
 
-ipx::package_project -root_dir [pwd]/taiga -import_files -force
+ipx::package_project -root_dir [pwd]/taiga -import_files -force -force_update_compile_order
 set core [ipx::current_core]
 set_property vendor sfu-rcl $core
 set_property library $name $core
