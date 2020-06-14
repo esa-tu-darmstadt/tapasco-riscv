@@ -18,3 +18,6 @@
   # Insert JTAG interface port and connect it to the core
   create_bd_intf_port -mode Slave -vlnv xilinx.com:interface:jtag_rtl:2.0 CoreJTAG
   connect_bd_intf_net [get_bd_intf_ports CoreJTAG] [get_bd_intf_pins swerv_0/jtag]
+
+  create_bd_port -dir I JTAG_RST
+  connect_bd_net [get_bd_ports JTAG_RST] [get_bd_pins swerv_0/jtag_trst_n]
