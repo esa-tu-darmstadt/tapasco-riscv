@@ -2474,7 +2474,7 @@ index 351cf79..779c626 100644
  module swerv_wrapper  
 diff --git a/design/swerv_wrapper_verilog.v b/design/swerv_wrapper_verilog.v
 new file mode 100644
-index 0000000..6df2b8c
+index 0000000..5a7df3c
 --- /dev/null
 +++ b/design/swerv_wrapper_verilog.v
 @@ -0,0 +1,491 @@
@@ -2690,7 +2690,7 @@ index 0000000..6df2b8c
 +    input wire jtag_tms, // JTAG TMS
 +    input wire jtag_tdi, // JTAG tdi
 +    input wire jtag_trst_n, // JTAG Reset
-+    input wire jtag_tdo // JTAG TDO
++    output wire jtag_tdo // JTAG TDO
 +);
 +
 +wire [31:0] rv_reset_vec_w = `RV_RESET_VEC;
