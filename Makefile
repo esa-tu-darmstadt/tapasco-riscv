@@ -14,7 +14,7 @@ endif
 CORE_LIST=$(patsubst riscv/%,%,$(wildcard riscv/*))
 PE_LIST=$(addsuffix _pe, $(CORE_LIST))
 
-all: $(PE_LIST)
+all: $(PE_LIST) picolibc
 
 list:
 	@echo $(CORE_LIST)
@@ -27,8 +27,18 @@ list:
 %_setup: riscv/%/setup.sh
 	$<
 
+picolibc: picolibc_support/build_picolibc.sh
+	picolibc_support/build_picolibc.sh
+
 uninstall:
 	rm -rf $(TAPASCO_HOME)/core/{${PE_LIST}}*
 
-clean: uninstall
+clean_picolib:
+	rm -rf picolibc_support/picolibc
+	rm -rf picolibc_support/picolibc-git
+	rm -rf picolibc_support/specs
+	rm -rf picolibc_support/tapasco_iob/rv*
+	rm -rf picolibc_support/tapasco_iob/*.o
+
+clean: uninstall clean_picolib
 	rm -rf IP/riscv/
