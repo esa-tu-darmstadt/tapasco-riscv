@@ -37,8 +37,6 @@ clean_picolib:
 	rm -rf picolibc_support/picolibc
 	rm -rf picolibc_support/picolibc-git
 	rm -rf picolibc_support/specs
-	rm -rf picolibc_support/tapasco_iob/rv*
-	rm -rf picolibc_support/tapasco_iob/*.o
 
 clean: uninstall clean_picolib
 	rm -rf IP/riscv/
