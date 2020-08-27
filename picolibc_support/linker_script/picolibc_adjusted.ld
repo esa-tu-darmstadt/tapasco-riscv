@@ -81,25 +81,35 @@ SECTIONS
 
 	. = ALIGN(8);
 
+	/* --------------------------------------------------
+	 * start of sections placed in data memory
+	 * --------------------------------------------------
+	 */
+	
+	
+	/* the following sections contain function pointers instead of actual code!
+	 * so that these function pointers can be read from memory by lw instructions
+	 * they need to be placed in the data memory as well!
+	 */
 	.preinit_array : {
 		PROVIDE_HIDDEN ( __preinit_array_start = . );
 		KEEP (*(.preinit_array))
 		PROVIDE_HIDDEN ( __preinit_array_end = . );
-	} >flash AT>flash :text
+	} >ram AT>ram :ram
 
 	.init_array : {
 		PROVIDE_HIDDEN ( __init_array_start = . );
 		KEEP (*(SORT_BY_INIT_PRIORITY(.init_array.*) SORT_BY_INIT_PRIORITY(.ctors.*)))
 		KEEP (*(.init_array EXCLUDE_FILE (*crtbegin.o *crtbegin?.o *crtend.o *crtend?.o ) .ctors))
 		PROVIDE_HIDDEN ( __init_array_end = . );
-	} >flash AT>flash :text
+	} >ram AT>ram :ram
 
 	.fini_array : {
 		PROVIDE_HIDDEN ( __fini_array_start = . );
 		KEEP (*(SORT_BY_INIT_PRIORITY(.fini_array.*) SORT_BY_INIT_PRIORITY(.dtors.*)))
 		KEEP (*(.fini_array EXCLUDE_FILE (*crtbegin.o *crtbegin?.o *crtend.o *crtend?.o ) .dtors))
 		PROVIDE_HIDDEN ( __fini_array_end = . );
-	} >flash AT>flash :text
+	} >ram AT>ram :ram
 
 	.ctors : {
 		KEEP (*crtbegin.o(.ctors))
@@ -107,7 +117,7 @@ SECTIONS
 		KEEP (*(EXCLUDE_FILE (*crtend.o *crtend?.o ) .ctors))
 		KEEP (*(SORT_BY_INIT_PRIORITY(.ctors.*)))
 		KEEP (*(.ctors))
-	} >flash AT>flash :text
+	} >ram AT>ram :ram
 
 	.dtors : {
 		KEEP (*crtbegin.o(.dtors))
@@ -115,10 +125,8 @@ SECTIONS
 		KEEP (*(EXCLUDE_FILE (*crtend.o *crtend?.o ) .dtors))
 		KEEP (*(SORT_BY_INIT_PRIORITY(.dtors.*)))
 		KEEP (*(.dtors))
-	} >flash AT>flash :text
+	} >ram AT>ram :ram
 
-	
-	/* start of sections placed in data memory */
 	.data.init.enter : {
 		KEEP (*(.data.init.enter))
 	} >ram AT>ram :ram
