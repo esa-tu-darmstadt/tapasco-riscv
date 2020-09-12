@@ -34,6 +34,7 @@ if { $::argc > 0 } {
       "--part"         { incr i; set part [lindex $::argv $i] }
       "--bram"         { incr i; set lmem [lindex $::argv $i] }
       "--cache"		   { incr i; set cache [lindex $::argv $i] }
+      "--mxp"          { incr i; set mxp_config [split [lindex $::argv $i] ","] }
       "--project_name" { incr i; set project_name [lindex $::argv $i] }
       "--help"         { help }
       default {

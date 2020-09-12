@@ -51,9 +51,17 @@ set_property -dict [ list \
 
 # add VectorBlox MXP vector processor to vcp port
 set mxp [ create_bd_cell -type ip -vlnv vectorblox.com:ip:vectorblox_mxp mxp ]
+
+set mxp_vl     [lindex $mxp_config 0]
+set mxp_ml     [lindex $mxp_config 1]
+set scratchpad [lindex $mxp_config 2]
+puts "MXP is configured for $mxp_vl vector lanes, $mxp_ml memory lanes and $scratchpad KB scratchpad memory."
 set_property -dict [list \
   CONFIG.C_INSTR_PORT_TYPE {3} \
   CONFIG.FIXED_POINT_SUPPORT {0} \
+  CONFIG.VECTOR_LANES $mxp_vl \
+  CONFIG.MEMORY_WIDTH_LANES $mxp_ml \
+  CONFIG.SCRATCHPAD_KB $scratchpad \
 ] $mxp
 
 connect_bd_intf_net $orca_0/vcp $mxp/vcp

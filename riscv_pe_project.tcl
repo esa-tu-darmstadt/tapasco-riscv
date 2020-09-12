@@ -93,6 +93,7 @@ update_ip_catalog -rebuild
 proc cr_bd_riscv_pe { parentCell lmem } {
   variable project_name
   variable cache
+  variable mxp_config
   # CHANGE DESIGN NAME HERE
   set design_name ${project_name}
 
