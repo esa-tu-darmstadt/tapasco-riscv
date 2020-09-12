@@ -11,7 +11,11 @@
   connect_bd_net [get_bd_ports CLK] [get_bd_pins orca_timer_0/clk]
 
   # Prepare instruction memory controller
-  set_property CONFIG.AXI_PROTOCOL {AXI4LITE} [get_bd_cells rv_imem_ctrl]
+  if { $cache } {
+    set_property CONFIG.AXI_PROTOCOL {AXI4} [get_bd_cells rv_imem_ctrl]
+  } else {
+    set_property CONFIG.AXI_PROTOCOL {AXI4LITE} [get_bd_cells rv_imem_ctrl]
+  }
 
   # Create port connections
   connect_bd_net -net RVController_0_rv_reset [get_bd_pins RVController_0/rv_reset] [get_bd_pins orca_0/reset]
