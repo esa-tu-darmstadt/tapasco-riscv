@@ -1,46 +1,42 @@
 diff --git a/core/taiga_config.sv b/core/taiga_config.sv
-index 771b364..a95fbe6 100755
+index 9507d5f..454b003 100755
 --- a/core/taiga_config.sv
 +++ b/core/taiga_config.sv
-@@ -36,7 +36,7 @@ package taiga_config;
-     parameter ENABLE_S_MODE = 0;
- 
-     parameter CPU_ID = 0;//32-bit value
--    parameter bit[31:0] RESET_VEC = 32'h80000000;
-+    parameter bit[31:0] RESET_VEC = 32'h00000000;
- 
-     //CSR counter width (33-64 bits): 48-bits --> 32 days @ 100MHz
-     parameter COUNTER_W = 33;
-@@ -93,16 +93,16 @@ package taiga_config;
+@@ -84,20 +84,20 @@ package taiga_config;
  
      ////////////////////////////////////////////////////
      //Address space
--    parameter SCRATCH_ADDR_L = 32'h80000000;
--    parameter SCRATCH_ADDR_H = 32'h800FFFFF;
-+    parameter SCRATCH_ADDR_L = 32'h00000000;
-+    parameter SCRATCH_ADDR_H = 32'h0000FFFF;
-     parameter SCRATCH_BIT_CHECK = 4;
+-    localparam SCRATCH_ADDR_L = 32'h80000000;
+-    localparam SCRATCH_ADDR_H = 32'h8001FFFF;
++    localparam SCRATCH_ADDR_L = 32'h00000000;
++    localparam SCRATCH_ADDR_H = 32'h0000FFFF;
+     localparam SCRATCH_BIT_CHECK = 4;
  
--    parameter MEMORY_ADDR_L = 32'h40000000;
--    parameter MEMORY_ADDR_H = 32'h4FFFFFFF;
--    parameter MEMORY_BIT_CHECK = 4;
-+    parameter MEMORY_ADDR_L = 32'h80000000;
-+    parameter MEMORY_ADDR_H = 32'hFFFFFFFF;
-+    parameter MEMORY_BIT_CHECK = 1;
+-    localparam MEMORY_ADDR_L = 32'h40000000;
+-    localparam MEMORY_ADDR_H = 32'h4FFFFFFF;
+-    localparam MEMORY_BIT_CHECK = 4;
++    localparam MEMORY_ADDR_L = 32'h80000000;
++    localparam MEMORY_ADDR_H = 32'hFFFFFFFF;
++    localparam MEMORY_BIT_CHECK = 1;
  
--    parameter BUS_ADDR_L = 32'h60000000;
--    parameter BUS_ADDR_H = 32'h6FFFFFFF;
-+    parameter BUS_ADDR_L = 32'h11000000;
-+    parameter BUS_ADDR_H = 32'h11FFFFFF;
-     parameter BUS_BIT_CHECK = 4;
+-    localparam BUS_ADDR_L = 32'h60000000;
+-    localparam BUS_ADDR_H = 32'h6FFFFFFF;
++    localparam BUS_ADDR_L = 32'h11000000;
++    localparam BUS_ADDR_H = 32'h11FFFFFF;
+     localparam BUS_BIT_CHECK = 4;
  
+     //PC address on reset
+-    localparam bit[31:0] RESET_VEC = 32'h80000000;
++    localparam bit[31:0] RESET_VEC = 32'h00000000;
  
+     ////////////////////////////////////////////////////
+     //Bus Options
 diff --git a/core/taiga_wrapper.sv b/core/taiga_wrapper.sv
 new file mode 100644
 index 0000000..eef9c9e
 --- /dev/null
 +++ b/core/taiga_wrapper.sv
-@@ -0,0 +1,228 @@
+@@ -0,0 +1,227 @@
 +/*
 + * Copyright © 2019 Carsten Heinz
 + *
@@ -230,7 +226,6 @@ index 0000000..eef9c9e
 +wishbone_interface m_wishbone();
 +
 +l2_requester_interface l2[L2_NUM_PORTS-1:0]();
-+assign l2[1].request = 0;
 +assign l2[1].request_push = 0;
 +assign l2[1].wr_data_push = 0;
 +assign l2[1].inv_ack = l2[1].inv_valid;
