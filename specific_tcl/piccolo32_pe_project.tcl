@@ -26,6 +26,15 @@
   connect_bd_net -net piccolo_0_RDY_cpu_reset_server_request_put [get_bd_pins RVController_0/reqRDY_req_rdy] [get_bd_pins piccolo_0/RDY_cpu_reset_server_request_put]
   connect_bd_net -net piccolo_0_RDY_cpu_reset_server_response_get [get_bd_pins RVController_0/resRDY_res_rdy] [get_bd_pins piccolo_0/RDY_cpu_reset_server_response_get]
 
+  # Get IP definition of DMI
+  set tapasco_toolflow $::env(TAPASCO_HOME_TOOLFLOW)
+  set_property ip_repo_paths [concat [get_property ip_repo_paths [current_project]] $tapasco_toolflow/vivado/common/ip/DMI/] [current_project]
+  update_ip_catalog
+
+  # Connect DMI port to the outside
+  create_bd_intf_port -mode Slave -vlnv esa.informatik.tu-darmstadt.de:user:DMI_rtl:1.0 DMI
+  connect_bd_intf_net [get_bd_intf_ports DMI] [get_bd_intf_pins piccolo_0/DMI]
+
 proc create_specific_addr_segs {} {
   variable lmem
   # Create specific address segments
