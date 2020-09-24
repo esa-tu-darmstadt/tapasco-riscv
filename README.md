@@ -59,7 +59,7 @@ You can configure the build of the PEs with several parameters. These can either
 | Parameter | Effect | Applicable PEs | Default value |
 |-----------|--------|----------------|---------------|
 | BRAM_SIZE | Determines the size of one local memory block in B | all | 0x4000 |
-| CACHE | Enables the instruction/data cache of the processor | ORCA | true |
+| CACHE | Enables the instruction/data cache of the processor | ORCA | false |
 
 So if you want to build a PE of the SpinalHDL VexRiscv processor, you would use `make vexriscv_pe`. Furthermore the size of the PE's local memory can be changed by providing
 the parameter BRAM_SIZE to the `make` command. Please note that instruction and data memory are separate, so by providing BRAM_SIZE you provide the size of each of those, 
