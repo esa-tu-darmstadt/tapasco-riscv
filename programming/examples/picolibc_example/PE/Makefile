@@ -1,4 +1,5 @@
 SIZE?=0x4000
+STACK_SIZE?=1K
 MARCH?=rv32im
 MABI?=ilp32
 PROGRAM?=picolibtest
@@ -14,6 +15,7 @@ program: setup
 setup:
 	mkdir -p elf bin
 	sed s/SIZE/$(SIZE)/ picolibclink.ld > picolibclink_$(SIZE).ld
+	sed -i s/STACK/$(STACK_SIZE)/ picolibclink_$(SIZE).ld
 	
 clean:
 	rm -rf bin elf picolibclink_*.ld
