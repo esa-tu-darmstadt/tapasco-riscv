@@ -16,6 +16,9 @@ static void check_tapasco(tapasco_res_t const result)
 	}
 }
 
+/**
+ * Read binary file containing the code running on the RISC-V core
+ */
 size_t read_binary_file(char * filename, unsigned char ** buffer){
 	FILE *fp;
 	size_t size;
@@ -64,7 +67,7 @@ int main(int argc, char** argv)
 	check_tapasco(tapasco_init(&ctx));
 	check_tapasco(tapasco_create_device(ctx, 0, &dev, TAPASCO_DEVICE_CREATE_EXCLUSIVE));
 
-	// find out kernelID
+	// find out kernelID of the available RISC-V PE
 	platform_info_t platform_info;
 	check_tapasco(tapasco_device_info(dev, &platform_info));
 	int i = 0;
@@ -112,6 +115,7 @@ int main(int argc, char** argv)
 	printf("Finished Job\n");
 	
 	// Get return value (if neccessary)
+	// -> no return value in this example, check general coding examples
 	
 	// teardown stdio buffers and get stdout buffer content
 	check_tapasco(teardown_stdio(dev, handle_stdout, stdout_array, output_length, handle_stdin, input_length));
