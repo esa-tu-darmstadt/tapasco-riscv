@@ -82,18 +82,18 @@ To build the library, just use the built-in script by calling:
 make picolibc
 ```
 
-You can add customize the build of picolibc by specifying additional build options by providing the PICOLIBC_OPTS parameter, e.g.:
+You can customize the build of picolibc and specify additional build options by providing the PICOLIBC_OPTS parameter, e.g.:
 
 ```
 make PICOLIBC_OPTS="-Dio-long-long=true"
 ```
 
-Detailed information about the available build uptions can be found [here](https://github.com/picolibc/picolibc/blob/main/doc/build.md), however, only the default configuration is tested.
+Detailed information about the available build options can be found [here](https://github.com/picolibc/picolibc/blob/main/doc/build.md), however, only the default configuration is tested.
 
 Picolibc provides a specs-file for the GCC you need to specify when compiling software using the standard library.
 
 ### Stdin/stdout
-If you would like to use functions like printf, scanf etc. you need to provide memory buffer using the TaPaSCo API, one buffer for stdin and one for stdout/stderr. We provide a header file which helps you with that, take a look at our [programming example](https://github.com/esa-tu-darmstadt/tapasco-riscv/tree/picolib_support/programming/examples/picolibc_example) to find out how to use it.
+If you would like to use functions like printf, scanf etc. you need to provide memory buffers using the TaPaSCo API, one buffer for stdin and one for stdout/stderr. We provide a header file which helps you with that, take a look at our [programming example](https://github.com/esa-tu-darmstadt/tapasco-riscv/tree/picolib_support/programming/examples/picolibc_example) to find out how to use it.
 
 ## Publications
 Heinz, C., Lavan, Y., Hofmann, J., and Koch, A. (2019). A Catalog and In-Hardware Evaluation of Open-Source Drop-In Compatible RISC-V Softcore Processors. In *IEEE Proc. International Conference on ReConFigurable Computing and FPGAs (ReConFig)*. IEEE. 
