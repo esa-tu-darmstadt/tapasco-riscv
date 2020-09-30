@@ -28,7 +28,7 @@ list:
 	$<
 
 picolibc: picolibc_support/build_picolibc.sh
-	picolibc_support/build_picolibc.sh
+	picolibc_support/build_picolibc.sh $(PICOLIBC_OPTS)
 
 uninstall:
 	rm -rf $(TAPASCO_HOME)/core/{${PE_LIST}}*

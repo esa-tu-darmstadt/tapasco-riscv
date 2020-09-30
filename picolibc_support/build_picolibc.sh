@@ -36,7 +36,7 @@ then
 	echo "Using RISC-V 64-bit GCC"
 	cd build
 	# disable tests to prevent failing build with self built compiler
-	../scripts/do-configure riscv64-unknown-elf -Dtests=false -Dprefix=$REPO_ROOT/picolibc_support -Dspecsdir=specs
+	../scripts/do-configure riscv64-unknown-elf -Dtests=false -Dprefix=$REPO_ROOT/picolibc_support -Dspecsdir=specs $1
 	ninja install
 elif command -v riscv32-unknown-elf-gcc &> /dev/null
 then
@@ -45,7 +45,7 @@ then
 	cp cross-riscv64-unknown-elf.txt cross-riscv32-unknown-elf.txt
 	sed -i 's/riscv64/riscv32/' cross-riscv32-unknown-elf.txt
 	cd ../build
-	../scripts/do-configure riscv32-unknown-elf -Dtests=false -Dprefix=$REPO_ROOT/picolibc_support -Dspecsdir=specs
+	../scripts/do-configure riscv32-unknown-elf -Dtests=false -Dprefix=$REPO_ROOT/picolibc_support -Dspecsdir=specs $1
 	ninja install
 else
 	echo "No RISC-V compiler found...exiting"
