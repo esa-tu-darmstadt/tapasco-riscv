@@ -1,5 +1,45 @@
+diff --git a/core/decode.sv b/core/decode.sv
+index 58cd797..0b21bc8 100755
+--- a/core/decode.sv
++++ b/core/decode.sv
+@@ -111,6 +111,7 @@ module decode(
+     logic [11:0] ls_offset;
+     logic is_load;
+     logic is_store;
++    logic is_csr;
+     logic amo_op;
+     logic store_conditional;
+     logic load_reserve;
+@@ -303,7 +304,6 @@ module decode(
+     logic sfence;
+     logic ifence;
+     logic environment_op;
+-    logic is_csr;
+     assign sfence = fb.instruction[25];
+     assign ifence =  (opcode_trim == FENCE_T) && fn3[0];
+     assign environment_op = (opcode_trim == SYSTEM_T) && (fn3 == 0);
+diff --git a/core/load_store_unit.sv b/core/load_store_unit.sv
+index c76d425..b416f03 100755
+--- a/core/load_store_unit.sv
++++ b/core/load_store_unit.sv
+@@ -342,7 +342,6 @@ module load_store_unit (
+ 
+     ////////////////////////////////////////////////////
+     //Output bank
+-    assign wb.rd = ls_done ? final_load_data : csr_rd;
+ 
+     logic exception_complete;
+     logic ls_done;
+@@ -351,6 +350,7 @@ module load_store_unit (
+     end
+     assign ls_done = load_complete | exception_complete;
+ 
++    assign wb.rd = ls_done ? final_load_data : csr_rd;
+     assign wb.done = csr_done | ls_done;
+     assign wb.id = csr_done ? csr_id : stage2_attr.instruction_id;
+     ////////////////////////////////////////////////////
 diff --git a/core/taiga_config.sv b/core/taiga_config.sv
-index 771b364..a95fbe6 100755
+index 4f548a4..5c8c11e 100755
 --- a/core/taiga_config.sv
 +++ b/core/taiga_config.sv
 @@ -36,7 +36,7 @@ package taiga_config;
@@ -11,7 +51,7 @@ index 771b364..a95fbe6 100755
  
      //CSR counter width (33-64 bits): 48-bits --> 32 days @ 100MHz
      parameter COUNTER_W = 33;
-@@ -93,16 +93,16 @@ package taiga_config;
+@@ -95,16 +95,16 @@ package taiga_config;
  
      ////////////////////////////////////////////////////
      //Address space
@@ -37,7 +77,7 @@ index 771b364..a95fbe6 100755
  
 diff --git a/core/taiga_wrapper.sv b/core/taiga_wrapper.sv
 new file mode 100644
-index 0000000..eef9c9e
+index 0000000..5081bef
 --- /dev/null
 +++ b/core/taiga_wrapper.sv
 @@ -0,0 +1,228 @@
