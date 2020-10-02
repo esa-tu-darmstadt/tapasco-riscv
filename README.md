@@ -13,6 +13,8 @@ The folder **common** contains TCL scripts which place and connect common compon
 
 The folder **specific_tcl** contains one TCL script per processor and places/connects the components which depend on the chosen processor, e.g. instantiate the correct IP and connect the memory busses.
 
+The folder **picolibc_support** contains a script as well as an adjusted linker script and code for stdio support to build the [picolibc](https://github.com/picolibc/picolibc) for the RISC-V cores.
+
 ## Dependencies
 The project might work with other configurations, but it was tested with the following setup:
 * Vivado 2018.3
@@ -66,6 +68,32 @@ the parameter BRAM_SIZE to the `make` command. Please note that instruction and 
 e.g. BRAM_SIZE=0x4000 makes a local memory size of 0x8000.
 
 For more information on PE local memory please refer to the [documentation](https://github.com/esa-tu-darmstadt/tapasco/blob/master/documentation/pe-local-memories.md).
+
+## Picolibc Support
+For a better programming experience, you may use the [picolibc](https://github.com/picolibc/picolibc) which provides C standard library functions and standard input/output. The build of picolibc requires the meson build tool which you may install with:
+
+```
+apt install meson
+```
+
+To build the library, just use the built-in script by calling:
+
+```
+make picolibc
+```
+
+You can customize the build of picolibc and specify additional build options by providing the PICOLIBC_OPTS parameter, e.g.:
+
+```
+make PICOLIBC_OPTS="-Dio-long-long=true"
+```
+
+Detailed information about the available build options can be found [here](https://github.com/picolibc/picolibc/blob/main/doc/build.md), however, only the default configuration is tested.
+
+Picolibc provides a specs-file for the GCC you need to specify when compiling software using the standard library.
+
+### Stdin/stdout
+If you would like to use functions like printf, scanf etc. you need to provide memory buffers using the TaPaSCo API, one buffer for stdin and one for stdout/stderr. We provide a header file which helps you with that, take a look at our [programming example](https://github.com/esa-tu-darmstadt/tapasco-riscv/tree/picolib_support/programming/examples/picolibc_example) to find out how to use it.
 
 ## Publications
 Heinz, C., Lavan, Y., Hofmann, J., and Koch, A. (2019). A Catalog and In-Hardware Evaluation of Open-Source Drop-In Compatible RISC-V Softcore Processors. In *IEEE Proc. International Conference on ReConFigurable Computing and FPGAs (ReConFig)*. IEEE. 

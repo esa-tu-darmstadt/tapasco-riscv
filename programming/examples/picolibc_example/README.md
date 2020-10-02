@@ -1,0 +1,1 @@
+This folder contains an example how to use the picolibc and stdin/stdout on the RISC-V cores. Check the PE/ folder for the RISC-V code and the host/ folder for the code running on the host.
