@@ -1,3 +1,4 @@
+SHELL=/bin/bash
 BRAM_SIZE?=0x4000
 PYNQ=xc7z020clg400-1
 XLEN?=32
@@ -11,8 +12,12 @@ ifndef XILINX_VIVADO
 $(error XILINX_VIVADO is not set, make sure that Vivado is setup correctly)
 endif
 
+null :=
+space := $(null) #
+comma := ,
 CORE_LIST=$(patsubst riscv/%,%,$(wildcard riscv/*))
 PE_LIST=$(addsuffix _pe, $(CORE_LIST))
+PE_LIST_SEPERATED=$(subst $(space),$(comma),$(strip $(PE_LIST)))
 
 all: $(PE_LIST)
 
@@ -28,7 +33,14 @@ list:
 	$<
 
 uninstall:
-	rm -rf $(TAPASCO_HOME)/core/{${PE_LIST}}*
+	rm -rf $(TAPASCO_WORK_DIR)/core/{${PE_LIST_SEPERATED}}*
 
 clean: uninstall
-	rm -rf IP/riscv/
+	rm -rf IP/{${PE_LIST_SEPERATED},riscv}
+	rm -rf Orca dummy* ${PE_LIST} package_picorv32
+	rm -rf riscv/flute32/{Flute,*RV*}
+	rm -rf riscv/piccolo32/{Piccolo,*RV*}
+	rm -rf riscv/picorv32/picorv32
+	rm -rf riscv/swerv/{swerv_eh1,wdc_risc-v_swerv_eh1.zip}
+	rm -rf riscv/taiga/{Taiga,sfu-rcl_risc-v_taiga.zip,taiga}
+	rm -rf riscv/vexriscv/{SpinalHDL,VexRiscv}
