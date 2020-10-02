@@ -4,6 +4,7 @@ mkdir -p IP/riscv/
 cd riscv/taiga
 git clone https://gitlab.com/sfu-rcl/Taiga.git
 cd Taiga
+git checkout 986f718
 git apply ../taiga_tapasco.patch
 cd ..
 vivado -nolog -nojournal -mode batch -source package.tcl

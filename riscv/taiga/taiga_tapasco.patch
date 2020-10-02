@@ -230,7 +230,7 @@ index 0000000..eef9c9e
 +wishbone_interface m_wishbone();
 +
 +l2_requester_interface l2[L2_NUM_PORTS-1:0]();
-+assign l2[1].request = 0;
++//assign l2[1].request = 0;
 +assign l2[1].request_push = 0;
 +assign l2[1].wr_data_push = 0;
 +assign l2[1].inv_ack = l2[1].inv_valid;
