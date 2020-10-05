@@ -22,15 +22,15 @@ if {[info exists dbram]} {
 	connect_bd_intf_net $dbram [get_bd_intf_pins dmem/BRAM_PORTA]
 } {
 	lappend axi_mem_slaves [get_bd_intf_pins rv_dmem_ctrl/S_AXI]
-	connect_bd_intf_net -intf_net rv_dmem_ctrl_BRAM_PORTA [get_bd_intf_pins dmem/BRAM_PORTA] [get_bd_intf_pins rv_dmem_ctrl/bram]
+	connect_bd_intf_net -intf_net rv_dmem_ctrl_BRAM_PORTA [get_bd_intf_pins dmem/BRAM_PORTA] [get_bd_intf_pins rv_dmem_ctrl/BRAM_PORTA]
 }
 if {[info exists ibram]} {
 	connect_bd_intf_net $ibram [get_bd_intf_pins imem/BRAM_PORTA]
 } elseif {[info exists iaxi]} {
-	connect_bd_intf_net [get_bd_intf_pins imem/BRAM_PORTA] [get_bd_intf_pins rv_imem_ctrl/bram]
+	connect_bd_intf_net [get_bd_intf_pins imem/BRAM_PORTA] [get_bd_intf_pins rv_imem_ctrl/BRAM_PORTA]
 	connect_bd_intf_net [get_bd_intf_pins rv_imem_ctrl/S_AXI] $iaxi
 } {
-	connect_bd_intf_net [get_bd_intf_pins imem/BRAM_PORTA] [get_bd_intf_pins rv_imem_ctrl/bram]
+	connect_bd_intf_net [get_bd_intf_pins imem/BRAM_PORTA] [get_bd_intf_pins rv_imem_ctrl/BRAM_PORTA]
 	lappend axi_mem_slaves [get_bd_intf_pins rv_imem_ctrl/S_AXI]
 }
 
