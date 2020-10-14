@@ -6,7 +6,7 @@
    CONFIG.NUM_READ_OUTSTANDING {1} \
    CONFIG.NUM_WRITE_OUTSTANDING {1} \
    CONFIG.MAX_BURST_LENGTH {1} \
- ] [get_bd_intf_pins /flute32_0/cpu_dmem_master]
+ ] [get_bd_intf_pins /flute32_0/core_mem_master]
 
   set_property -dict [ list \
    CONFIG.SUPPORTS_NARROW_BURST {0} \
@@ -16,7 +16,7 @@
  ] [get_bd_intf_pins /flute32_0/cpu_imem_master]
 
   # Create interface connections
-  connect_bd_intf_net -intf_net flute32_0_dmem_master [get_bd_intf_pins axi_mem_intercon_1/S00_AXI] [get_bd_intf_pins flute32_0/cpu_dmem_master]
+  connect_bd_intf_net -intf_net flute32_0_dmem_master [get_bd_intf_pins axi_mem_intercon_1/S00_AXI] [get_bd_intf_pins flute32_0/core_mem_master]
   set iaxi [get_bd_intf_pins flute32_0/cpu_imem_master]
 
   # Create port connections
@@ -29,8 +29,8 @@
 proc create_specific_addr_segs {} {
   variable lmem
   # Create address segments
-  create_bd_addr_seg -range 0x00010000 -offset 0x11000000 [get_bd_addr_spaces flute32_0/cpu_dmem_master] [get_bd_addr_segs RVController_0/saxi/reg0] SEG_RVController_0_reg0
-  create_bd_addr_seg -range 0x80000000 -offset 0x80000000 [get_bd_addr_spaces flute32_0/cpu_dmem_master] [get_bd_addr_segs dmaOffset/S_AXI/reg0] SEG_dmaOffset_reg0
-  create_bd_addr_seg -range $lmem -offset $lmem [get_bd_addr_spaces flute32_0/cpu_dmem_master] [get_bd_addr_segs rv_dmem_ctrl/S_AXI/Mem0] SEG_rv_dmem_ctrl_Mem0
+  create_bd_addr_seg -range 0x00010000 -offset 0x11000000 [get_bd_addr_spaces flute32_0/core_mem_master] [get_bd_addr_segs RVController_0/saxi/reg0] SEG_RVController_0_reg0
+  create_bd_addr_seg -range 0x80000000 -offset 0x80000000 [get_bd_addr_spaces flute32_0/core_mem_master] [get_bd_addr_segs dmaOffset/S_AXI/reg0] SEG_dmaOffset_reg0
+  create_bd_addr_seg -range $lmem -offset $lmem [get_bd_addr_spaces flute32_0/core_mem_master] [get_bd_addr_segs rv_dmem_ctrl/S_AXI/Mem0] SEG_rv_dmem_ctrl_Mem0
   create_bd_addr_seg -range $lmem -offset 0x00000000 [get_bd_addr_spaces flute32_0/cpu_imem_master] [get_bd_addr_segs rv_imem_ctrl/S_AXI/Mem0] SEG_rv_imem_ctrl_Mem0
 }
