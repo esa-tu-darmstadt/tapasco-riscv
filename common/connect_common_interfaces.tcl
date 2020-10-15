@@ -54,11 +54,12 @@ if {[info exists axi_mem_port]} {
 	set cpu_dmem [get_bd_intf_pins -of_objects [get_bd_intf_nets -of_objects [get_bd_intf_pins axi_mem_intercon_1/S00_AXI]] -filter {MODE == Master}]
 }
 set data_width [get_property CONFIG.DATA_WIDTH $cpu_dmem]
-set addr_width 32
+set addr_width [get_property CONFIG.ADDR_WIDTH $cpu_dmem]
+puts "Configure data path to ${addr_width}-bit address width and ${data_width}-bit data width."
 set_property CONFIG.BYTES_PER_WORD [expr $data_width / 8] [get_bd_cells dmaOffset]
 set_property CONFIG.DATA_WIDTH $data_width [get_bd_intf_ports M_AXI]
 set_property CONFIG.ADDRESS_WIDTH $addr_width [get_bd_cells dmaOffset]
-set_property CONFIG.ADDRESS_WIDTH $addr_width [get_bd_intf_ports M_AXI]
+set_property CONFIG.ADDR_WIDTH $addr_width [get_bd_intf_ports M_AXI]
 set_property CONFIG.BYTES_PER_WORD [expr $data_width / 8] [get_bd_cells rv_dmem_ctrl]
 set_property CONFIG.BYTES_PER_WORD [expr $data_width / 8] [get_bd_cells rv_imem_ctrl]
 # keep second BRAM port in sync, otherwise problems with larger sizes
