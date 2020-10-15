@@ -59,8 +59,8 @@ set_property CONFIG.BYTES_PER_WORD [expr $data_width / 8] [get_bd_cells dmaOffse
 set_property CONFIG.DATA_WIDTH $data_width [get_bd_intf_ports M_AXI]
 set_property CONFIG.ADDRESS_WIDTH $addr_width [get_bd_cells dmaOffset]
 set_property CONFIG.ADDRESS_WIDTH $addr_width [get_bd_intf_ports M_AXI]
-set_property CONFIG.BYTES_PER_WORD [expr $data_width / 8] [get_bd_cells rv_dmem_ctrl]
-set_property CONFIG.BYTES_PER_WORD [expr $data_width / 8] [get_bd_cells rv_imem_ctrl]
+set_property CONFIG.DATA_WIDTH $data_width [get_bd_cells rv_dmem_ctrl]
+set_property CONFIG.DATA_WIDTH $data_width [get_bd_cells rv_imem_ctrl]
 # keep second BRAM port in sync, otherwise problems with larger sizes
 set_property CONFIG.DATA_WIDTH $data_width [get_bd_cells ps_dmem_ctrl]
 set_property CONFIG.DATA_WIDTH $data_width [get_bd_cells ps_imem_ctrl]
