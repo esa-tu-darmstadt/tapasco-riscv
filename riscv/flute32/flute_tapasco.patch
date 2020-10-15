@@ -1,5 +1,18 @@
+diff --git a/src_Core/Near_Mem_VM_WT_L1/MMU_Cache.bsv b/src_Core/Near_Mem_VM_WT_L1/MMU_Cache.bsv
+index 4e9f446..01f05a9 100644
+--- a/src_Core/Near_Mem_VM_WT_L1/MMU_Cache.bsv
++++ b/src_Core/Near_Mem_VM_WT_L1/MMU_Cache.bsv
+@@ -433,7 +433,7 @@ module mkMMU_Cache  #(parameter Bool dmem_not_imem)  (MMU_Cache_IFC);
+ 
+    // Overall state of this module
+    Reg #(Module_State)  rg_state      <- mkReg (MODULE_PRERESET);
+-   Reg #(Bool)          rg_ddr4_ready <- mkReg (False);
++   Reg #(Bool)          rg_ddr4_ready <- mkReg (True);
+    Reg #(Bool)          rg_wr_rsp_err <- mkReg (False);
+ 
+    // SoC_Map is needed for method 'm_is_mem_addr' to distinguish mem
 diff --git a/src_Testbench/SoC/SoC_Map.bsv b/src_Testbench/SoC/SoC_Map.bsv
-index 4042041..f86d96d 100644
+index 5976904..f7ccb84 100644
 --- a/src_Testbench/SoC/SoC_Map.bsv
 +++ b/src_Testbench/SoC/SoC_Map.bsv
 @@ -110,8 +110,8 @@ module mkSoC_Map (SoC_Map_IFC);
