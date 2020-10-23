@@ -1,8 +1,15 @@
 diff --git a/core/taiga_config.sv b/core/taiga_config.sv
-index 9507d5f..454b003 100755
+index 9507d5f..75e76be 100755
 --- a/core/taiga_config.sv
 +++ b/core/taiga_config.sv
-@@ -84,20 +84,20 @@ package taiga_config;
+@@ -78,26 +78,26 @@ package taiga_config;
+     localparam bus_type_t BUS_TYPE = AXI_BUS;
+ 
+     //Caches
+-    localparam USE_DCACHE = 0;
++    localparam USE_DCACHE = 1;
+     localparam USE_ICACHE = 0;
+ 
  
      ////////////////////////////////////////////////////
      //Address space
