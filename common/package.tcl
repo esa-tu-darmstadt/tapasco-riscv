@@ -5,6 +5,12 @@ set_property supported_families {virtex7 Beta qvirtex7 Beta kintex7 Beta kintex7
 
 set core [ipx::current_core]
 
+# Remove SystemC simulation sources
+set sim_fg [ipx::get_file_groups xilinx_anylanguagebehavioralsimulation]
+foreach file [ipx::get_files -type systemCSource -of_objects $sim_fg] {
+	ipx::remove_file [get_property NAME $file] -file_group $sim_fg
+}
+
 # Basic information
 set_property vendor esa.informatik.tu-darmstadt.de $core
 set_property library tapasco $core
