@@ -12,6 +12,11 @@ connect_bd_intf_net -intf_net ps_imem_ctrl_BRAM_PORTA [get_bd_intf_pins imem/BRA
 
 lappend axi_mem_slaves [get_bd_intf_pins dmaOffset/S_AXI]
 
+if {$maxi_ports == 2} {
+	connect_bd_intf_net [get_bd_intf_ports M_AXI2] [get_bd_intf_pins dmaOffset2/M_AXI]
+	lappend axi_mem_slaves [get_bd_intf_pins dmaOffset2/S_AXI]
+}
+
 if {[info exists axi_io_port]} {
 	connect_bd_intf_net $axi_io_port [get_bd_intf_pins axi_interconnect_0/S01_AXI]
 } {
@@ -60,6 +65,12 @@ set_property CONFIG.BYTES_PER_WORD [expr $data_width / 8] [get_bd_cells dmaOffse
 set_property CONFIG.DATA_WIDTH $data_width [get_bd_intf_ports M_AXI]
 set_property CONFIG.ADDRESS_WIDTH $addr_width [get_bd_cells dmaOffset]
 set_property CONFIG.ADDR_WIDTH $addr_width [get_bd_intf_ports M_AXI]
+if {$maxi_ports == 2} {
+	set_property CONFIG.BYTES_PER_WORD [expr $data_width / 8] [get_bd_cells dmaOffset2]
+	set_property CONFIG.DATA_WIDTH $data_width [get_bd_intf_ports M_AXI2]
+	set_property CONFIG.ADDRESS_WIDTH $addr_width [get_bd_cells dmaOffset2]
+	set_property CONFIG.ADDR_WIDTH $addr_width [get_bd_intf_ports M_AXI2]
+}
 set_property CONFIG.BYTES_PER_WORD [expr $data_width / 8] [get_bd_cells rv_dmem_ctrl]
 set_property CONFIG.BYTES_PER_WORD [expr $data_width / 8] [get_bd_cells rv_imem_ctrl]
 # keep second BRAM port in sync, otherwise problems with larger sizes
