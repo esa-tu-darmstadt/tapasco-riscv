@@ -116,6 +116,7 @@
  
  # Create instance: dmaOffset, and set properties
   set dmaOffset [ create_bd_cell -type ip -vlnv esa.cs.tu-darmstadt.de:axi:axi_offset dmaOffset ]
+  set_property CONFIG.HIGHEST_ADDR_BIT 0 $dmaOffset
 
   set_property -dict [ list \
    CONFIG.SUPPORTS_NARROW_BURST {1} \
