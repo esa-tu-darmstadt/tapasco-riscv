@@ -28,6 +28,12 @@ set_property core_revision 1 $core
 
 set_property driver_value 1 [ipx::get_ports cpu_reset_server_request_put -of_objects [ipx::current_core]]
 
+if {[string match *32* $name]} {
+	# 32 bit version, need to set address width to 32 bit
+	ipx::add_bus_parameter ADDR_WIDTH [ipx::get_bus_interfaces cpu_dmem_master -of_objects [ipx::current_core]]
+	set_property value 32 [ipx::get_bus_parameters ADDR_WIDTH -of_objects [ipx::get_bus_interfaces cpu_dmem_master -of_objects [ipx::current_core]]]
+}
+
 ipx::create_xgui_files $core
 ipx::update_checksums $core
 ipx::save_core $core
