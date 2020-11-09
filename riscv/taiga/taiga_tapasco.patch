@@ -1,5 +1,5 @@
 diff --git a/core/taiga_config.sv b/core/taiga_config.sv
-index 9507d5f..75e76be 100755
+index 9507d5f..244b651 100755
 --- a/core/taiga_config.sv
 +++ b/core/taiga_config.sv
 @@ -78,26 +78,26 @@ package taiga_config;
@@ -38,9 +38,18 @@ index 9507d5f..75e76be 100755
  
      ////////////////////////////////////////////////////
      //Bus Options
+@@ -146,7 +146,7 @@ package taiga_config;
+ 
+     ////////////////////////////////////////////////////
+     //Branch Predictor Options
+-    localparam USE_BRANCH_PREDICTOR = 1;
++    localparam USE_BRANCH_PREDICTOR = 0;
+     localparam BRANCH_PREDICTOR_WAYS = 2;
+     localparam BRANCH_TABLE_ENTRIES = 512; //min 512
+     localparam RAS_DEPTH = 8;
 diff --git a/core/taiga_wrapper.sv b/core/taiga_wrapper.sv
 new file mode 100644
-index 0000000..eef9c9e
+index 0000000..7468bbb
 --- /dev/null
 +++ b/core/taiga_wrapper.sv
 @@ -0,0 +1,227 @@
