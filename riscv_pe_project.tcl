@@ -94,6 +94,8 @@ proc cr_bd_riscv_pe { parentCell lmem } {
   variable project_name
   variable cache
   variable maxi_ports
+  variable ipec_ports
+  
   # CHANGE DESIGN NAME HERE
   set design_name ${project_name}
 
@@ -148,6 +150,8 @@ proc cr_bd_riscv_pe { parentCell lmem } {
   # Create address segments
   source common/common_addr_segments.tcl
   
+  # Create IPEC (BD and adrress) requirements
+  source common/place_IPEC_intefaces.tcl
 
   # Restore current instance
   current_bd_instance $oldCurInst
