@@ -4,3 +4,8 @@ connect_bd_net -net CLK_1 [get_bd_ports CLK] [get_bd_pins AXIGate_0/CLK] [get_bd
 connect_bd_net -net RVController_0_tapasco_intr [get_bd_ports interrupt] [get_bd_pins RVController_0/tapasco_intr]
 connect_bd_net -net rst_CLK_100M_interconnect_aresetn [get_bd_pins axi_interconnect_0/ARESETN] [get_bd_pins axi_interconnect_1/ARESETN] [get_bd_pins axi_mem_intercon_1/ARESETN] [get_bd_pins rst_CLK_100M/interconnect_aresetn]
 connect_bd_net -net rst_CLK_100M_peripheral_aresetn [get_bd_pins AXIGate_0/RST_N] [get_bd_pins RVController_0/RST_N] [get_bd_pins axi_interconnect_0/M00_ARESETN] [get_bd_pins axi_interconnect_0/S00_ARESETN] [get_bd_pins axi_interconnect_0/S01_ARESETN] [get_bd_pins axi_interconnect_1/M00_ARESETN] [get_bd_pins axi_interconnect_1/M01_ARESETN] [get_bd_pins axi_interconnect_1/S00_ARESETN] [get_bd_pins axi_mem_intercon_1/M00_ARESETN] [get_bd_pins axi_mem_intercon_1/M0*_ARESETN] [get_bd_pins axi_mem_intercon_1/S0*_ARESETN] [get_bd_pins dmaOffset/RST_N] [get_bd_pins ps_dmem_ctrl/s_axi_aresetn] [get_bd_pins ps_imem_ctrl/s_axi_aresetn] [get_bd_pins rst_CLK_100M/peripheral_aresetn] [get_bd_pins rv_dmem_ctrl/RST_N] [get_bd_pins rv_imem_ctrl/RST_N]
+
+if {$maxi_ports == 2} {
+	connect_bd_net -net CLK_1 [get_bd_pins dmaOffset2/CLK]
+	connect_bd_net -net rst_CLK_100M_peripheral_aresetn [get_bd_pins dmaOffset2/RST_N]
+}

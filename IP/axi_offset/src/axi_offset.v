@@ -11,6 +11,7 @@ module axi_offset #(
     parameter BYTES_PER_WORD = 16,
     parameter ADDRESS_WIDTH = 32,
     parameter ID_WIDTH = 6,
+    parameter OVERWRITE_BITS = 1,
     parameter HIGHEST_ADDR_BIT = 0
 ) (
     input wire CLK,
@@ -105,9 +106,11 @@ module axi_offset #(
     output wire                         M_AXI_wvalid
 );
 
-assign M_AXI_araddr = {HIGHEST_ADDR_BIT[0],S_AXI_araddr[ADDRESS_WIDTH-2:0]};
+assign M_AXI_araddr = {HIGHEST_ADDR_BIT[OVERWRITE_BITS-1:0],S_AXI_araddr[ADDRESS_WIDTH-OVERWRITE_BITS-1:0]};
 assign M_AXI_arlen = S_AXI_arlen;
-assign M_AXI_arprot = S_AXI_arprot;
+
+// overwrite arprot with "Secure Data Unpriviledged" to prevent DECERR returned by memory controller of the PYNQ 
+assign M_AXI_arprot = 3'b000;
 assign M_AXI_arsize = S_AXI_arsize;
 assign M_AXI_arburst = S_AXI_arburst;
 assign M_AXI_arlock = S_AXI_arlock;
@@ -118,9 +121,11 @@ assign M_AXI_aruser = S_AXI_aruser;
 assign M_AXI_arid = S_AXI_arid;
 assign M_AXI_arvalid = S_AXI_arvalid;
 
-assign M_AXI_awaddr = {HIGHEST_ADDR_BIT[0],S_AXI_awaddr[ADDRESS_WIDTH-2:0]};
+assign M_AXI_awaddr = {HIGHEST_ADDR_BIT[OVERWRITE_BITS-1:0],S_AXI_awaddr[ADDRESS_WIDTH-OVERWRITE_BITS-1:0]};
 assign M_AXI_awlen = S_AXI_awlen;
-assign M_AXI_awprot = S_AXI_awprot;
+
+// overwrite awprot with "Secure Data Unpriviledged" to prevent DECERR returned by memory controller of the PYNQ 
+assign M_AXI_awprot = 3'b000;
 assign M_AXI_awsize = S_AXI_awsize;
 assign M_AXI_awburst = S_AXI_awburst;
 assign M_AXI_awlock = S_AXI_awlock;

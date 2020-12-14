@@ -74,6 +74,12 @@ ipx::add_port_map REQ_VALID [ipx::get_bus_interfaces DMI -of_objects [ipx::curre
 }
 
 
+if {[string match *32* $name]} {
+	# 32 bit version, need to set address width to 32 bit
+	ipx::add_bus_parameter ADDR_WIDTH [ipx::get_bus_interfaces cpu_dmem_master -of_objects [ipx::current_core]]
+	set_property value 32 [ipx::get_bus_parameters ADDR_WIDTH -of_objects [ipx::get_bus_interfaces cpu_dmem_master -of_objects [ipx::current_core]]]
+}
+
 ipx::create_xgui_files $core
 ipx::update_checksums $core
 ipx::save_core $core

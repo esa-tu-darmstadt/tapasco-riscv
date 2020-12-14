@@ -8,6 +8,7 @@ add_files [glob Taiga/l2_arbiter/*.sv]
 add_files [glob Taiga/local_memory/local_memory_interface.sv]
 add_files [glob Taiga/core/div_algorithms/*.sv]
 add_files [glob Taiga/core/*{.sv,.v}]
+add_files Taiga/core/xilinx/xilinx_byte_enable_ram.sv
 
 remove_files Taiga/core/div_unit_core_wrapper.sv
 remove_files Taiga/core/binary_occupancy.sv

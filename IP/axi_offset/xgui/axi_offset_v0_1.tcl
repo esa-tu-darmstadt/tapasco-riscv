@@ -7,6 +7,7 @@ proc init_gui { IPINST } {
   ipgui::add_param $IPINST -name "BYTES_PER_WORD" -parent ${Page_0}
   ipgui::add_param $IPINST -name "HIGHEST_ADDR_BIT" -parent ${Page_0}
   ipgui::add_param $IPINST -name "ID_WIDTH" -parent ${Page_0}
+  ipgui::add_param $IPINST -name "OVERWRITE_BITS" -parent ${Page_0}
 
 
 }
@@ -47,6 +48,15 @@ proc validate_PARAM_VALUE.ID_WIDTH { PARAM_VALUE.ID_WIDTH } {
 	return true
 }
 
+proc update_PARAM_VALUE.OVERWRITE_BITS { PARAM_VALUE.OVERWRITE_BITS } {
+	# Procedure called to update OVERWRITE_BITS when any of the dependent parameters in the arguments change
+}
+
+proc validate_PARAM_VALUE.OVERWRITE_BITS { PARAM_VALUE.OVERWRITE_BITS } {
+	# Procedure called to validate OVERWRITE_BITS
+	return true
+}
+
 
 proc update_MODELPARAM_VALUE.BYTES_PER_WORD { MODELPARAM_VALUE.BYTES_PER_WORD PARAM_VALUE.BYTES_PER_WORD } {
 	# Procedure called to set VHDL generic/Verilog parameter value(s) based on TCL parameter value
@@ -61,6 +71,11 @@ proc update_MODELPARAM_VALUE.ADDRESS_WIDTH { MODELPARAM_VALUE.ADDRESS_WIDTH PARA
 proc update_MODELPARAM_VALUE.ID_WIDTH { MODELPARAM_VALUE.ID_WIDTH PARAM_VALUE.ID_WIDTH } {
 	# Procedure called to set VHDL generic/Verilog parameter value(s) based on TCL parameter value
 	set_property value [get_property value ${PARAM_VALUE.ID_WIDTH}] ${MODELPARAM_VALUE.ID_WIDTH}
+}
+
+proc update_MODELPARAM_VALUE.OVERWRITE_BITS { MODELPARAM_VALUE.OVERWRITE_BITS PARAM_VALUE.OVERWRITE_BITS } {
+	# Procedure called to set VHDL generic/Verilog parameter value(s) based on TCL parameter value
+	set_property value [get_property value ${PARAM_VALUE.OVERWRITE_BITS}] ${MODELPARAM_VALUE.OVERWRITE_BITS}
 }
 
 proc update_MODELPARAM_VALUE.HIGHEST_ADDR_BIT { MODELPARAM_VALUE.HIGHEST_ADDR_BIT PARAM_VALUE.HIGHEST_ADDR_BIT } {

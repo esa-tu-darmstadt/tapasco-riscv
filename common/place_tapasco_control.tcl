@@ -5,6 +5,16 @@
    CONFIG.DATA_WIDTH {32} \
    CONFIG.PROTOCOL {AXI4} \
    ] $M_AXI
+
+if {$maxi_ports == 2} {
+    set M_AXI2 [create_bd_intf_port -mode Master -vlnv xilinx.com:interface:aximm_rtl:1.0 M_AXI2]
+    set_property -dict [ list \
+      CONFIG.ADDR_WIDTH {32} \
+      CONFIG.DATA_WIDTH {32} \
+      CONFIG.PROTOCOL {AXI4} \
+    ] $M_AXI2
+}
+
   set S_AXI_BRAM [ create_bd_intf_port -mode Slave -vlnv xilinx.com:interface:aximm_rtl:1.0 S_AXI_BRAM ]
   set_property -dict [ list \
    CONFIG.ADDR_WIDTH [expr log10($lmem*2)/log10(2)] \
@@ -116,6 +126,7 @@
  
  # Create instance: dmaOffset, and set properties
   set dmaOffset [ create_bd_cell -type ip -vlnv esa.cs.tu-darmstadt.de:axi:axi_offset dmaOffset ]
+  set_property CONFIG.HIGHEST_ADDR_BIT 0 $dmaOffset
 
   set_property -dict [ list \
    CONFIG.SUPPORTS_NARROW_BURST {1} \
@@ -130,3 +141,8 @@
    CONFIG.NUM_WRITE_OUTSTANDING {2} \
    CONFIG.MAX_BURST_LENGTH {256} \
  ] [get_bd_intf_pins /dmaOffset/S_AXI]
+
+if {$maxi_ports == 2} {
+    set dmaOffset2 [create_bd_cell -type ip -vlnv esa.cs.tu-darmstadt.de:axi:axi_offset dmaOffset2]
+    set_property CONFIG.HIGHEST_ADDR_BIT 0 $dmaOffset
+}
