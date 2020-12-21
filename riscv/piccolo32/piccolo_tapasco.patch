@@ -1,3 +1,27 @@
+diff --git a/builds/RV32ACIMU_Piccolo_verilator/Makefile b/builds/RV32ACIMU_Piccolo_verilator/Makefile
+index 2cc9625..7157ea9 100644
+--- a/builds/RV32ACIMU_Piccolo_verilator/Makefile
++++ b/builds/RV32ACIMU_Piccolo_verilator/Makefile
+@@ -18,6 +18,7 @@ BSC_COMPILATION_FLAGS += \
+ 	-D MULT_SYNTH    \
+ 	-D Near_Mem_Caches    \
+ 	-D FABRIC64    \
++	-D INCLUDE_GDB_CONTROL \
+ 
+ 
+ # Default ISA test
+diff --git a/builds/RV64ACIMU_Piccolo_verilator/Makefile b/builds/RV64ACIMU_Piccolo_verilator/Makefile
+index 993ee5a..3c87b05 100644
+--- a/builds/RV64ACIMU_Piccolo_verilator/Makefile
++++ b/builds/RV64ACIMU_Piccolo_verilator/Makefile
+@@ -18,6 +18,7 @@ BSC_COMPILATION_FLAGS += \
+ 	-D MULT_SYNTH    \
+ 	-D Near_Mem_Caches    \
+ 	-D FABRIC64    \
++	-D INCLUDE_GDB_CONTROL \
+ 
+ 
+ # Default ISA test
 diff --git a/src_Testbench/SoC/SoC_Map.bsv b/src_Testbench/SoC/SoC_Map.bsv
 index 4042041..e4849a2 100644
 --- a/src_Testbench/SoC/SoC_Map.bsv
