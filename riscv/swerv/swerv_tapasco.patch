@@ -2449,7 +2449,7 @@ index c40d396..577ba1f 100644
  module pic_ctrl
                    (
 diff --git a/design/swerv.sv b/design/swerv.sv
-index e438070..6580741 100644
+index e438070..bb0a8cc 100644
 --- a/design/swerv.sv
 +++ b/design/swerv.sv
 @@ -20,6 +20,7 @@
@@ -2460,8 +2460,45 @@ index e438070..6580741 100644
  module swerv 
     import swerv_types::*;
  (
+@@ -377,6 +378,14 @@ module swerv
+    input logic 	           jtag_trst_n, // JTAG Reset
+    output logic            jtag_tdo, // JTAG TDO
+    
++   // inputs from the JTAG - these will become input ports to the echx
++   input logic                  dmi_reg_en,                // read or write
++   input logic [6:0]             dmi_reg_addr,              // address of DM register
++   input logic                   dmi_reg_wr_en,             // write instruction
++   input logic [31:0] 	   dmi_reg_wdata,             // write data
++   // outputs from the dbg back to jtag
++   output logic [31:0] 	   dmi_reg_rdata,
++			    
+ 			    
+    input logic [`RV_PIC_TOTAL_INT:1]           extintsrc_req,
+    input logic                   timer_int,
+@@ -972,6 +981,7 @@ module swerv
+       .*
+    );
+  
++   /*
+    // inputs from the JTAG - these will become input ports to the echx
+    logic                   dmi_reg_en;                // read or write
+    logic [6:0]             dmi_reg_addr;              // address of DM register
+@@ -1002,10 +1012,11 @@ module swerv
+            .rd_data     (dmi_reg_rdata),  // 32 bit Read data from  Processor                       
+            .reg_wr_data (dmi_reg_wdata),  // 32 bit Write data to Processor                      
+            .reg_wr_addr (dmi_reg_addr),   // 32 bit Write address to Processor                   
+-           .reg_en      (dmi_reg_en),     // 1 bit  Write interface bit to Processor                                   
+-           .reg_wr_en   (dmi_reg_wr_en),   // 1 bit  Write enable to Processor               
++           .reg_en      (dmi_reg_op[0]),     // 1 bit  Write interface bit to Processor                                   
++           .reg_wr_en   (dmi_reg_op[1]),   // 1 bit  Write enable to Processor               
+            .dmi_hard_reset   (dmi_hard_reset)   //a hard reset of the DTM, causing the DTM to forget about any outstanding DMI transactions
+ ); 
++*/
+    
+    // -----------------   DEBUG END -----------------------------
+ 
 diff --git a/design/swerv_wrapper.sv b/design/swerv_wrapper.sv
-index 351cf79..779c626 100644
+index 351cf79..bef828d 100644
 --- a/design/swerv_wrapper.sv
 +++ b/design/swerv_wrapper.sv
 @@ -20,6 +20,7 @@
@@ -2472,12 +2509,28 @@ index 351cf79..779c626 100644
  `include "build.h"
  //`include "def.sv"
  module swerv_wrapper  
+@@ -309,6 +310,15 @@ module swerv_wrapper
+    input logic 			     jtag_tdi, // JTAG tdi
+    input logic 			     jtag_trst_n, // JTAG Reset
+    output logic 		     jtag_tdo, // JTAG TDO
++
++   // inputs from the JTAG - these will become input ports to the echx
++   input logic                   dmi_reg_en,                // read or write
++   input logic [6:0]             dmi_reg_addr,              // address of DM register
++   input logic                   dmi_reg_wr_en,             // write instruction
++   input logic [31:0] 	   dmi_reg_wdata,             // write data
++   // outputs from the dbg back to jtag
++   output logic [31:0] 	   dmi_reg_rdata,
++	
+    // external MPC halt/run interface
+    input logic mpc_debug_halt_req, // Async halt request
+    input logic mpc_debug_run_req, // Async run request
 diff --git a/design/swerv_wrapper_verilog.v b/design/swerv_wrapper_verilog.v
 new file mode 100644
-index 0000000..6e418d4
+index 0000000..18e25a0
 --- /dev/null
 +++ b/design/swerv_wrapper_verilog.v
-@@ -0,0 +1,491 @@
+@@ -0,0 +1,506 @@
 +// Verilog wrapper for SweRV
 +// 
 +// Copyright 2019 Carsten Heinz
@@ -2680,11 +2733,26 @@ index 0000000..6e418d4
 +	output wire [`RV_DMA_BUS_TAG-1:0]   dma_axi_rid,
 +	output wire [63:0]                  dma_axi_rdata,
 +	output wire [1:0]                   dma_axi_rresp,
-+	output wire                         dma_axi_rlast
++	output wire                         dma_axi_rlast,
 +`endif
 +`ifdef RV_BUILD_AHB_LITE
 +	// AHB bus not available in verilog wrapper yet
 +`endif
++
++    input wire jtag_tck, // JTAG clk
++    input wire jtag_tms, // JTAG TMS
++    input wire jtag_tdi, // JTAG tdi
++    input wire jtag_trst_n, // JTAG Reset
++    output wire jtag_tdo, // JTAG TDO
++
++   // inputs from the JTAG - these will become input ports to the echx
++   input wire                   dmi_reg_en,                // read or write
++   input wire [6:0]             dmi_reg_addr,              // address of DM register
++   input wire dmi_reg_wr_en,             // write instruction
++   input wire [31:0] 	   dmi_reg_wdata,             // write data
++   // outputs from the dbg back to jtag
++   output wire [31:0] 	   dmi_reg_rdata
++	
 +);
 +
 +wire [31:0] rv_reset_vec_w = `RV_RESET_VEC;
@@ -2715,12 +2783,6 @@ index 0000000..6e418d4
 +wire dec_tlu_perfcnt2;
 +wire dec_tlu_perfcnt3;
 +  
-+wire jtag_tck = 1'b0; // JTAG clk
-+wire jtag_tms = 1'b0; // JTAG TMS  
-+wire jtag_tdi = 1'b0; // JTAG tdi
-+wire jtag_trst_n = 1'b0; // JTAG Reset
-+wire jtag_tdo; // JTAG TDO
-+
 +wire i_cpu_halt_req = 1'b0; // Async halt req to CPU
 +wire o_cpu_halt_ack; // core response to halt
 +wire o_cpu_halt_status; // 1'b1 indicates core is halted
@@ -2943,12 +3005,18 @@ index 0000000..6e418d4
 +	.dec_tlu_perfcnt2(dec_tlu_perfcnt2),
 +	.dec_tlu_perfcnt3(dec_tlu_perfcnt3),
 +
-+	// ports added by the soc team	       
++	// ports added by the soc team
 +	.jtag_tck(jtag_tck), // JTAG clk
-+	.jtag_tms(jtag_tms), // JTAG TMS  
++	.jtag_tms(jtag_tms), // JTAG TMS
 +	.jtag_tdi(jtag_tdi), // JTAG tdi
 +	.jtag_trst_n(jtag_trst_n), // JTAG Reset
 +	.jtag_tdo(jtag_tdo), // JTAG TDO
++
++    .dmi_reg_en(dmi_reg_en),
++    .dmi_reg_addr(dmi_reg_addr),
++    .dmi_reg_wr_en(dmi_reg_wr_en),
++    .dmi_reg_wdata(dmi_reg_wdata),
++    .dmi_reg_rdata(dmi_reg_rdata),
 +
 +	// MPC interface, not used
 +	.mpc_debug_halt_req(0), // Async halt request
