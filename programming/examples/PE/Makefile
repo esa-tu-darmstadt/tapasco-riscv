@@ -3,7 +3,13 @@ STACK_START!=printf "0x%08x" $$(($(SIZE) + $(SIZE)))
 MARCH?=rv32im
 MABI?=ilp32
 PROGRAM?=simple_sum
-RV_FLAGS:=-march=$(MARCH) -mabi=$(MABI) -nostdlib -T rv_$(SIZE).ld startup_$(SIZE)1.s
+RV_FLAGS:=-march=$(MARCH) -mabi=$(MABI) -nostdlib -g
+ifndef SWERV_CCM
+	RV_FLAGS+= -T rv_$(SIZE).ld startup_$(SIZE)1.s
+else
+	RV_FLAGS+= -T rv_swerv.ld startup_swerv.s
+endif
+
 TOP:=`echo $(STACK_START) | cut -c3-7`
 BOTTOM:=`echo $(STACK_START) | cut -c8-10`
 
