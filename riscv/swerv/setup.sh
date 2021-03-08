@@ -7,7 +7,7 @@ cd swerv_eh1
 git apply ../swerv_tapasco.patch
 export RV_ROOT=$(pwd)
 cd configs
-./swerv.config -set reset_vec=0x0 -set dccm_enable=0 -set icache_enable=0
+./swerv.config -set reset_vec=0x0 -set dccm_enable=1 -set iccm_enable=1 -set icache_enable=1
 cd ../..
 vivado -nolog -nojournal -mode batch -source package.tcl
 
