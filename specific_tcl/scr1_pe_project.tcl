@@ -8,21 +8,23 @@
   
   # Create port connections
   connect_bd_net [get_bd_pins RVController_0/rv_rstn] [get_bd_pins scr1_0/rst_n]
+  # TODO: For now connect all reset signals to same reset signal.
+  connect_bd_net [get_bd_pins RVController_0/rv_rstn] [get_bd_pins scr1_0/pwrup_rst_n]
+  connect_bd_net [get_bd_pins RVController_0/rv_rstn] [get_bd_pins scr1_0/cpu_rst_n]
+  connect_bd_net [get_bd_pins RVController_0/rv_rstn] [get_bd_pins scr1_0/test_rst_n]
+  # TODO: Difference to test_rst_n?
+  connect_bd_net [get_bd_pins RVController_0/rv_rstn] [get_bd_pins scr1_0/trst_n]
 
   # Create rtc_clk connection
   # TODO: Difference between get_bd_ports and get_bd_pins?
   connect_bd_net [get_bd_ports CLK] [get_bd_pins scr1_0/rtc_clk]
 
   # TODO: What do with unconnected pins?
-  # pwrup_rst_n
-  # cpu_rst_n
   # test_mode
-  # test_rst_n
   # fuse_mhartid
   # fuse_idcode
   # irq_lines
   # soft_irq
-  # trst_n
   # tck
   # tms
   # tdi
