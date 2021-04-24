@@ -11,8 +11,8 @@
   # TODO: For now connect all reset signals to same reset signal.
   connect_bd_net [get_bd_pins RVController_0/rv_rstn] [get_bd_pins scr1_0/pwrup_rst_n]
   connect_bd_net [get_bd_pins RVController_0/rv_rstn] [get_bd_pins scr1_0/cpu_rst_n]
-  connect_bd_net [get_bd_pins RVController_0/rv_rstn] [get_bd_pins scr1_0/test_rst_n]
   # TODO: Difference to test_rst_n?
+  #connect_bd_net [get_bd_pins RVController_0/rv_rstn] [get_bd_pins scr1_0/test_rst_n]
   #connect_bd_net [get_bd_pins RVController_0/rv_rstn] [get_bd_pins scr1_0/trst_n]
 
   # Create rtc_clk connection
@@ -32,6 +32,17 @@
   # sys_rdc_qlfy_o
   # tdo
   # tdo_en
+
+set test_mode_constant [create_bd_cell -type ip -vlnv xilinx.com:ip:xlconstant:1.1 test_mode_constant]
+set test_rst_n_constant [create_bd_cell -type ip -vlnv xilinx.com:ip:xlconstant:1.1 test_rst_n_constant]
+
+set_property -dict [list CONFIG.CONST_VAL {0}] [get_bd_cells test_mode_constant]
+set_property -dict [list CONFIG.CONST_WIDTH {1}] [get_bd_cells test_mode_constant]
+set_property -dict [list CONFIG.CONST_VAL {1}] [get_bd_cells test_rst_n_constant]
+set_property -dict [list CONFIG.CONST_WIDTH {1}] [get_bd_cells test_rst_n_constant]
+
+connect_bd_net [get_bd_pins test_mode_constant/dout] [get_bd_pins scr1_0/test_mode]
+connect_bd_net [get_bd_pins test_rst_n_constant/dout] [get_bd_pins scr1_0/test_rst_n]
 
 # Add debug module
 #if 0 {
