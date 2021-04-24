@@ -9,4 +9,5 @@ set cpu_vlnv [list \
   "picorv32_pe"                 {user.org:riscv:picorv32:1.0} \
   "swerv_pe"                    {wdc:swerv:swerv_eh1} \
   "taiga_pe"                    {sfu-rcl:taiga:taiga} \
+  "scr1_pe"                     {syntacore:scr1:scr1:0.1} \
 ]
