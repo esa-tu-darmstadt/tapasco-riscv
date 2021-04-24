@@ -9,6 +9,28 @@
   # Create port connections
   connect_bd_net [get_bd_pins RVController_0/rv_rstn] [get_bd_pins scr1_0/rst_n]
 
+  # Create rtc_clk connection
+  # TODO: Difference between get_bd_ports and get_bd_pins?
+  connect_bd_net [get_bd_ports CLK] [get_bd_pins scr1_0/rtc_clk]
+
+  # TODO: What do with unconnected pins?
+  # pwrup_rst_n
+  # cpu_rst_n
+  # test_mode
+  # test_rst_n
+  # fuse_mhartid
+  # fuse_idcode
+  # irq_lines
+  # soft_irq
+  # trst_n
+  # tck
+  # tms
+  # tdi
+  # sys_rst_n_o
+  # sys_rdc_qlfy_o
+  # tdo
+  # tdo_en
+
 # Add debug module
 #if 0 {
 #  # Insert JTAG interface port and connect it to the core
