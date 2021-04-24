@@ -9,7 +9,7 @@ export RV_ROOT=$(pwd)
 #cd ..
 cd src
 
-vivado -nolog -nojournal -mode batch -source package.tcl
+vivado -nolog -nojournal -mode batch -source ../../package.tcl
 
 if [ ! -d "../../../../IP/riscv/SCR1/xgui" ]; then
     echo "Unzipping SCR1..."
