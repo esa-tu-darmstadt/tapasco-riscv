@@ -2,9 +2,13 @@
 
 mkdir -p IP/riscv/
 cd riscv/scr1
-git clone https://github.com/syntacore/scr1.git
+rm -rf scr1
+#git clone https://github.com/syntacore/scr1.git
+git clone https://github.com/7FM/scr1.git
 cd scr1
-git apply ../scr1_tapasco.patch
+#git checkout master
+git checkout trials
+#git apply ../scr1_tapasco.patch
 export RV_ROOT=$(pwd)
 #cd ..
 cd src
