@@ -10,6 +10,15 @@
 #define COUNTER 0x1c
 #define COUNTERH 0x1d
 
+#include <stdint.h>
+
+/*  */
+#ifdef RV_64
+static uint64_t *const rv_mtvec = 0x0;
+#else
+static uint32_t rv_mtvec[32] __attribute__((aligned(16)));
+#endif
+
 /**
 	Writes the value at the specified register.
 	Example: writeToCtrl(RETL, 42); writes 42 to the lower 32 bits of return value register.
@@ -45,4 +54,22 @@ void setIntr()
 	int* addr = start + IAR;
 	*addr = 1;
 	while(1){}
+}
+
+void defaultIRQ()
+{
+	setIntr();
+}
+
+void initInterrupts()
+{
+	/* set trap base vector address */
+	uint32_t addr_and_mode = (uint32_t)rv_mtvec | 0x1; // 0x1 is vectored mode
+
+	__asm__(
+		"csrw mtvec, %0"
+		: "r" (addr_and_mode)
+	);
+
+	rv_mtvec[0] = (uint32_t)defaultIRQ;
 }
