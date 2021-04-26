@@ -10,13 +10,13 @@
 #define COUNTER 0x1c
 #define COUNTERH 0x1d
 
-#include <stdint.h>
-
 /*  */
 #ifdef RV_64
 static uint64_t *const rv_mtvec = 0x0;
 #else
-static uint32_t rv_mtvec[32] __attribute__((aligned(16)));
+/* Only 1 entry, we only support direct mode for now! */
+static int rv_mtvec[1] __attribute__((aligned(64)));
+static_assert(sizeof(rv_mtvec[0]) == 4);
 #endif
 
 /**
@@ -64,12 +64,12 @@ void defaultIRQ()
 void initInterrupts()
 {
 	/* set trap base vector address */
-	uint32_t addr_and_mode = (uint32_t)rv_mtvec | 0x1; // 0x1 is vectored mode
+	int addr_and_mode = (int)rv_mtvec | 0x0; // 0x0 is direct mode
 
 	__asm__(
 		"csrw mtvec, %0"
 		: "r" (addr_and_mode)
 	);
 
-	rv_mtvec[0] = (uint32_t)defaultIRQ;
+	rv_mtvec[0] = (int)defaultIRQ;
 }
