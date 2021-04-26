@@ -10,15 +10,6 @@
 #define COUNTER 0x1c
 #define COUNTERH 0x1d
 
-/*  */
-#ifdef RV_64
-static uint64_t *const rv_mtvec = 0x0;
-#else
-/* Only 1 entry, we only support direct mode for now! */
-static int rv_mtvec[1] __attribute__((aligned(64)));
-static_assert(sizeof(rv_mtvec[0]) == 4);
-#endif
-
 /**
 	Writes the value at the specified register.
 	Example: writeToCtrl(RETL, 42); writes 42 to the lower 32 bits of return value register.
@@ -56,20 +47,39 @@ void setIntr()
 	while(1){}
 }
 
-void defaultIRQ()
+
+void fallbackDefaultIRQ()
 {
+	writeToCtrl(RETL, -2);
 	setIntr();
 }
+
+void defaultIRQ() __attribute__((aligned(64), weak, alias("fallbackDefaultIRQ")));
 
 void initInterrupts()
 {
 	/* set trap base vector address */
-	int addr_and_mode = (int)rv_mtvec | 0x0; // 0x0 is direct mode
+	const int addr_and_mode = (int)defaultIRQ | 0x0; // 0x0 is direct mode
 
+	/* https://wiki.osdev.org/Inline_Assembly */
 	__asm__(
 		"csrw mtvec, %0"
+		:
 		: "r" (addr_and_mode)
 	);
 
-	rv_mtvec[0] = (int)defaultIRQ;
+	int current_mtvec;
+
+	/* check if mtvec is writeable */
+	__asm__(
+		"csrr mtvec, %0"
+		: "=r" (current_mtvec)
+		:
+	);
+
+	if (current_mtvec != addr_and_mode) {
+		// MTVEC is not writeable -> PANIC!
+		writeToCtrl(RETL, -1);
+		setIntr();
+	}
 }
