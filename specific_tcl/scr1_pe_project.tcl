@@ -13,7 +13,7 @@
   connect_bd_net [get_bd_pins RVController_0/rv_rstn] [get_bd_pins scr1_0/cpu_rst_n]
   # TODO: Difference to test_rst_n?
   #connect_bd_net [get_bd_pins RVController_0/rv_rstn] [get_bd_pins scr1_0/test_rst_n]
-  #connect_bd_net [get_bd_pins RVController_0/rv_rstn] [get_bd_pins scr1_0/trst_n]
+  connect_bd_net [get_bd_pins RVController_0/rv_rstn] [get_bd_pins scr1_0/trst_n]
 
   # Create rtc_clk connection
   # TODO: Difference between get_bd_ports and get_bd_pins?
