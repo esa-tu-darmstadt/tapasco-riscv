@@ -45,22 +45,22 @@ connect_bd_net [get_bd_pins test_mode_constant/dout] [get_bd_pins scr1_0/test_mo
 connect_bd_net [get_bd_pins test_rst_n_constant/dout] [get_bd_pins scr1_0/test_rst_n]
 
 # Add debug module
-#if 0 {
-#  # Insert JTAG interface port and connect it to the core
-#  create_bd_intf_port -mode Slave -vlnv xilinx.com:interface:jtag_rtl:2.0 CoreJTAG
-#  connect_bd_intf_net [get_bd_intf_ports CoreJTAG] [get_bd_intf_pins scr1_0/jtag]
-#
-#  create_bd_port -dir I -type rst JTAG_RST
-#  set_property CONFIG.POLARITY ACTIVE_LOW [get_bd_ports JTAG_RST]
-#  connect_bd_net [get_bd_ports JTAG_RST] [get_bd_pins scr1_0/jtag_trst_n]
-#} else {
-#  set tapasco_toolflow $::env(TAPASCO_HOME_TOOLFLOW)
-#  set_property ip_repo_paths [concat [get_property ip_repo_paths [current_project]] $tapasco_toolflow/vivado/common/ip/DMI/] [current_project]
-#  update_ip_catalog
-#
-#  create_bd_intf_port -mode Slave -vlnv esa.informatik.tu-darmstadt.de:user:DMI_rtl:1.0 DMI
-#  connect_bd_intf_net [get_bd_intf_ports DMI] [get_bd_intf_pins scr1_0/DMI]
-#}
+if 0 {
+  # Insert JTAG interface port and connect it to the core
+  create_bd_intf_port -mode Slave -vlnv xilinx.com:interface:jtag_rtl:2.0 CoreJTAG
+  connect_bd_intf_net [get_bd_intf_ports CoreJTAG] [get_bd_intf_pins scr1_0/jtag]
+
+  create_bd_port -dir I -type rst JTAG_RST
+  set_property CONFIG.POLARITY ACTIVE_LOW [get_bd_ports JTAG_RST]
+  connect_bd_net [get_bd_ports JTAG_RST] [get_bd_pins scr1_0/jtag_trst_n]
+} else {
+  set tapasco_toolflow $::env(TAPASCO_HOME_TOOLFLOW)
+  set_property ip_repo_paths [concat [get_property ip_repo_paths [current_project]] $tapasco_toolflow/vivado/common/ip/DMI/] [current_project]
+  update_ip_catalog
+
+  create_bd_intf_port -mode Slave -vlnv esa.informatik.tu-darmstadt.de:user:DMI_rtl:1.0 DMI
+  connect_bd_intf_net [get_bd_intf_ports DMI] [get_bd_intf_pins scr1_0/DMI]
+}
 
 proc create_specific_addr_segs {} {
   variable lmem
