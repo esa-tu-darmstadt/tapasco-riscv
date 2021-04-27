@@ -72,7 +72,7 @@ void initInterrupts()
 
 	/* check if mtvec is writeable */
 	__asm__(
-		"csrr mtvec, %0"
+		"csrr %0, mtvec"
 		: "=r" (current_mtvec)
 		:
 	);
