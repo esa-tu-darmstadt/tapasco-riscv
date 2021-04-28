@@ -11,7 +11,7 @@
 #include <fcntl.h>
 #include "tapasco.hpp"
 
-#define PE_ID 1744
+#define PE_ID 1748
 
 #define BRAM_SIZE 0x10000
 #define PROGRAM_BRAM_SIZE (BRAM_SIZE - (BRAM_SIZE / 4))
@@ -48,6 +48,9 @@ int main(int argc, char** argv)
         exit(1);
     }
 
+#define STDOUT_BUF 1024
+    char *stdoutBuf = new char[STDOUT_BUF]();
+
     // Wrap the program buffer into local memory object
     auto program_buffer_in = makeLocal(makeInOnly(
             makeWrappedPointer(program_buffer.data(), program_buffer.size())
@@ -61,11 +64,20 @@ int main(int argc, char** argv)
                                 retval, // return value
                                 program_buffer_in,
                                 a, // Arg 1
-                                b  // Arg 2
+                                b, // Arg 2
+                                makeOutOnly(makeWrappedPointer(stdoutBuf, STDOUT_BUF)) // Arg3
                              );
     cout << "Waiting for RISC-V " << endl;
     job();
-    cout << "RISC-V return value: " << fpga_sum << endl;
-    
+    cout << "RISC-V return value: " << (fpga_sum & 0x0FFFFFFFF) << endl;
+
+    uint32_t firstProgBytes = fpga_sum >> 32;
+
+    cout << "First program bytes: " << hex << firstProgBytes << endl;
+
+    cout << "RiscV STDOUT: " << stdoutBuf << endl;
+
+    delete[] stdoutBuf;
+
     return 0;
 }

@@ -83,3 +83,24 @@ void initInterrupts()
 		setIntr();
 	}
 }
+
+/* printing */
+static char *out_buf = 0;
+static int out_idx = 0;
+
+void print(const char *str)
+{
+    if (!out_buf)
+        out_buf = (char *)readFromCtrl(ARG3) + 0x80000000;
+
+    for (const char *c = str; *c; ++c, ++out_idx)
+        out_buf[out_idx] = *c;
+
+    out_buf[out_idx] = '\0';
+}
+
+
+
+
+
+
