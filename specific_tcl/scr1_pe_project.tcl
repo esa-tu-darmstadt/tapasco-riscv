@@ -35,14 +35,25 @@
 
 set test_mode_constant [create_bd_cell -type ip -vlnv xilinx.com:ip:xlconstant:1.1 test_mode_constant]
 set test_rst_n_constant [create_bd_cell -type ip -vlnv xilinx.com:ip:xlconstant:1.1 test_rst_n_constant]
+set idcode_constant [create_bd_cell -type ip -vlnv xilinx.com:ip:xlconstant:1.1 idcode_constant]
+set mhartid_constant [create_bd_cell -type ip -vlnv xilinx.com:ip:xlconstant:1.1 mhartid_constant]
 
 set_property -dict [list CONFIG.CONST_VAL {0}] [get_bd_cells test_mode_constant]
 set_property -dict [list CONFIG.CONST_WIDTH {1}] [get_bd_cells test_mode_constant]
+
 set_property -dict [list CONFIG.CONST_VAL {1}] [get_bd_cells test_rst_n_constant]
 set_property -dict [list CONFIG.CONST_WIDTH {1}] [get_bd_cells test_rst_n_constant]
 
+set_property -dict [list CONFIG.CONST_VAL {0x0000108B}] [get_bd_cells idcode_constant]
+set_property -dict [list CONFIG.CONST_WIDTH {32}] [get_bd_cells idcode_constant]
+
+set_property -dict [list CONFIG.CONST_VAL {0x0000108B}] [get_bd_cells mhartid_constant]
+set_property -dict [list CONFIG.CONST_WIDTH {32}] [get_bd_cells mhartid_constant]
+
 connect_bd_net [get_bd_pins test_mode_constant/dout] [get_bd_pins scr1_0/test_mode]
 connect_bd_net [get_bd_pins test_rst_n_constant/dout] [get_bd_pins scr1_0/test_rst_n]
+connect_bd_net [get_bd_pins idcode_constant/dout] [get_bd_pins scr1_0/fuse_idcode]
+connect_bd_net [get_bd_pins idcode_constant/dout] [get_bd_pins scr1_0/fuse_mhartid]
 
 # Add debug module
 if 0 {
