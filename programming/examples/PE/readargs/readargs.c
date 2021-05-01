@@ -14,29 +14,6 @@ int main()
 
     writeToCtrl(RETL, a + b);
 
-    //const char *codeAddr = (char*)readFromCtrl(ARG0);
-
-    /*
-    int firstProgBytes = codeAddr[0];
-    firstProgBytes <<= 8;
-    firstProgBytes |= codeAddr[1];
-    firstProgBytes <<= 8;
-    firstProgBytes |= codeAddr[2];
-    firstProgBytes <<= 8;
-    firstProgBytes |= codeAddr[3];
-    */
-
-    //writeToCtrl(RETL, (int)codeAddr);
-
-    // magic RAM offset, taken from PR of picolib
-    char *buf = (char *)readFromCtrl(ARG3) + 0x80000000;
-    /*
-    buf[0] = 'H';
-    buf[1] = 'i';
-    buf[2] = '!';
-    buf[3] = '\0';
-    */
-
     print("Hello World!");
 
     setIntr();

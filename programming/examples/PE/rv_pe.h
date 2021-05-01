@@ -10,6 +10,10 @@
 #define COUNTER 0x1c
 #define COUNTERH 0x1d
 
+#ifndef RAM_OFFSET
+#define RAM_OFFSET 0x80000000
+#endif
+
 /**
 	Writes the value at the specified register.
 	Example: writeToCtrl(RETL, 42); writes 42 to the lower 32 bits of return value register.
@@ -91,7 +95,7 @@ static int out_idx = 0;
 void print(const char *str)
 {
     if (!out_buf)
-        out_buf = (char *)readFromCtrl(ARG3) + 0x80000000;
+        out_buf = (char *)readFromCtrl(ARG3) + RAM_OFFSET;
 
     for (const char *c = str; *c; ++c, ++out_idx)
         out_buf[out_idx] = *c;
