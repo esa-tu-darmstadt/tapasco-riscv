@@ -3,11 +3,11 @@
 mkdir -p IP/riscv/
 cd riscv/cva6
 rm -rf cva6
-git clone https://github.com/jschj/cva6.git
+git clone --recursive https://github.com/jschj/cva6.git
 cd cva6
 #git checkout master
 #git checkout trials
-#git apply ../scr1_tapasco.patch
+#git apply ../cva6_tapasco.patch
 export RV_ROOT=$(pwd)
 #cd ..
 cd src
