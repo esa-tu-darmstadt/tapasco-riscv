@@ -46,3 +46,4 @@ clean: uninstall
 	rm -rf riscv/swerv/{swerv_eh1,wdc_risc-v_swerv_eh1.zip}
 	rm -rf riscv/taiga/{Taiga,sfu-rcl_risc-v_taiga.zip,taiga}
 	rm -rf riscv/vexriscv/{SpinalHDL,VexRiscv}
+	rm -rf riscv/cva6/cva6
