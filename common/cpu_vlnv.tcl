@@ -10,4 +10,5 @@ set cpu_vlnv [list \
   "swerv_pe"                    {wdc:swerv:swerv_eh1} \
   "taiga_pe"                    {sfu-rcl:taiga:taiga} \
   "scr1_pe"                     {syntacore:scr1:scr1:0.1} \
+  "cva6_pe"                     {openhwgroup:cva6:cva6:0.1} \
 ]

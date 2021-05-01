@@ -10,16 +10,16 @@ cd cva6
 #git apply ../cva6_tapasco.patch
 export RV_ROOT=$(pwd)
 #cd ..
-cd src
+#cd src
 
-#vivado -nolog -nojournal -mode batch -source ../../package.tcl
+vivado -nolog -nojournal -mode batch -source ../package.tcl
 
-#if [ ! -d "../../../../IP/riscv/CVA6/xgui" ]; then
-#    echo "Unzipping SCR1..."
-#    unzip risc-v_cva6.zip -d ../../../../IP/riscv/CVA6/
-#fi
+if [ ! -d "../../../IP/riscv/CVA6/xgui" ]; then
+    echo "Unzipping SCR1..."
+    unzip risc-v_cva6.zip -d ../../../IP/riscv/CVA6/
+fi
 
+cd ../../..
 #cd ../..
-#cd ../..
 
-#echo "Finished CVA6 Setup!"
+echo "Finished CVA6 Setup!"

@@ -1,7 +1,7 @@
 puts "package  OpenHW Group's CVA6"
 
 set name cva6
-set version 1.0
+set version 0.1
 create_project -in_memory
 
 add_files [exec cat core.files axi_top.files]
@@ -18,8 +18,8 @@ update_compile_order -fileset sources_1
 #ipx::package_project -root_dir [pwd]/scr1 -import_files -force
 ipx::package_project -root_dir [pwd] -import_files -force
 set core [ipx::current_core]
-set_property vendor syntacore $core
-set_property library scr1 $core
+set_property vendor openhwgroup $core
+set_property library cva6 $core
 set_property name $name $core
 set_property display_name $name $core
 set_property description $name $core
