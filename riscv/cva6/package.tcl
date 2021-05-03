@@ -13,7 +13,7 @@ set_property include_dirs {include} [current_fileset]
 
 update_compile_order -fileset sources_1
 #TODO what is our top file?
-set_property top ariane [current_fileset]
+set_property top ariane_top [current_fileset]
 update_compile_order -fileset sources_1
 
 #ipx::package_project -root_dir [pwd]/scr1 -import_files -force
