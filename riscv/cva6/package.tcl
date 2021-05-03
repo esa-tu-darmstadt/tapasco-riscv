@@ -4,15 +4,16 @@ set name cva6
 set version 0.1
 create_project -in_memory
 
-add_files [exec cat core.files axi_top.files]
+add_files [exec find src/ -type f -name "*.sv"]
 #add_files [glob includes/*.{v,sv,h,svh}]
 #set_property file_type {Verilog Header} [get_files *.svh]
-set_property include_dirs {includes} [current_fileset]
+set_property include_dirs {include} [current_fileset]
 
 # optionally remove unneeded files
 
 update_compile_order -fileset sources_1
-set_property top scr1_top_axi [current_fileset]
+#TODO what is our top file?
+set_property top ariane [current_fileset]
 update_compile_order -fileset sources_1
 
 #ipx::package_project -root_dir [pwd]/scr1 -import_files -force
