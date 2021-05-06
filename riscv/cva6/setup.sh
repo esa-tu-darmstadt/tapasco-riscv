@@ -3,8 +3,8 @@
 mkdir -p IP/riscv/
 cd riscv/cva6
 rm -rf cva6
-#git clone --recursive https://github.com/jschj/cva6.git
-git clone https://github.com/jschj/cva6.git
+git clone --recursive https://github.com/jschj/cva6.git
+#git clone https://github.com/jschj/cva6.git
 cd cva6
 #git checkout master
 #git checkout trials
