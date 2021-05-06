@@ -1,5 +1,6 @@
 # Create instance: cva6_0, and set properties
   set cva6_0 [ create_bd_cell -type ip -vlnv [dict get $cpu_vlnv $project_name] cva6_0 ]
+  set cva6_timer_0 [ create_bd_cell -type ip -vlnv openhwgroup:cva6:cva6_timer:0.1 cva6_timer_0 ]
   set cpu_clk [get_bd_pins cva6_0/clk_i]
 
   # Create interface connections
@@ -21,6 +22,16 @@
 
   connect_bd_net [get_bd_pins boot_addr_constant/dout] [get_bd_pins cva6_0/boot_addr_i]
   connect_bd_net [get_bd_pins mhartid_constant/dout] [get_bd_pins cva6_0/hart_id_i]
+
+  # Connect Timer
+  connect_bd_net [get_bd_pins RVController_0/rv_rstn] [get_bd_pins cva6_timer_0/rst_ni]
+  connect_bd_net [get_bd_ports CLK] [get_bd_pins cva6_timer_0/clk_i]
+  connect_bd_net [get_bd_pins cva6_timer_0/ipi_o] [get_bd_pins cva6_0/ipi_i]
+  connect_bd_net [get_bd_pins cva6_timer_0/timer_irq_o] [get_bd_pins cva6_0/time_irq_i]
+  set test_mode_constant [create_bd_cell -type ip -vlnv xilinx.com:ip:xlconstant:1.1 test_mode_constant]
+  set_property -dict [list CONFIG.CONST_WIDTH {1}] [get_bd_cells test_mode_constant]
+  set_property -dict [list CONFIG.CONST_VAL {0}] [get_bd_cells test_mode_constant]
+  connect_bd_net [get_bd_pins test_mode_constant/dout] [get_bd_pins cva6_timer_0/testmode_i]
 
 #TODO handle unconnected pins:
 # irq_i[1:0]

@@ -14,10 +14,18 @@ export RV_ROOT=$(pwd)
 #cd src
 
 vivado -nolog -nojournal -mode batch -source ../package.tcl
+vivado -nolog -nojournal -mode batch -source ../package_timer.tcl
 
-if [ ! -d "../../../IP/riscv/CVA6/xgui" ]; then
-    echo "Unzipping SCR1..."
-    unzip risc-v_cva6.zip -d ../../../IP/riscv/CVA6/
+if [ ! -d "../../../IP/riscv/CVA6/cva6" ]; then
+    mkdir -p "../../../IP/riscv/CVA6/cva6"
+    echo "Unzipping CVA6..."
+    unzip risc-v_cva6.zip -d ../../../IP/riscv/CVA6/cva6
+fi
+
+if [ ! -d "../../../IP/riscv/CVA6/timer" ]; then
+    mkdir -p "../../../IP/riscv/CVA6/timer"
+    echo "Unzipping CVA6 Timer..."
+    unzip risc-v_cva6_timer.zip -d ../../../IP/riscv/CVA6/timer
 fi
 
 cd ../../..
