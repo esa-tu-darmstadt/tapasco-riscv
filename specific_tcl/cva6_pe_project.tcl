@@ -20,7 +20,7 @@
   set_property -dict [list CONFIG.CONST_VAL {0x000000000000108B}] [get_bd_cells mhartid_constant]
 
   connect_bd_net [get_bd_pins boot_addr_constant/dout] [get_bd_pins cva6_0/boot_addr_i]
-  connect_bd_net [get_bd_pins mhartid_constant/dout] [get_bd_pins cva6_0/fuse_mhartid]
+  connect_bd_net [get_bd_pins mhartid_constant/dout] [get_bd_pins cva6_0/hart_id_i]
 
 #TODO handle unconnected pins:
 # irq_i[1:0]
