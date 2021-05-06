@@ -12,8 +12,13 @@
   set_property CONFIG.NUM_MI 3 [get_bd_cells /cva6_mem_splitter]
   connect_bd_intf_net -boundary_type upper [get_bd_intf_pins cva6_mem_splitter/M01_AXI] [get_bd_intf_pins axi_mem_intercon_1/S00_AXI]
   #connect_bd_intf_net -boundary_type upper [get_bd_intf_pins cva6_mem_splitter/M02_AXI] [get_bd_intf_pins rv_imem_ctrl/S_AXI]
+  # Connect clocks
+  connect_bd_net -net [get_bd_ports CLK] [get_bd_pins cva6_mem_splitter/ACLK] [get_bd_pins cva6_mem_splitter/S00_ACLK] [get_bd_pins cva6_mem_splitter/M00_ACLK] [get_bd_pins cva6_mem_splitter/M01_ACLK] [get_bd_pins cva6_mem_splitter/M02_ACLK]
+
   # imem connection is done via the iaxi variable
   set iaxi [get_bd_intf_pins cva6_mem_splitter/M02_AXI]
+  # This port is used to determine the address and data widths
+  set axi_mem_port [get_bd_intf_pins cva6_0/io_axi_mem]
 
   # Create port connections
   connect_bd_net [get_bd_pins RVController_0/rv_rstn] [get_bd_pins cva6_0/rst_ni]
