@@ -165,7 +165,6 @@ add_files { src/ariane_top.sv \
             src/axi/src/axi_delayer.sv \
             src/axi/src/axi_to_axi_lite.sv \
             src/fpga-support/rtl/SyncSpRamBeNx64.sv \
-            src/common_cells/src/unread.sv \
             src/common_cells/src/sync.sv \
             src/common_cells/src/cdc_2phase.sv \
             src/common_cells/src/spill_register.sv \
