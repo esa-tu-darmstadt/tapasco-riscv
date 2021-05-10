@@ -4,7 +4,12 @@ set name cva6
 set version 0.1
 create_project -in_memory
 
-add_files {src/ariane_top.sv \
+add_files { src/ariane_top.sv \
+            include/ariane_axi_pkg.sv \
+            include/ariane_pkg.sv \
+            include/riscv_pkg.sv \
+            include/std_cache_pkg.sv \
+            include/wt_cache_pkg.sv \
             src/alu.sv \
             src/amo_buffer.sv \
             src/ariane_regfile_ff.sv \
@@ -49,6 +54,8 @@ add_files {src/ariane_top.sv \
             src/fpu/src/fpnew_opgroup_multifmt_slice.sv \
             src/fpu/src/fpnew_rounding.sv \
             src/fpu/src/fpnew_top.sv \
+            src/fpu/src/fpnew_pkg.sv \
+            src/fpu/src/fpu_div_sqrt_mvp/hdl/defs_div_sqrt_mvp.sv \
             src/fpu/src/fpu_div_sqrt_mvp/hdl/control_mvp.sv \
             src/fpu/src/fpu_div_sqrt_mvp/hdl/div_sqrt_mvp_wrapper.sv \
             src/fpu/src/fpu_div_sqrt_mvp/hdl/div_sqrt_top_mvp.sv \
@@ -127,6 +134,7 @@ add_files {src/ariane_top.sv \
             src/rv_plic/rtl/rv_plic_gateway.sv \
             src/rv_plic/rtl/plic_regmap.sv \
             src/rv_plic/rtl/plic_top.sv \
+            src/riscv-dbg/src/dm_pkg.sv \
             src/riscv-dbg/src/dmi_cdc.sv \
             src/riscv-dbg/src/dmi_jtag.sv \
             src/riscv-dbg/src/dmi_jtag_tap.sv \
@@ -135,8 +143,8 @@ add_files {src/ariane_top.sv \
             src/riscv-dbg/src/dm_sba.sv \
             src/riscv-dbg/src/dm_top.sv \
             src/riscv-dbg/debug_rom/debug_rom.sv \
+            src/register_interface/src/reg_intf_pkg.sv \
             src/register_interface/src/apb_to_reg.sv \
-            src/axi/src/axi_multicut.sv \
             src/common_cells/src/deprecated/generic_fifo.sv \
             src/common_cells/src/deprecated/pulp_sync.sv \
             src/common_cells/src/deprecated/find_first_one.sv \
@@ -149,6 +157,9 @@ add_files {src/ariane_top.sv \
             src/util/axi_slave_connect.sv \
             src/util/axi_master_connect_rev.sv \
             src/util/axi_slave_connect_rev.sv \
+            src/util/sram.sv \
+            src/axi/src/axi_pkg.sv \
+            src/axi/src/axi_multicut.sv \
             src/axi/src/axi_cut.sv \
             src/axi/src/axi_join.sv \
             src/axi/src/axi_delayer.sv \
@@ -181,7 +192,7 @@ add_files {src/ariane_top.sv \
 #add_files [exec find src/ -type f -name "*.sv"]
 #add_files [glob includes/*.{v,sv,h,svh}]
 #set_property file_type {Verilog Header} [get_files *.svh]
-set_property include_dirs {"include" "src/common_cells/include"} [current_fileset]
+set_property include_dirs {"include" "src/common_cells/include" "src/common_cells/include/common_cells"} [current_fileset]
 
 # optionally remove unneeded files
 
