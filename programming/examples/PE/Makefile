@@ -9,6 +9,11 @@ ifndef SWERV_CCM
 else
 	RV_FLAGS+= -T rv_swerv.ld startup_swerv.s
 endif
+ifndef SCR1_CCM
+	RV_FLAGS+= -T rv_$(SIZE).ld startup_$(SIZE)1.s
+else
+	RV_FLAGS+= -T rv_scr1.ld startup_scr1.s
+endif
 
 TOP:=`echo $(STACK_START) | cut -c3-7`
 BOTTOM:=`echo $(STACK_START) | cut -c8-10`
