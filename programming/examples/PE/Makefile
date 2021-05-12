@@ -5,14 +5,13 @@ MABI?=ilp32
 PROGRAM?=simple_sum
 RV_FLAGS:=-march=$(MARCH) -mabi=$(MABI) -nostdlib -g
 ifndef SWERV_CCM
-	RV_FLAGS+= -T rv_$(SIZE).ld startup_$(SIZE)1.s
-else
-	RV_FLAGS+= -T rv_swerv.ld startup_swerv.s
-endif
 ifndef SCR1_CCM
 	RV_FLAGS+= -T rv_$(SIZE).ld startup_$(SIZE)1.s
 else
 	RV_FLAGS+= -T rv_scr1.ld startup_scr1.s
+endif
+else
+	RV_FLAGS+= -T rv_swerv.ld startup_swerv.s
 endif
 
 TOP:=`echo $(STACK_START) | cut -c3-7`
