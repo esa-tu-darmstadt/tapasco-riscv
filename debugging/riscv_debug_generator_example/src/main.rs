@@ -125,11 +125,11 @@ fn start_debugging() -> Result<()> {
     let args: Vec<String> = std::env::args().collect();
     let empty = "".to_string();
     let file_name: &String = match args.len() {
-        x if x > 1 => &args[1],
+        x if x > 2 => &args[2],
         _ => &empty,
     };
     let pe_id: usize = match args.len() {
-        x if x > 2 => args[2].parse().context(ParsePeIdError)?,
+        x if x > 1 => args[1].parse().context(ParsePeIdError)?,
         _ => DEFAULT_PE_ID,
     };
 
