@@ -9,6 +9,7 @@
 #include <string.h>
 
 #include "tlkm_ioctl_cmds.h"
+#include "device.hpp"
 
 
 #define TLKM_PATH "/dev/tlkm"
@@ -54,20 +55,12 @@ void list_devices(int tlkm_fd)
 
 int main(int argc, const char **argv)
 {
-    int tlkm_fd = open(TLKM_PATH, 0);
+    Device device(TLKM_DEVICE_PATH);
 
-    if (tlkm_fd == -1) {
-        std::cout << "Could not open " << TLKM_PATH << std::endl;
-        return 0;
+    for (uint32_t i = 0x04; i <= 0x40; ++i) {
+        uint32_t reg = device(i);
+        std::cout << "reg " << std::hex << i << '=' << reg << std::endl;
     }
-
-    std::cout << "Opened " << TLKM_PATH << '!' << std::endl;
-    
-    print_version(tlkm_fd);
-    enum_devices(tlkm_fd);
-
-    std::cout << "Closing TLKM..." << std::endl;
-    close(tlkm_fd);
 
     return 0;
 }
