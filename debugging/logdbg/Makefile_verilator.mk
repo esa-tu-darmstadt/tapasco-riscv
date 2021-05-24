@@ -35,10 +35,11 @@ V_LDFLAGS := -lpthread
 all: preparebuild scr1 sim
 
 preparebuild:
-	cp *.cpp $(SIM_SRC)/$(DEFAULT_TOP_MODULE)
-	cp *.c $(SIM_SRC)/$(DEFAULT_TOP_MODULE)
-	cp *.h $(SIM_SRC)/$(DEFAULT_TOP_MODULE)
-	cp *.hpp $(SIM_SRC)/$(DEFAULT_TOP_MODULE)
+	@echo "Nothing to do here"
+#	cp *.cpp $(SIM_SRC)/$(DEFAULT_TOP_MODULE)
+#	cp *.c $(SIM_SRC)/$(DEFAULT_TOP_MODULE)
+#	cp *.h $(SIM_SRC)/$(DEFAULT_TOP_MODULE)
+#	cp *.hpp $(SIM_SRC)/$(DEFAULT_TOP_MODULE)
 
 scr1:
 	git clone https://github.com/7FM/scr1.git && cd scr1 && git checkout trials || cd scr1 && git pull
