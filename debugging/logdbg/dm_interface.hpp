@@ -131,7 +131,26 @@ namespace dm
 
         std::string req_to_string(const Request& req) const;
 
+        static Response invalid(const Request& req)
+        {
+            return Response{.isRead = req.isRead, .success = 0};
+        }
+
+        static Response valid(const Request& req, uint32_t data = 0)
+        {
+            return Response{.isRead = req.isRead, .data = data, .success = 1};
+        }
+
+        /* This will be connected to the test bench at the end of the day. */
+        uint32_t read_dm(uint32_t addr) const;
+        void write_dm(uint32_t addr, uint32_t data);
+
         Response process_read_dtm(const Request& req);
+        Response process_dm(const Request& req);
+        Response process_register(const Request& req);
+        Response process_memory(const Request& req);
+        Response process_bus(const Request& req);
+        Response process_control(const Request& req);
     public:
         virtual Response process_request(const Request& req) override;
     };
