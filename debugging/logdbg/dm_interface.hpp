@@ -17,7 +17,7 @@
 #include <sys/un.h>
 
 #include "tapasco-riscv.capnp.h"
-#include "sim_src/scr1_top_tb_axi_dmi/DMI_Handler.hpp"
+#include "DMI_Types.hpp"
 
 
 namespace dm

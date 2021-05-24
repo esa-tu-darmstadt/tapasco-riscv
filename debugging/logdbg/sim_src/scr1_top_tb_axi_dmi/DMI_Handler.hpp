@@ -1,6 +1,7 @@
 #pragma once
 
 #include "DMI_Types.hpp"
+#include "dm_interface.hpp"
 
 namespace v2dmi {
 
@@ -12,10 +13,13 @@ namespace v2dmi {
         bool receiveRequest(DMI_Request &request);
 
       public:
+        DMI_Handler(const std::shared_ptr<dm::DM_TestBenchInterface> &dm_interface) : dm_interface(dm_interface) {}
+
         template <class Top>
         void tick(Top *ptop);
 
       private:
+        std::shared_ptr<dm::DM_TestBenchInterface> dm_interface;
         // internal state
         bool busy = false;
         int latency = 0;

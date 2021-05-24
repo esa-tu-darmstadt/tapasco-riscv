@@ -76,7 +76,7 @@ static void run(uint64_t limit, bool dump, bool checkStopCondition = true) {
 }
 
 /******************************************************************************/
-static void reset() {
+static void reset(const std::shared_ptr<dm::DM_TestBenchInterface>& dm_interface) {
     // Initialize signals & perform reset
     ptop->dmi_req = 0;
     ptop->dmi_wr = 0;
@@ -90,7 +90,7 @@ static void reset() {
     if (dmiHandler) {
         delete dmiHandler;
     }
-    dmiHandler = new v2dmi::DMI_Handler();
+    dmiHandler = new v2dmi::DMI_Handler(dm_interface);
 }
 
 /******************************************************************************/
@@ -120,7 +120,7 @@ int main(int argc, char **argv) {
     Verilated::commandArgs(argc, argv);
     ptop = new TOP_MODULE; // Create instance
 
-    std::shared_ptr<dm::DM_MemoryInterface> dm_interface = std::make_shared<dm::DM_MemoryInterface>();
+    std::shared_ptr<dm::DM_TestBenchInterface> dm_interface = std::make_shared<dm::DM_TestBenchInterface>();
     dm::OpenOCDServer *server = nullptr;
 
     int verbose = 0;
@@ -158,7 +158,7 @@ int main(int argc, char **argv) {
     }
 
     // start things going
-    reset();
+    reset(dm_interface);
 
     if (start) {
         run(start, false);

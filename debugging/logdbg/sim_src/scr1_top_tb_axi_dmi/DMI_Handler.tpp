@@ -4,8 +4,24 @@
 
 namespace v2dmi {
 
+    void DMI_Handler::returnResponse(const DMI_Response& response) {
+        dm_interface->push_dmi_response(response);
+    }
+
+    bool DMI_Handler::receiveRequest(DMI_Request &request) {
+        if (auto req = dm_interface->pop_dmi_request()) {
+            request = *req;
+            return true;
+        }
+
+        return false;
+    }
+
     template <class Top>
     void DMI_Handler::tick(Top *ptop) {
+        // Let the openocd interface run
+        dm_interface->tick();
+
         if (latency > 0) {
             // Request flag is only set for one cycle -> clear it
             ptop->dmi_req = 0;

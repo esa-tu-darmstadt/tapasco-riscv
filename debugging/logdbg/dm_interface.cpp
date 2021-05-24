@@ -1,7 +1,5 @@
 #include "dm_interface.hpp"
 
-#include "DMI_Handler.hpp"
-
 #include <iostream>
 #include <sstream>
 #include <cassert>
@@ -463,7 +461,7 @@ namespace dm
     std::optional<v2dmi::DMI_Request> DM_TestBenchInterface::pop_dmi_request()
     {
         if (!dmi_request_queue.empty()) {
-            DMI_Request req = dmi_request_queue.back();
+            v2dmi::DMI_Request req = dmi_request_queue.back();
             dmi_request_queue.pop();
             return req;
         }

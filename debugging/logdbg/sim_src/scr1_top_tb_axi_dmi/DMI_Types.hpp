@@ -35,5 +35,3 @@ namespace v2dmi {
     } DMI_Response;
 
 } // namespace v2dmi
-
-#include "DMI_Handler.tpp"
