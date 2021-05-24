@@ -10,12 +10,16 @@
 #include "Vscr1_top_tb_axi_dmi.h"       // basic Top header
 #include "Vscr1_top_tb_axi_dmi__Syms.h" // all headers to access exposed internal signals
 
+#include "DMI_Handler.hpp"
+
 #ifndef PHASE_LENGTH
 #define PHASE_LENGTH 5
 #endif
 
 static TOP_MODULE *ptop = nullptr; // Instantiation of module
 static VerilatedVcdC *tfp = nullptr;
+
+static v2dmi::DMI_Handler *dmiHandler = nullptr;
 
 static vluint64_t main_time = 0; // Current simulation time
 
@@ -72,6 +76,11 @@ static void reset() {
     ptop->rst_n = 0;
     run(100, false);
     ptop->rst_n = 1;
+
+    if (dmiHandler) {
+        delete dmiHandler;
+    }
+    dmiHandler = new v2dmi::DMI_Handler();
 }
 
 /******************************************************************************/
@@ -88,6 +97,9 @@ static void onRisingEdge() {
 }
 
 static void onFallingEdge() {
+    if (dmiHandler) {
+        dmiHandler->tick(ptop);
+    }
 }
 
 /******************************************************************************/
@@ -138,6 +150,10 @@ int main(int argc, char **argv) {
     run(4 * 10, true, false);
 
 exitAndCleanup:
+
+    if (dmiHandler) {
+        delete dmiHandler;
+    }
 
     if (tfp)
         tfp->close();
