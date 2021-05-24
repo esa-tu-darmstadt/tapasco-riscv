@@ -164,7 +164,7 @@ int main(int argc, char **argv) {
         run(start, false);
     }
 
-    if (server){
+    if (server) {
         server->start_listening();
     }
 
@@ -180,24 +180,24 @@ int main(int argc, char **argv) {
         server->stop_listening();
     }
 
-    exitAndCleanup:
-        if (server) {
-            delete server;
-        }
-
-        if (dmiHandler) {
-            delete dmiHandler;
-        }
-
-        if (tfp)
-            tfp->close();
-
-        ptop->final(); // Done simulating
-
-        if (tfp)
-            delete tfp;
-
-        delete ptop;
-
-        return 0;
+exitAndCleanup:
+    if (server) {
+        delete server;
     }
+
+    if (dmiHandler) {
+        delete dmiHandler;
+    }
+
+    if (tfp)
+        tfp->close();
+
+    ptop->final(); // Done simulating
+
+    if (tfp)
+        delete tfp;
+
+    delete ptop;
+
+    return 0;
+}
