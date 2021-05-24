@@ -1,5 +1,5 @@
 CC := c++
-FLAGS := -std=c++17 -g
+FLAGS := -std=c++17 -g -I sim_src/scr1_top_tb_axi_dmi/
 
 ifndef CAPN_PATH
 	$(error CAPN_PATH is undefined)
