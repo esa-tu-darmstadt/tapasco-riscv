@@ -79,5 +79,7 @@ sim: sim_$(DEFAULT_TOP_MODULE)
 
 clean:
 	rm -rf $(V_DIR)
+	rm -f $(SIM_SRC)/$(DEFAULT_TOP_MODULE)/dm_interface.*
+	rm -f $(SIM_SRC)/$(DEFAULT_TOP_MODULE)/tapasco-riscv.capnp.*
 
 -include $(deps)
