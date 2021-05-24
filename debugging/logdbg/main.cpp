@@ -3,10 +3,7 @@
 #include <memory>
 #include "dm_interface.hpp"
 
-
-static std::unique_ptr<dm::OpenOCDServer> server;
 static bool run = true;
-
 
 static void signal_handler(int signum)
 {
