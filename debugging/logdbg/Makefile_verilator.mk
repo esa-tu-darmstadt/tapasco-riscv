@@ -1,3 +1,7 @@
+ifndef CAPN_PATH
+	$(error CAPN_PATH is undefined)
+endif
+
 SRC ?= scr1/src
 SRC_PREFIX ?= scr1/src/
 SRC_FILES ?= scr1/src/core.files scr1/src/axi_top.files
@@ -27,7 +31,7 @@ sim_tops := $(patsubst sim_%.cpp,%,$(notdir $(sim_targets)))
 deps := $(call rwildcard,$(V_DIR),*.d)
 
 PWD := $(dir $(abspath $(lastword $(MAKEFILE_LIST))))
-V_CCFLAGS := -g -Wall -O3 -I$(PWD)$(SIM_SRC)
+V_CCFLAGS := -g -Wall -O3 -I$(PWD)$(SIM_SRC) -I$(CAPN_PATH)/lib
 V_LDFLAGS := -lpthread
 
 .PHONY: all clean sim build scr1
@@ -35,7 +39,8 @@ V_LDFLAGS := -lpthread
 all: preparebuild scr1 sim
 
 preparebuild:
-	@echo "Nothing to do here"
+	cp dm_interface.* $(SIM_SRC)/$(DEFAULT_TOP_MODULE)
+	cp tapasco-riscv.capnp.* $(SIM_SRC)/$(DEFAULT_TOP_MODULE)
 #	cp *.cpp $(SIM_SRC)/$(DEFAULT_TOP_MODULE)
 #	cp *.c $(SIM_SRC)/$(DEFAULT_TOP_MODULE)
 #	cp *.h $(SIM_SRC)/$(DEFAULT_TOP_MODULE)
@@ -47,11 +52,11 @@ scr1:
 define GEN_SIM_RULES
 .PHONY: sim_$(sim_top)
 
-sim_$(sim_top): $$(V_DIR)/$(sim_top)/Vsim_$(sim_top).mk $$(SIM_SRC)/sim_$(sim_top).cpp $(call rwildcard,$(SIM_SRC)/$(sim_top),*.cpp) $$(srcs)
+sim_$(sim_top): $$(V_DIR)/$(sim_top)/Vsim_$(sim_top).mk $$(SIM_SRC)/sim_$(sim_top).cpp $$(call rwildcard,$$(SIM_SRC)/$(sim_top),*.cpp) $$(call rwildcard,$$(SIM_SRC)/$(sim_top),*.c) $(CAPN_PATH)/lib/*.o $$(srcs)
 	@make -j$$(shell nproc) -C $$(V_DIR)/$(sim_top) -f V$(sim_top).mk V$(sim_top)
 	@echo "============================================================================================"
 
-$$(V_DIR)/$(sim_top)/Vsim_$(sim_top).mk: $$(call rwildcard,$$(SIM_SRC)/$(sim_top),*.cpp) $$(call rwildcard,$$(SIM_SRC)/$(sim_top),*.c) $$(srcs)
+$$(V_DIR)/$(sim_top)/Vsim_$(sim_top).mk: $$(call rwildcard,$$(SIM_SRC)/$(sim_top),*.cpp) $$(call rwildcard,$$(SIM_SRC)/$(sim_top),*.c) $(CAPN_PATH)/lib/*.o $$(srcs)
 	@mkdir -p $$(V_DIR)/$(sim_top)
 	@mkdir -p $$(V_DIR)/$(sim_top)/$$(SIM_SRC)
 	$$(VERILATOR) -j $$(shell nproc) \
@@ -61,7 +66,7 @@ $$(V_DIR)/$(sim_top)/Vsim_$(sim_top).mk: $$(call rwildcard,$$(SIM_SRC)/$(sim_top
 		-CFLAGS "$$(V_CCFLAGS) -I$$(PWD)$$(SIM_SRC)/$(sim_top)" \
 	 	-LDFLAGS "$$(V_LDFLAGS)" \
 		-I$$(SRC) -I$$(INCLUDE_DIR) \
-		--exe $$(PWD)$$(SIM_SRC)/sim_$(sim_top).cpp $$(call rwildcard,$$(PWD)$$(SIM_SRC)/$(sim_top),*.cpp) $$(call rwildcard,$$(PWD)$$(SIM_SRC)/$(sim_top),*.c) \
+		--exe $$(PWD)$$(SIM_SRC)/sim_$(sim_top).cpp $$(call rwildcard,$$(PWD)$$(SIM_SRC)/$(sim_top),*.cpp) $$(call rwildcard,$$(PWD)$$(SIM_SRC)/$(sim_top),*.c) $(CAPN_PATH)/lib/*.o \
 		-sv --top-module $(sim_top) --trace --trace-structs $$(srcs) || true
 	@echo "============================================================================================"
 endef
