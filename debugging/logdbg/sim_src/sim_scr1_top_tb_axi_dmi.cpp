@@ -1,4 +1,5 @@
 #include <bitset>
+#include <csignal>
 #include <cstdint>
 #include <getopt.h>
 #include <iostream>
@@ -11,6 +12,7 @@
 #include "Vscr1_top_tb_axi_dmi__Syms.h" // all headers to access exposed internal signals
 
 #include "DMI_Handler.hpp"
+#include "dm_interface.hpp"
 
 #ifndef PHASE_LENGTH
 #define PHASE_LENGTH 5
@@ -23,8 +25,16 @@ static v2dmi::DMI_Handler *dmiHandler = nullptr;
 
 static vluint64_t main_time = 0; // Current simulation time
 
-static bool stopCondition();
+static volatile bool runSim = true;
 
+static void signal_handler(int signum) {
+    if (signum == SIGINT) {
+        std::cout << "Trying to exit..." << std::endl;
+        runSim = false;
+    }
+}
+
+static bool stopCondition();
 static void sanityChecks();
 static void onRisingEdge();
 static void onFallingEdge();
@@ -90,7 +100,7 @@ static void sanityChecks() {
 
 static bool stopCondition() {
     // Finish when $finish() was called
-    return Verilated::gotFinish();
+    return !runSim || Verilated::gotFinish();
 }
 
 static void onRisingEdge() {
@@ -104,14 +114,20 @@ static void onFallingEdge() {
 
 /******************************************************************************/
 int main(int argc, char **argv) {
+    // Register signal handler in order to properly terminate the simulation
+    std::signal(SIGINT, signal_handler);
+
     Verilated::commandArgs(argc, argv);
     ptop = new TOP_MODULE; // Create instance
+
+    std::shared_ptr<dm::DM_MemoryInterface> dm_interface = std::make_shared<dm::DM_MemoryInterface>();
+    dm::OpenOCDServer *server = nullptr;
 
     int verbose = 0;
     int start = 0;
 
     int opt;
-    while ((opt = getopt(argc, argv, ":s:t:v:")) != -1) {
+    while ((opt = getopt(argc, argv, ":s:t:v:o")) != -1) {
         switch (opt) {
             case 'v':
                 verbose = std::atoi(optarg);
@@ -130,6 +146,10 @@ int main(int argc, char **argv) {
                 std::cout << "option needs a value" << std::endl;
                 goto exitAndCleanup;
                 break;
+            case 'o':
+                // Run simulation with an openocd connection
+                server = new dm::OpenOCDServer("/tmp/riscv-debug.sock", dm_interface);
+                break;
             case '?': //used for some unknown options
                 std::cout << "unknown option: " << optopt << std::endl;
                 goto exitAndCleanup;
@@ -143,13 +163,27 @@ int main(int argc, char **argv) {
     if (start) {
         run(start, false);
     }
+
+    if (server) {
+        server->start_listening();
+    }
+
     // Execute till stop condition
-    run(0, true);
+    do {
+        run(0, true);
+    } while (!stopCondition());
 
     // Execute a few more cycles
     run(4 * 10, true, false);
 
+    if (server) {
+        server->stop_listening();
+    }
+
 exitAndCleanup:
+    if (server) {
+        delete server;
+    }
 
     if (dmiHandler) {
         delete dmiHandler;
