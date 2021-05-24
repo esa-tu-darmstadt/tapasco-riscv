@@ -1,5 +1,7 @@
 #include "dm_interface.hpp"
 
+#include "DMI_Handler.hpp"
+
 #include <iostream>
 #include <sstream>
 #include <cassert>
@@ -348,7 +350,7 @@ namespace dm
         }
     }
 
-    uint32_t DM_MemoryInterface::read_dm(uint32_t addr) const
+    uint32_t DM_MemoryInterface::read_dm(uint32_t addr)
     {
         return *(reinterpret_cast<const uint32_t *>(&dm_register_file) + addr);
     }
@@ -356,5 +358,121 @@ namespace dm
     void DM_MemoryInterface::write_dm(uint32_t addr, uint32_t data)
     {
         *(reinterpret_cast<uint32_t *>(&dm_register_file) + addr) = data;
+    }
+
+    /*
+        TB stuff
+     */
+
+    uint32_t DM_TestBenchInterface::read_dm(uint32_t addr)
+    {
+        v2dmi::DMI_Request req{
+            .converterAddress = v2dmi::DMI_ConverterAddress::DMI_ADDR_REG_ADDR,
+            .payload = addr,
+            .dmiAccessType = v2dmi::DMI_AccessType::WRITE
+        };
+
+        dmi_request_queue.push(req);
+
+        req = v2dmi::DMI_Request{
+            .converterAddress = v2dmi::DMI_ConverterAddress::DMI_REG_ADDR,
+            .payload = 0,
+            .dmiAccessType = v2dmi::DMI_AccessType::READ
+        };
+
+        dmi_request_queue.push(req);
+
+        /* unused */
+        return 0;
+    }
+
+    void DM_TestBenchInterface::write_dm(uint32_t addr, uint32_t data)
+    {
+        v2dmi::DMI_Request req{
+            .converterAddress = v2dmi::DMI_ConverterAddress::DMI_ADDR_REG_ADDR,
+            .payload = addr,
+            .dmiAccessType = v2dmi::DMI_AccessType::WRITE
+        };
+
+        dmi_request_queue.push(req);
+
+        req = v2dmi::DMI_Request{
+            .converterAddress = v2dmi::DMI_ConverterAddress::DMI_REG_ADDR,
+            .payload = data,
+            .dmiAccessType = v2dmi::DMI_AccessType::WRITE
+        };
+
+        dmi_request_queue.push(req);
+    }
+
+    void DM_TestBenchInterface::tick()
+    {
+        /* try to fetch request from socket */
+        if (request_queue_lock.try_lock()) {
+            if (!request_queue.empty()) {
+                Request req = request_queue.back();
+                request_queue.pop();
+
+                std::cout << req_to_string(req) << std::endl;
+
+                /* this will eventually push something onto the DMI request queue */
+                switch (req.type) {
+                    case Request_RequestType_dtm:
+                        if (req.isRead)
+                            process_read_dtm(req);
+
+                            break;
+                    case Request_RequestType_dm:
+                        process_dm(req);
+                    case Request_RequestType_register:
+                        process_register(req);
+                    case Request_RequestType_memory:
+                        process_memory(req);
+                    case Request_RequestType_systemBus:
+                        process_bus(req);
+                    case Request_RequestType_control:
+                        process_control(req);
+                    default:
+                        std::cout << "WARNING: Unknown request type " << req.type << std::endl;
+                        break;
+                }
+            }
+            
+            request_queue_lock.unlock();
+        }
+
+        /* try to fetch DMI response */
+        if (!dmi_response_queue.empty()) {
+            v2dmi::DMI_Response dmi_resp = dmi_response_queue.back();
+
+            if (response_queue_lock.try_lock()) {            
+                dmi_response_queue.pop();
+
+                Response resp {
+                    .isRead = 0, //TODO
+                    .data = dmi_resp.payload,
+                    .success = dmi_resp.responseStatus
+                };
+                
+                response_queue.push(resp);
+                response_queue_lock.unlock();
+            }
+        }
+    }
+
+    std::optional<v2dmi::DMI_Request> DM_TestBenchInterface::pop_dmi_request()
+    {
+        if (!dmi_request_queue.empty()) {
+            DMI_Request req = dmi_request_queue.back();
+            dmi_request_queue.pop();
+            return req;
+        }
+
+        return std::optional<v2dmi::DMI_Request>();
+    }
+    
+    void DM_TestBenchInterface::push_dmi_response(const v2dmi::DMI_Response& resp)
+    {
+        dmi_response_queue.push(resp);
     }
 }

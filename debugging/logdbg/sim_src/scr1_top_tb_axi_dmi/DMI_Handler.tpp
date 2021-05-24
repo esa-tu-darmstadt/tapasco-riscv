@@ -4,15 +4,6 @@
 
 namespace v2dmi {
 
-    void DMI_Handler::returnResponse(const DMI_Response& response) {
-        //TODO
-    }
-
-    bool DMI_Handler::receiveRequest(DMI_Request &request) {
-        //TODO
-        return false;
-    }
-
     template <class Top>
     void DMI_Handler::tick(Top *ptop) {
         if (latency > 0) {

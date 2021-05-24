@@ -17,6 +17,7 @@
 #include <sys/un.h>
 
 #include "tapasco-riscv.capnp.h"
+#include "sim_src/scr1_top_tb_axi_dmi/DMI_Handler.hpp"
 
 
 namespace dm
@@ -24,7 +25,7 @@ namespace dm
     /* This can later be extended to forwarding and test bench connection. */
     class DM_Interface
     {
-    private:
+    protected:
         static std::string req_to_string(const Request& req)
         {
             std::stringstream ss;
@@ -75,6 +76,7 @@ namespace dm
             return Response{.isRead = req.isRead, .data = data, .success = 1};
         }
 
+        /* server requests/responses */
         std::queue<Request> request_queue;
         std::mutex request_queue_lock;
 
@@ -89,9 +91,10 @@ namespace dm
         Response process_control(const Request& req);
     public:
         /* This will be connected to the test bench at the end of the day. */
-        virtual uint32_t read_dm(uint32_t addr) const = 0;
+        virtual uint32_t read_dm(uint32_t addr) = 0;
         virtual void write_dm(uint32_t addr, uint32_t data) = 0;
 
+        /* immediate response */
         Response process_request(const Request& req);
 
         /* asynchronus interface for server */
@@ -208,7 +211,7 @@ namespace dm
         DTM_RegisterFile dtm_register_file;
         DM_RegisterFile dm_register_file;
     public:
-        virtual uint32_t read_dm(uint32_t addr) const override;
+        virtual uint32_t read_dm(uint32_t addr) override;
         virtual void write_dm(uint32_t addr, uint32_t data) override;
     };
 
@@ -218,7 +221,19 @@ namespace dm
 
     class DM_TestBenchInterface : public DM_Interface
     {
+    private:
+        /* DMI requests/reponses */
+        std::queue<v2dmi::DMI_Request> dmi_request_queue;
+        std::queue<v2dmi::DMI_Response> dmi_response_queue;
+    public:
+        uint32_t read_dm(uint32_t addr) override;
+        void write_dm(uint32_t addr, uint32_t data) override;
 
+        void tick();
+
+        /* interface for test bench */
+        std::optional<v2dmi::DMI_Request> pop_dmi_request();
+        void push_dmi_response(const v2dmi::DMI_Response& resp);
     };
 }
 
