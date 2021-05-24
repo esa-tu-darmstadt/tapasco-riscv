@@ -7,6 +7,10 @@
 #include <vector>
 #include <thread>
 #include <string>
+#include <sstream>
+#include <queue>
+#include <optional>
+#include <mutex>
 
 #include <unistd.h>
 #include <sys/socket.h>
@@ -17,10 +21,82 @@
 
 namespace dm
 {
+    /* This can later be extended to forwarding and test bench connection. */
     class DM_Interface
     {
+    private:
+        static std::string req_to_string(const Request& req)
+        {
+            std::stringstream ss;
+
+            if (req.isRead)
+                ss << "READ ";
+            else
+                ss << "WRITE ";
+
+            switch (req.type) {
+                case Request_RequestType_dtm:
+                    ss << "DTM";
+                    break;
+                case Request_RequestType_dm:
+                    ss << "DM";
+                    break;
+                case Request_RequestType_register:
+                    ss << "REG";
+                    break;
+                case Request_RequestType_memory:
+                    ss << "MEM";
+                    break;
+                case Request_RequestType_systemBus:
+                    ss << "BUS";
+                    break;
+                case Request_RequestType_control:
+                    ss << "CTRL";
+                    break;
+                default:
+                    return "INVALID";
+            }
+
+            ss << " from/to " << std::hex << req.addr;
+
+            if (!req.isRead)
+                ss << " value " << req.data;
+            
+            return ss.str();
+    }
+
+        static Response invalid(const Request& req)
+        {
+            return Response{.isRead = req.isRead, .success = 0};
+        }
+
+        static Response valid(const Request& req, uint32_t data = 0)
+        {
+            return Response{.isRead = req.isRead, .data = data, .success = 1};
+        }
+
+        std::queue<Request> request_queue;
+        std::mutex request_queue_lock;
+
+        std::queue<Response> response_queue;
+        std::mutex response_queue_lock;
+
+        Response process_read_dtm(const Request& req);
+        Response process_dm(const Request& req);
+        Response process_register(const Request& req);
+        Response process_memory(const Request& req);
+        Response process_bus(const Request& req);
+        Response process_control(const Request& req);
     public:
-        virtual Response process_request(const Request& req) = 0;
+        /* This will be connected to the test bench at the end of the day. */
+        virtual uint32_t read_dm(uint32_t addr) const = 0;
+        virtual void write_dm(uint32_t addr, uint32_t data) = 0;
+
+        Response process_request(const Request& req);
+
+        /* asynchronus interface for server */
+        void push_request(const Request& req);
+        std::optional<Response> pop_response();
     };
 
     /* This handles the socket to which OpenOCD connects. It takes a client connection, reads and answers requests. */
@@ -48,6 +124,10 @@ namespace dm
         void start_listening();
         void stop_listening();
     };
+
+    /*
+        In-memory stuff
+     */
 
     /*
         This is an internal buffer for logging and easily accessing the DTM/DM registers, memory, system bus and more.
@@ -122,37 +202,23 @@ namespace dm
 
     } __attribute__((packed));
 
-    /* This can later be extended to forwarding and test bench connection. */
     class DM_MemoryInterface : public DM_Interface
     {
     private:
         DTM_RegisterFile dtm_register_file;
         DM_RegisterFile dm_register_file;
-
-        std::string req_to_string(const Request& req) const;
-
-        static Response invalid(const Request& req)
-        {
-            return Response{.isRead = req.isRead, .success = 0};
-        }
-
-        static Response valid(const Request& req, uint32_t data = 0)
-        {
-            return Response{.isRead = req.isRead, .data = data, .success = 1};
-        }
-
-        /* This will be connected to the test bench at the end of the day. */
-        uint32_t read_dm(uint32_t addr) const;
-        void write_dm(uint32_t addr, uint32_t data);
-
-        Response process_read_dtm(const Request& req);
-        Response process_dm(const Request& req);
-        Response process_register(const Request& req);
-        Response process_memory(const Request& req);
-        Response process_bus(const Request& req);
-        Response process_control(const Request& req);
     public:
-        virtual Response process_request(const Request& req) override;
+        virtual uint32_t read_dm(uint32_t addr) const override;
+        virtual void write_dm(uint32_t addr, uint32_t data) override;
+    };
+
+    /*
+        TB stuff
+     */
+
+    class DM_TestBenchInterface : public DM_Interface
+    {
+
     };
 }
 
