@@ -4,7 +4,7 @@
 
 namespace v2dmi {
 
-    void DMI_Handler::returnResponse(const DMI_Response& response) {
+    void DMI_Handler::returnResponse(const DMI_Response &response) {
         dm_interface->push_dmi_response(response);
     }
 
@@ -31,6 +31,7 @@ namespace v2dmi {
             DMI_Response response;
             response.payload = ptop->dmi_rdata;
             response.responseStatus = SUCCESS;
+            response.isRead = isRead;
             returnResponse(response);
 
             // We have processed the request -> clear busy flag
@@ -40,6 +41,7 @@ namespace v2dmi {
 
             if (receiveRequest(request)) {
                 // Returns true if a request is available for processing
+                isRead = request.dmiAccessType == WRITE ? 0 : 1;
 
                 // Handle request by resolving the pseudo request address and changing values at DM interface ports
                 switch (request.converterAddress) {
@@ -48,6 +50,7 @@ namespace v2dmi {
                         DMI_Response response;
                         response.payload = 0x0C751;
                         response.responseStatus = SUCCESS;
+                        response.isRead = isRead;
                         returnResponse(response);
                         break;
                     }
@@ -57,6 +60,7 @@ namespace v2dmi {
                         DMI_Response response;
                         response.payload = 0x0D41;
                         response.responseStatus = SUCCESS;
+                        response.isRead = isRead;
                         returnResponse(response);
                         break;
                     }
@@ -66,18 +70,21 @@ namespace v2dmi {
                         DMI_Response response;
                         response.payload = 0x0D74C;
                         response.responseStatus = SUCCESS;
+                        response.isRead = isRead;
                         returnResponse(response);
                         break;
                     }
 
                     case DMI_ADDR_REG_ADDR: {
                         // Apply a new addr value
+                        std::cout << "Write DMI addr: " << std::hex << request.payload << std::endl;
                         ptop->dmi_addr = request.payload & 0x7F;
 
                         // AxiToDMI always returns the same values here
                         DMI_Response response;
                         response.payload = 0x0ADD5;
                         response.responseStatus = SUCCESS;
+                        response.isRead = isRead;
                         returnResponse(response);
                         break;
                     }

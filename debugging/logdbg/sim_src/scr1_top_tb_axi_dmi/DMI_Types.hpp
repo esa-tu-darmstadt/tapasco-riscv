@@ -32,6 +32,7 @@ namespace v2dmi {
     typedef struct {
         uint32_t payload;
         DMI_ResponseStatus responseStatus;
+        unsigned int isRead;
     } DMI_Response;
 
 } // namespace v2dmi

@@ -483,15 +483,17 @@ namespace dm
         }
 
         /* try to fetch DMI response */
-        if (!dmi_response_queue.empty()) {
+        if (dmi_response_queue.size() >= 2) {
             if (response_queue_lock.try_lock()) {
 
                 std::cout << "Got DMI response" << std::endl;
+                // We always expect 2 DMI responses per Openocd request!
+                dmi_response_queue.pop();
                 v2dmi::DMI_Response dmi_resp = dmi_response_queue.front();
                 dmi_response_queue.pop();
 
-                Response resp {
-                    .isRead = 0, //TODO
+                Response resp{
+                    .isRead = dmi_resp.isRead,
                     .data = dmi_resp.payload,
                     .success = dmi_resp.responseStatus
                 };

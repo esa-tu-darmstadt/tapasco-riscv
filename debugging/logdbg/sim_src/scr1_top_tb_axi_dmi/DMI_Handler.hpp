@@ -23,6 +23,7 @@ namespace v2dmi {
         // internal state
         bool busy = false;
         int latency = 0;
+        unsigned int isRead;
     };
 
 } // namespace v2dmi
