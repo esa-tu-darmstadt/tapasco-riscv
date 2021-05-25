@@ -79,6 +79,7 @@ namespace v2dmi {
                         response.payload = 0x0ADD5;
                         response.responseStatus = SUCCESS;
                         returnResponse(response);
+                        break;
                     }
 
                     case DMI_REG_ADDR: {
@@ -94,10 +95,11 @@ namespace v2dmi {
                         // Set wait latency and change busy state
                         latency = waitForResponseLatency;
                         busy = true;
+                        break;
                     }
 
                     default:
-                        std::cerr << "Invalid request address!" << std::endl;
+                        std::cerr << "DMI Handler: Invalid request address: " << std::hex << request.converterAddress << "!" << std::endl;
                         break;
                 }
             }
