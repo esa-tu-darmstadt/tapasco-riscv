@@ -240,11 +240,11 @@ namespace dm
         std::optional<Response> result;
 
         if (response_queue_lock.try_lock()) {
-            if (!response_queue.empty()) {            
-                Response resp = response_queue.back();
+            if (!response_queue.empty()) {
+                Response resp = response_queue.front();
+                response_queue.pop();
                 std::cout << "Popped response " << resp.isRead << " " << resp.data << " " << resp.success << std::endl;
                 result = resp;
-                response_queue.pop();
             } else {
                 //std::cout << "No responses!" << std::endl;
             }
@@ -448,7 +448,7 @@ namespace dm
         /* try to fetch request from socket */
         if (request_queue_lock.try_lock()) {
             if (!request_queue.empty()) {
-                Request req = request_queue.back();
+                Request req = request_queue.front();
                 request_queue.pop();
 
                 std::cout << req_to_string(req) << std::endl;
@@ -484,10 +484,10 @@ namespace dm
 
         /* try to fetch DMI response */
         if (!dmi_response_queue.empty()) {
-            std::cout << "Got DMI response" << std::endl;
-            v2dmi::DMI_Response dmi_resp = dmi_response_queue.back();
+            if (response_queue_lock.try_lock()) {
 
-            if (response_queue_lock.try_lock()) {            
+                std::cout << "Got DMI response" << std::endl;
+                v2dmi::DMI_Response dmi_resp = dmi_response_queue.front();
                 dmi_response_queue.pop();
 
                 Response resp {
@@ -505,7 +505,7 @@ namespace dm
     std::optional<v2dmi::DMI_Request> DM_TestBenchInterface::pop_dmi_request()
     {
         if (!dmi_request_queue.empty()) {
-            v2dmi::DMI_Request req = dmi_request_queue.back();
+            v2dmi::DMI_Request req = dmi_request_queue.front();
             dmi_request_queue.pop();
             return req;
         }
