@@ -212,6 +212,7 @@ namespace dm
 
     void DM_Interface::push_request(const Request& req)
     {
+        std::cout << "Pushed request!" << std::endl;
         request_queue_lock.lock();
         request_queue.push(req);
         request_queue_lock.unlock();
@@ -219,16 +220,22 @@ namespace dm
 
     std::optional<Response> DM_Interface::pop_response()
     {
-        if (response_queue_lock.try_lock()) {
-            Response resp = response_queue.back();
-            response_queue.pop();
-            response_queue_lock.unlock();
+        std::optional<Response> result;
 
-            return resp;
+        if (response_queue_lock.try_lock()) {
+            if (!response_queue.empty()) {            
+                std::cout << "Popped response!" << std::endl;
+                Response resp = response_queue.back();
+                result = resp;
+                response_queue.pop();
+            } else {
+                //std::cout << "No responses!" << std::endl;
+            }
+
+            response_queue_lock.unlock();
         }
 
-        /* no value */
-        return std::optional<Response>();
+        return result;
     }
 
     /*
@@ -241,12 +248,39 @@ namespace dm
         ssize_t n;
 
         /* read data */
-        while ((n = recv(connection_fd, buf.data(), buf.size(), 0)) != -1) {
-            Request req;
-            Response resp;
+        while (true) {
+            n = recv(connection_fd, buf.data(), buf.size(), MSG_DONTWAIT);
 
-            /* parse request */
-            {
+            if (n < 0) {
+                if (errno != EAGAIN && errno != EWOULDBLOCK)
+                    break; /* some error */
+
+                /* check for response and build it */
+                auto dm_resp = dm_interface->pop_response();
+
+                if (dm_resp) {
+                    capn c;
+                    capn_init_malloc(&c);
+                    capn_ptr cr = capn_root(&c);
+                    capn_segment *cs = cr.seg;
+
+                    /* THIS IS NOT THREAD SAFE! IT'S THE USER'S RESPONSIBILITY TO ONLY HAVE ONE CONNECTION AT ONCE! */
+                    //resp = dm_interface->process_request(req);
+
+                    Response resp = *dm_resp;
+
+                    Response_ptr ptr = new_Response(cs);
+                    write_Response(&resp, ptr);
+                    capn_setp(capn_root(&c), 0, ptr.p);
+
+                    capn_write_fd(&c, write /* function ptr! */ , connection_fd, 0 /* packed */);
+                }
+            } else {
+                std::cout << "Received " << n << " bytes!" << std::endl;
+
+                /* parse request */
+                Request req;
+
                 capn c;
                 capn_init_mem(&c, reinterpret_cast<const uint8_t *>(buf.data()), n, 0 /* packed */);
 
@@ -254,25 +288,12 @@ namespace dm
                 
                 ptr.p = capn_getp(capn_root(&c), 0 /* off */, 1 /* resolve */);
                 read_Request(&req, ptr);
-            }
 
-            /* build response */
-            {
-                capn c;
-                capn_init_malloc(&c);
-                capn_ptr cr = capn_root(&c);
-                capn_segment *cs = cr.seg;
-
-                /* THIS IS NOT THREAD SAFE! IT'S THE USER'S RESPONSIBILITY TO ONLY HAVE ONE CONNECTION AT ONCE! */
-                resp = dm_interface->process_request(req);
-
-                Response_ptr ptr = new_Response(cs);
-                write_Response(&resp, ptr);
-                capn_setp(capn_root(&c), 0, ptr.p);
-
-                capn_write_fd(&c, write /* function ptr! */ , connection_fd, 0 /* packed */);
-            }
+                dm_interface->push_request(req);
+            }            
         }
+
+        std::cout << "Connection closed!" << std::endl;
 
         if (connection_fd != -1)
             close(connection_fd);
@@ -441,6 +462,7 @@ namespace dm
 
         /* try to fetch DMI response */
         if (!dmi_response_queue.empty()) {
+            std::cout << "Got DMI response" << std::endl;
             v2dmi::DMI_Response dmi_resp = dmi_response_queue.back();
 
             if (response_queue_lock.try_lock()) {            
@@ -471,6 +493,7 @@ namespace dm
     
     void DM_TestBenchInterface::push_dmi_response(const v2dmi::DMI_Response& resp)
     {
+        std::cout << "Pushing DMI response" << std::endl;
         dmi_response_queue.push(resp);
     }
 }
