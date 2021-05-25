@@ -34,7 +34,7 @@ PWD := $(dir $(abspath $(lastword $(MAKEFILE_LIST))))
 V_CCFLAGS := -g -Wall -O3 -I$(PWD)$(SIM_SRC) -I$(CAPN_PATH)/lib
 V_LDFLAGS := -lpthread
 
-.PHONY: all clean sim build scr1
+.PHONY: all clean sim preparebuild scr1
 
 all: preparebuild scr1 sim
 
