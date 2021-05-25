@@ -11,10 +11,30 @@ namespace dm
         DM_Interface
      */
    
-    Response DM_Interface::process_read_dtm(const Request& req)
+    Response DM_Interface::process_dtm(const Request& req)
     {
-        if (req.addr == 8)
-            return Response{.isRead = req.isRead, .data = 0x71, .success = 1};
+        Response resp{.isRead = req.isRead};
+
+        if (req.isRead) {
+            if (req.addr == 0x8) {
+                resp.success = 1;
+                resp.data = 0x71;
+
+                response_queue_lock.lock();
+                response_queue.push(resp);
+                response_queue_lock.unlock();
+            }
+
+            if (req.addr == 0x10 || req.addr == 0xC) {
+                /* data register */
+                resp = process_dm(req);
+            }
+        } else {
+            if (req.addr == 0x10 || req.addr == 0xC) {
+                /* data register */
+                resp = process_dm(req);
+            }
+        }
 
         return Response{.isRead = req.isRead, .data = 0x0, .success = 1};
     }
@@ -187,10 +207,7 @@ namespace dm
 
         switch (req.type) {
             case Request_RequestType_dtm:
-                if (req.isRead)
-                    return process_read_dtm(req);
-
-                break;
+                return process_dtm(req);
             case Request_RequestType_dm:
                 return process_dm(req);
             case Request_RequestType_register:
@@ -224,8 +241,8 @@ namespace dm
 
         if (response_queue_lock.try_lock()) {
             if (!response_queue.empty()) {            
-                std::cout << "Popped response!" << std::endl;
                 Response resp = response_queue.back();
+                std::cout << "Popped response " << resp.isRead << " " << resp.data << " " << resp.success << std::endl;
                 result = resp;
                 response_queue.pop();
             } else {
@@ -276,20 +293,22 @@ namespace dm
                     capn_write_fd(&c, write /* function ptr! */ , connection_fd, 0 /* packed */);
                 }
             } else {
-                std::cout << "Received " << n << " bytes!" << std::endl;
+                //std::cout << "Received " << n << " bytes!" << std::endl;
 
                 /* parse request */
-                Request req;
+                if (n > 0) {
+                    Request req;
 
-                capn c;
-                capn_init_mem(&c, reinterpret_cast<const uint8_t *>(buf.data()), n, 0 /* packed */);
+                    capn c;
+                    capn_init_mem(&c, reinterpret_cast<const uint8_t *>(buf.data()), n, 0 /* packed */);
 
-                Request_ptr ptr;
-                
-                ptr.p = capn_getp(capn_root(&c), 0 /* off */, 1 /* resolve */);
-                read_Request(&req, ptr);
+                    Request_ptr ptr;
+                    
+                    ptr.p = capn_getp(capn_root(&c), 0 /* off */, 1 /* resolve */);
+                    read_Request(&req, ptr);
 
-                dm_interface->push_request(req);
+                    dm_interface->push_request(req);
+                }
             }            
         }
 
@@ -437,20 +456,23 @@ namespace dm
                 /* this will eventually push something onto the DMI request queue */
                 switch (req.type) {
                     case Request_RequestType_dtm:
-                        if (req.isRead)
-                            process_read_dtm(req);
-
-                            break;
+                        process_dtm(req);
+                        break;
                     case Request_RequestType_dm:
                         process_dm(req);
+                        break;
                     case Request_RequestType_register:
                         process_register(req);
+                        break;
                     case Request_RequestType_memory:
                         process_memory(req);
+                        break;
                     case Request_RequestType_systemBus:
                         process_bus(req);
+                        break;
                     case Request_RequestType_control:
                         process_control(req);
+                        break;
                     default:
                         std::cout << "WARNING: Unknown request type " << req.type << std::endl;
                         break;

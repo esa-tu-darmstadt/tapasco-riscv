@@ -64,7 +64,7 @@ namespace dm
                 ss << " value " << req.data;
             
             return ss.str();
-    }
+        }
 
         static Response invalid(const Request& req)
         {
@@ -78,12 +78,13 @@ namespace dm
 
         /* server requests/responses */
         std::queue<Request> request_queue;
+        std::queue<bool> request_is_read_queue;
         std::mutex request_queue_lock;
 
         std::queue<Response> response_queue;
         std::mutex response_queue_lock;
 
-        Response process_read_dtm(const Request& req);
+        Response process_dtm(const Request& req);
         Response process_dm(const Request& req);
         Response process_register(const Request& req);
         Response process_memory(const Request& req);
