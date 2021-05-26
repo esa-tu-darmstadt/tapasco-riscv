@@ -19,7 +19,7 @@ namespace dm
 
         if (response_queue_mutex.try_lock()) {
             if (!response_queue.empty()) {
-                result = response_queue.back();
+                result = response_queue.front();
                 response_queue.pop();
             }
 
@@ -42,7 +42,7 @@ namespace dm
 
         if (request_queue_mutex.try_lock()) {
             if (!request_queue.empty()) {
-                result = request_queue.back();
+                result = request_queue.front();
                 request_queue.pop();
             }
 
