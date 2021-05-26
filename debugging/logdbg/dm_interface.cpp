@@ -404,16 +404,9 @@ namespace dm
 
     uint32_t DM_TestBenchInterface::read_dm(uint32_t addr)
     {
-        v2dmi::DMI_Request req{
-            .converterAddress = v2dmi::DMI_ConverterAddress::DMI_ADDR_REG_ADDR,
-            .payload = addr,
-            .dmiAccessType = v2dmi::DMI_AccessType::WRITE
-        };
 
-        dmi_request_queue.push(req);
-
-        req = v2dmi::DMI_Request{
-            .converterAddress = v2dmi::DMI_ConverterAddress::DMI_REG_ADDR,
+        v2dmi::DMI_Request req = v2dmi::DMI_Request{
+            .converterAddress = static_cast<v2dmi::DMI_ConverterAddress>(addr),
             .payload = 0,
             .dmiAccessType = v2dmi::DMI_AccessType::READ
         };
@@ -427,15 +420,7 @@ namespace dm
     void DM_TestBenchInterface::write_dm(uint32_t addr, uint32_t data)
     {
         v2dmi::DMI_Request req{
-            .converterAddress = v2dmi::DMI_ConverterAddress::DMI_ADDR_REG_ADDR,
-            .payload = addr,
-            .dmiAccessType = v2dmi::DMI_AccessType::WRITE
-        };
-
-        dmi_request_queue.push(req);
-
-        req = v2dmi::DMI_Request{
-            .converterAddress = v2dmi::DMI_ConverterAddress::DMI_REG_ADDR,
+            .converterAddress = static_cast<v2dmi::DMI_ConverterAddress>(addr),
             .payload = data,
             .dmiAccessType = v2dmi::DMI_AccessType::WRITE
         };
@@ -483,11 +468,9 @@ namespace dm
         }
 
         /* try to fetch DMI response */
-        if (dmi_response_queue.size() >= 2) {
+        if (dmi_response_queue.size() >= 1) {
             if (response_queue_lock.try_lock()) {
 
-                // We always expect 2 DMI responses per Openocd request!
-                dmi_response_queue.pop();
                 v2dmi::DMI_Response dmi_resp = dmi_response_queue.front();
                 dmi_response_queue.pop();
 
