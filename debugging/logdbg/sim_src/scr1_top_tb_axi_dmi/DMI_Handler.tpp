@@ -36,78 +36,84 @@ namespace v2dmi {
 
             // We have processed the request -> clear busy flag
             busy = false;
+            // Ensure a minimum of x cycles between the next request!
+            idleCycles = minIdleCyclesBetweenRequests;
         } else {
-            DMI_Request request;
+            if (idleCycles > 0) {
+                --idleCycles;
+            } else {
+                DMI_Request request;
 
-            if (receiveRequest(request)) {
-                // Returns true if a request is available for processing
-                isRead = request.dmiAccessType == WRITE ? 0 : 1;
+                if (receiveRequest(request)) {
+                    // Returns true if a request is available for processing
+                    isRead = request.dmiAccessType == WRITE ? 0 : 1;
 
-                // Handle request by resolving the pseudo request address and changing values at DM interface ports
-                switch (request.converterAddress) {
-                    case CTRL_REG_ADDR: {
-                        // AxiToDMI always returns the same values here
-                        DMI_Response response;
-                        response.payload = 0x0C751;
-                        response.responseStatus = SUCCESS;
-                        response.isRead = isRead;
-                        returnResponse(response);
-                        break;
+                    // Handle request by resolving the pseudo request address and changing values at DM interface ports
+                    switch (request.converterAddress) {
+                        case CTRL_REG_ADDR: {
+                            // AxiToDMI always returns the same values here
+                            DMI_Response response;
+                            response.payload = 0x0C751;
+                            response.responseStatus = SUCCESS;
+                            response.isRead = isRead;
+                            returnResponse(response);
+                            break;
+                        }
+
+                        case IDCODE_REG_ADDR: {
+                            // AxiToDMI always returns the same values here
+                            DMI_Response response;
+                            response.payload = 0x0D41;
+                            response.responseStatus = SUCCESS;
+                            response.isRead = isRead;
+                            returnResponse(response);
+                            break;
+                        }
+
+                        case DTMCS_REG_ADDR: {
+                            // AxiToDMI always returns the same values here
+                            DMI_Response response;
+                            response.payload = 0x0D74C;
+                            response.responseStatus = SUCCESS;
+                            response.isRead = isRead;
+                            returnResponse(response);
+                            break;
+                        }
+
+                        case DMI_ADDR_REG_ADDR: {
+                            // Apply a new addr value
+                            std::cout << "Write DMI addr: " << std::hex << request.payload << std::endl;
+                            ptop->dmi_addr = request.payload & 0x7F;
+
+                            // AxiToDMI always returns the same values here
+                            DMI_Response response;
+                            response.payload = 0x0ADD5;
+                            response.responseStatus = SUCCESS;
+                            response.isRead = isRead;
+                            returnResponse(response);
+                            break;
+                        }
+
+                        case DMI_REG_ADDR: {
+                            // Set wdata register and issue a new DM request
+                            std::cout << "Write DMI wdata: " << std::hex << request.payload << std::endl;
+                            // Apply data
+                            ptop->dmi_wdata = request.payload;
+
+                            // Issue request
+                            ptop->dmi_req = 1;
+                            ptop->dmi_wr = request.dmiAccessType == WRITE ? 1 : 0;
+
+                            // Set wait latency and change busy state
+                            latency = waitForResponseLatency;
+                            busy = true;
+                            break;
+                        }
+
+                        default:
+                            std::cerr << "DMI Handler: Invalid request address: " << std::hex << request.converterAddress << "!" << std::endl;
+                            break;
                     }
-
-                    case IDCODE_REG_ADDR: {
-                        // AxiToDMI always returns the same values here
-                        DMI_Response response;
-                        response.payload = 0x0D41;
-                        response.responseStatus = SUCCESS;
-                        response.isRead = isRead;
-                        returnResponse(response);
-                        break;
-                    }
-
-                    case DTMCS_REG_ADDR: {
-                        // AxiToDMI always returns the same values here
-                        DMI_Response response;
-                        response.payload = 0x0D74C;
-                        response.responseStatus = SUCCESS;
-                        response.isRead = isRead;
-                        returnResponse(response);
-                        break;
-                    }
-
-                    case DMI_ADDR_REG_ADDR: {
-                        // Apply a new addr value
-                        std::cout << "Write DMI addr: " << std::hex << request.payload << std::endl;
-                        ptop->dmi_addr = request.payload & 0x7F;
-
-                        // AxiToDMI always returns the same values here
-                        DMI_Response response;
-                        response.payload = 0x0ADD5;
-                        response.responseStatus = SUCCESS;
-                        response.isRead = isRead;
-                        returnResponse(response);
-                        break;
-                    }
-
-                    case DMI_REG_ADDR: {
-                        // Set wdata register and issue a new DM request
-                        std::cout << "Write DMI wdata: " << std::hex << request.payload << std::endl;
-                        // Apply data
-                        ptop->dmi_wdata = request.payload;
-
-                        // Issue request
-                        ptop->dmi_req = 1;
-                        ptop->dmi_wr = request.dmiAccessType == WRITE ? 1 : 0;
-
-                        // Set wait latency and change busy state
-                        latency = waitForResponseLatency;
-                        busy = true;
-                        break;
-                    }
-
-                    default:
-                        std::cerr << "DMI Handler: Invalid request address: " << std::hex << request.converterAddress << "!" << std::endl;
-                        break;
                 }
             }
         }

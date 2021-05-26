@@ -8,6 +8,7 @@ namespace v2dmi {
     class DMI_Handler {
       private:
         static constexpr int waitForResponseLatency = 2;
+        static constexpr int minIdleCyclesBetweenRequests = 5;
 
         void returnResponse(const DMI_Response &response);
         bool receiveRequest(DMI_Request &request);
@@ -23,6 +24,7 @@ namespace v2dmi {
         // internal state
         bool busy = false;
         int latency = 0;
+        int idleCycles = 0;
         unsigned int isRead;
     };
 
