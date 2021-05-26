@@ -229,7 +229,6 @@ namespace dm
 
     void DM_Interface::push_request(const Request& req)
     {
-        std::cout << "Pushed request!" << std::endl;
         request_queue_lock.lock();
         request_queue.push(req);
         request_queue_lock.unlock();
@@ -243,10 +242,7 @@ namespace dm
             if (!response_queue.empty()) {
                 Response resp = response_queue.front();
                 response_queue.pop();
-                std::cout << "Popped response " << resp.isRead << " " << resp.data << " " << resp.success << std::endl;
                 result = resp;
-            } else {
-                //std::cout << "No responses!" << std::endl;
             }
 
             response_queue_lock.unlock();
@@ -486,7 +482,6 @@ namespace dm
         if (dmi_response_queue.size() >= 2) {
             if (response_queue_lock.try_lock()) {
 
-                std::cout << "Got DMI response" << std::endl;
                 // We always expect 2 DMI responses per Openocd request!
                 dmi_response_queue.pop();
                 v2dmi::DMI_Response dmi_resp = dmi_response_queue.front();
@@ -517,7 +512,6 @@ namespace dm
     
     void DM_TestBenchInterface::push_dmi_response(const v2dmi::DMI_Response& resp)
     {
-        std::cout << "Pushing DMI response" << std::endl;
         dmi_response_queue.push(resp);
     }
 }

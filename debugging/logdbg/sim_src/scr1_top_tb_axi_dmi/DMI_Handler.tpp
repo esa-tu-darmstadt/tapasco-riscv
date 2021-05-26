@@ -91,7 +91,7 @@ namespace v2dmi {
 
                     case DMI_REG_ADDR: {
                         // Set wdata register and issue a new DM request
-
+                        std::cout << "Write DMI wdata: " << std::hex << request.payload << std::endl;
                         // Apply data
                         ptop->dmi_wdata = request.payload;
 
