@@ -287,6 +287,8 @@ namespace dm
                     capn_setp(capn_root(&c), 0, ptr.p);
 
                     capn_write_fd(&c, write /* function ptr! */ , connection_fd, 0 /* packed */);
+
+                    capn_free(&c);
                 }
             } else {
                 //std::cout << "Received " << n << " bytes!" << std::endl;
@@ -302,6 +304,8 @@ namespace dm
                     
                     ptr.p = capn_getp(capn_root(&c), 0 /* off */, 1 /* resolve */);
                     read_Request(&req, ptr);
+
+                    capn_free(&c);
 
                     dm_interface->push_request(req);
                 }
