@@ -3,6 +3,67 @@
 
 namespace dm
 {
+    void RequestResponseFIFO::push_request(const Request& req)
+    {
+        request_queue_mutex.lock();
+        request_queue.push(req);
+        request_queue_mutex.unlock();
+
+        /* notfiy AFTER unlocking */
+        request_cv.notify_one();
+    }
+
+    std::optional<Response> RequestResponseFIFO::pop_response()
+    {
+        std::optional<Response> result;
+
+        if (response_queue_mutex.try_lock()) {
+            if (!response_queue.empty()) {
+                result = response_queue.back();
+                response_queue.pop();
+            }
+
+            response_queue_mutex.unlock();
+        }
+
+        return result;
+    }
+
+    void RequestResponseFIFO::push_response(const Response& resp)
+    {
+        response_queue_mutex.lock();
+        response_queue.push(resp);
+        response_queue_mutex.unlock();
+    }
+
+    std::optional<Request> RequestResponseFIFO::pop_request()
+    {
+        std::optional<Request> result;
+
+        if (request_queue_mutex.try_lock()) {
+            if (!request_queue.empty()) {
+                result = request_queue.back();
+                request_queue.pop();
+            }
+
+            request_queue_mutex.unlock();
+        }
+
+        return result;
+    }
+
+    bool RequestResponseFIFO::has_requests()
+    {
+        std::lock_guard<std::mutex> lk(request_queue_mutex);
+        return !request_queue.empty();
+    }
+
+    void RequestResponseFIFO::wait_for_request()
+    {
+        std::unique_lock<std::mutex> lk(request_queue_mutex);
+        request_cv.wait(lk, [this]{ return !request_queue.empty(); });
+    }
+
     /*
         DM_Interface
      */
@@ -16,9 +77,7 @@ namespace dm
                 resp.success = 1;
                 resp.data = 0x71;
 
-                response_queue_lock.lock();
-                response_queue.push(resp);
-                response_queue_lock.unlock();
+                fifo->push_response(resp);
             }
 
             if (req.addr == 0x10 || req.addr == 0xC) {
@@ -78,28 +137,10 @@ namespace dm
         return invalid(req);
     }
 
-    void DM_Interface::push_request(const Request& req)
+    DM_Interface::DM_Interface(const std::shared_ptr<RequestResponseFIFO>& fifo):
+        fifo(fifo)
     {
-        request_queue_lock.lock();
-        request_queue.push(req);
-        request_queue_lock.unlock();
-    }
 
-    std::optional<Response> DM_Interface::pop_response()
-    {
-        std::optional<Response> result;
-
-        if (response_queue_lock.try_lock()) {
-            if (!response_queue.empty()) {
-                Response resp = response_queue.front();
-                response_queue.pop();
-                result = resp;
-            }
-
-            response_queue_lock.unlock();
-        }
-
-        return result;
     }
 
     /*
@@ -120,7 +161,7 @@ namespace dm
                     break; /* some error */
 
                 /* check for response and build it */
-                auto dm_resp = dm_interface->pop_response();
+                auto dm_resp = fifo->pop_response();
 
                 if (dm_resp) {
                     capn c;
@@ -158,7 +199,7 @@ namespace dm
 
                     capn_free(&c);
 
-                    dm_interface->push_request(req);
+                    fifo->push_request(req);
                 }
             }            
         }
@@ -192,9 +233,9 @@ namespace dm
         }
     }
 
-    OpenOCDServer::OpenOCDServer(const char *socket_path, const std::shared_ptr<DM_Interface>& dm_interface):
+    OpenOCDServer::OpenOCDServer(const char *socket_path, const std::shared_ptr<RequestResponseFIFO>& fifo):
         socket_file(socket_path),
-        dm_interface(dm_interface)
+        fifo(fifo)
     {
         socket_fd = socket(PF_UNIX, SOCK_STREAM | SOCK_NONBLOCK, 0);
 

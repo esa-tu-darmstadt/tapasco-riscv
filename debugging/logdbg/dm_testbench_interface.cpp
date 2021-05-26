@@ -6,7 +6,6 @@ namespace dm
     /*
         TB stuff
      */
-
     uint32_t DM_TestBenchInterface::read_dm(uint32_t addr)
     {
 
@@ -33,50 +32,78 @@ namespace dm
         dmi_request_queue.push(req);
     }
 
+    bool DM_TestBenchInterface::can_tick()
+    {
+        /* first check if we have cycles left */
+        if (cycles_left > 0)
+            return true;
+
+        /* then check if we have requests in queue */
+        if (fifo->has_requests()) {
+            std::cout << "FIFO has requests" << std::endl;
+            cycles_left = std::max(cycles_left, cycle_budget);
+            return true;
+        }
+
+        /* check if we have responses left */
+        if (!dmi_response_queue.empty()) {
+            std::cout << "DMI responses waiting" << std::endl;
+            cycles_left = std::max(cycles_left, cycle_budget);
+            return true;
+        }
+
+        return false;
+    }
+
     void DM_TestBenchInterface::tick()
     {
+        if (!can_tick()) {
+            /* no budget, no pending requests => sleep */
+            std::cout << "Cannot tick, waiting..." << std::endl;
+            fifo->wait_for_request();
+            std::cout << "Can tick again, working..." << std::endl;
+        }
+
         /* try to fetch request from socket */
-        if (request_queue_lock.try_lock()) {
-            if (!request_queue.empty()) {
-                Request req = request_queue.front();
-                request_queue.pop();
+        std::optional<Request> opt_req = fifo->pop_request();
 
-                std::cout << req_to_string(req) << std::endl;
+        if (opt_req) {
+            /* evertime we get a request, our budget is reset */
+            cycles_left = std::max(cycles_left, cycle_budget);
 
-                /* this will eventually push something onto the DMI request queue */
-                switch (req.type) {
-                    case Request_RequestType_dtm:
-                        process_dtm(req);
-                        break;
-                    case Request_RequestType_control:
-                        process_control(req);
-                        break;
-                    default:
-                        std::cout << "WARNING: Unknown request type " << req.type << std::endl;
-                        break;
-                }
+            Request req = *opt_req;
+            std::cout << req_to_string(req) << std::endl;
+
+            /* this will eventually push something onto the DMI request queue */
+            switch (req.type) {
+                case Request_RequestType_dtm:
+                    process_dtm(req);
+                    break;
+                case Request_RequestType_control:
+                    process_control(req);
+                    break;
+                default:
+                    std::cout << "WARNING: Unknown request type " << req.type << std::endl;
+                    break;
             }
-            
-            request_queue_lock.unlock();
         }
 
         /* try to fetch DMI response */
         if (dmi_response_queue.size() >= 1) {
-            if (response_queue_lock.try_lock()) {
+            v2dmi::DMI_Response dmi_resp = dmi_response_queue.front();
+            dmi_response_queue.pop();
 
-                v2dmi::DMI_Response dmi_resp = dmi_response_queue.front();
-                dmi_response_queue.pop();
+            Response resp{
+                .isRead = dmi_resp.isRead,
+                .data = dmi_resp.payload,
+                .success = dmi_resp.responseStatus
+            };
 
-                Response resp{
-                    .isRead = dmi_resp.isRead,
-                    .data = dmi_resp.payload,
-                    .success = dmi_resp.responseStatus
-                };
-                
-                response_queue.push(resp);
-                response_queue_lock.unlock();
-            }
+            fifo->push_response(resp);
         }
+
+        if (cycles_left > 0)
+            --cycles_left;
     }
 
     std::optional<v2dmi::DMI_Request> DM_TestBenchInterface::pop_dmi_request()

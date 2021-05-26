@@ -120,7 +120,8 @@ int main(int argc, char **argv) {
     Verilated::commandArgs(argc, argv);
     ptop = new TOP_MODULE; // Create instance
 
-    std::shared_ptr<dm::DM_TestBenchInterface> dm_interface = std::make_shared<dm::DM_TestBenchInterface>();
+    std::shared_ptr<dm::RequestResponseFIFO> rr_fifo = std::make_shared<dm::RequestResponseFIFO>();
+    std::shared_ptr<dm::DM_TestBenchInterface> dm_interface = std::make_shared<dm::DM_TestBenchInterface>(rr_fifo);
     dm::OpenOCDServer *server = nullptr;
 
     int verbose = 0;
@@ -148,7 +149,7 @@ int main(int argc, char **argv) {
                 break;
             case 'o':
                 // Run simulation with an openocd connection
-                server = new dm::OpenOCDServer("/tmp/riscv-debug.sock", dm_interface);
+                server = new dm::OpenOCDServer("/tmp/riscv-debug.sock", rr_fifo);
                 break;
             case '?': //used for some unknown options
                 std::cout << "unknown option: " << optopt << std::endl;

@@ -14,6 +14,7 @@
 #include <iostream>
 #include <sstream>
 #include <cassert>
+#include <condition_variable>
 
 #include <unistd.h>
 #include <sys/socket.h>
@@ -25,6 +26,26 @@
 
 namespace dm
 {
+    class RequestResponseFIFO
+    {
+    private:
+        std::condition_variable request_cv;
+        std::mutex request_queue_mutex;
+        std::queue<Request> request_queue;
+
+        std::mutex response_queue_mutex;
+        std::queue<Response> response_queue;
+    public:
+        /* server side */
+        void push_request(const Request& req);
+        std::optional<Response> pop_response();
+        /* client side */
+        void push_response(const Response& resp);
+        std::optional<Request> pop_request();
+        bool has_requests();
+        void wait_for_request();
+    };
+
     /* This can later be extended to forwarding and test bench connection. */
     class DM_Interface
     {
@@ -80,30 +101,20 @@ namespace dm
         }
 
         /* server requests/responses */
-        std::queue<Request> request_queue;
-        std::queue<bool> request_is_read_queue;
-        std::mutex request_queue_lock;
-
-        std::queue<Response> response_queue;
-        std::mutex response_queue_lock;
+        std::shared_ptr<RequestResponseFIFO> fifo;
 
         Response process_dtm(const Request& req);
         Response process_dm(const Request& req);
-        Response process_register(const Request& req);
-        Response process_memory(const Request& req);
-        Response process_bus(const Request& req);
         Response process_control(const Request& req);
     public:
+        DM_Interface(const std::shared_ptr<RequestResponseFIFO>& fifo);
+
         /* This will be connected to the test bench at the end of the day. */
         virtual uint32_t read_dm(uint32_t addr) = 0;
         virtual void write_dm(uint32_t addr, uint32_t data) = 0;
 
         /* immediate response */
-        Response process_request(const Request& req);
-
-        /* asynchronus interface for server */
-        void push_request(const Request& req);
-        std::optional<Response> pop_response();
+        //Response process_request(const Request& req);
     };
 
     /* This handles the socket to which OpenOCD connects. It takes a client connection, reads and answers requests. */
@@ -118,12 +129,12 @@ namespace dm
         volatile bool run_server = true;
         std::thread listen_thread;
 
-        std::shared_ptr<DM_Interface> dm_interface;
+        std::shared_ptr<RequestResponseFIFO> fifo;
 
         void handle_connection(int connection_fd);
         void do_listen();
     public:
-        OpenOCDServer(const char *socket_path, const std::shared_ptr<DM_Interface>& dm_interface);
+        OpenOCDServer(const char *socket_path, const std::shared_ptr<RequestResponseFIFO>& fifo);
         ~OpenOCDServer();
 
         void start_listening();
