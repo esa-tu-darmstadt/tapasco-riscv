@@ -40,14 +40,14 @@ namespace dm
 
         /* then check if we have requests in queue */
         if (fifo->has_requests()) {
-            std::cout << "FIFO has requests" << std::endl;
+            //std::cout << "FIFO has requests" << std::endl;
             cycles_left = std::max(cycles_left, cycle_budget);
             return true;
         }
 
         /* check if we have responses left */
         if (!dmi_response_queue.empty()) {
-            std::cout << "DMI responses waiting" << std::endl;
+            //std::cout << "DMI responses waiting" << std::endl;
             cycles_left = std::max(cycles_left, cycle_budget);
             return true;
         }
@@ -59,16 +59,16 @@ namespace dm
     {
         if (!can_tick()) {
             /* no budget, no pending requests => sleep */
-            std::cout << "Cannot tick, waiting..." << std::endl;
+            //std::cout << "Cannot tick, waiting..." << std::endl;
             fifo->wait_for_request();
-            std::cout << "Can tick again, working..." << std::endl;
+            //std::cout << "Can tick again, working..." << std::endl;
         }
 
         /* try to fetch request from socket */
         std::optional<Request> opt_req = fifo->pop_request();
 
         if (opt_req) {
-            /* evertime we get a request, our budget is reset */
+            /* everytime we get a request, our budget is reset */
             cycles_left = std::max(cycles_left, cycle_budget);
 
             Request req = *opt_req;
