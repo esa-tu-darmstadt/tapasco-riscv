@@ -1,7 +1,7 @@
 #pragma once
 
 #include "DMI_Types.hpp"
-#include "dm_interface.hpp"
+#include "dm_testbench_interface.hpp"
 
 namespace v2dmi {
 

@@ -11,6 +11,9 @@
 #include <queue>
 #include <optional>
 #include <mutex>
+#include <iostream>
+#include <sstream>
+#include <cassert>
 
 #include <unistd.h>
 #include <sys/socket.h>
@@ -119,19 +122,13 @@ namespace dm
 
         void handle_connection(int connection_fd);
         void do_listen();
-
     public:
-
         OpenOCDServer(const char *socket_path, const std::shared_ptr<DM_Interface>& dm_interface);
         ~OpenOCDServer();
 
         void start_listening();
         void stop_listening();
     };
-
-    /*
-        In-memory stuff
-     */
 
     /*
         This is an internal buffer for logging and easily accessing the DTM/DM registers, memory, system bus and more.
@@ -205,37 +202,6 @@ namespace dm
     {
 
     } __attribute__((packed));
-
-    class DM_MemoryInterface : public DM_Interface
-    {
-    private:
-        DTM_RegisterFile dtm_register_file;
-        DM_RegisterFile dm_register_file;
-    public:
-        virtual uint32_t read_dm(uint32_t addr) override;
-        virtual void write_dm(uint32_t addr, uint32_t data) override;
-    };
-
-    /*
-        TB stuff
-     */
-
-    class DM_TestBenchInterface : public DM_Interface
-    {
-    private:
-        /* DMI requests/reponses */
-        std::queue<v2dmi::DMI_Request> dmi_request_queue;
-        std::queue<v2dmi::DMI_Response> dmi_response_queue;
-    public:
-        uint32_t read_dm(uint32_t addr) override;
-        void write_dm(uint32_t addr, uint32_t data) override;
-
-        void tick();
-
-        /* interface for test bench */
-        std::optional<v2dmi::DMI_Request> pop_dmi_request();
-        void push_dmi_response(const v2dmi::DMI_Response& resp);
-    };
 }
 
 

@@ -12,7 +12,7 @@
 #include "Vscr1_top_tb_axi_dmi__Syms.h" // all headers to access exposed internal signals
 
 #include "DMI_Handler.hpp"
-#include "dm_interface.hpp"
+#include "dm_testbench_interface.hpp"
 
 #ifndef PHASE_LENGTH
 #define PHASE_LENGTH 5

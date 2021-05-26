@@ -40,6 +40,7 @@ all: preparebuild scr1 sim
 
 preparebuild:
 	cp dm_interface.* $(SIM_SRC)/$(DEFAULT_TOP_MODULE)
+	cp dm_testbench_interface.* $(SIM_SRC)/$(DEFAULT_TOP_MODULE)
 	cp tapasco-riscv.capnp.* $(SIM_SRC)/$(DEFAULT_TOP_MODULE)
 #	cp *.cpp $(SIM_SRC)/$(DEFAULT_TOP_MODULE)
 #	cp *.c $(SIM_SRC)/$(DEFAULT_TOP_MODULE)
@@ -80,6 +81,7 @@ sim: sim_$(DEFAULT_TOP_MODULE)
 clean:
 	rm -rf $(V_DIR)
 	rm -f $(SIM_SRC)/$(DEFAULT_TOP_MODULE)/dm_interface.*
+	rm -f $(SIM_SRC)/$(DEFAULT_TOP_MODULE)/dm_testbench_interface.*
 	rm -f $(SIM_SRC)/$(DEFAULT_TOP_MODULE)/tapasco-riscv.capnp.*
 
 -include $(deps)
