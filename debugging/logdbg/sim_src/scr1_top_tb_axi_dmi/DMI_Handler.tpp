@@ -19,9 +19,6 @@ namespace v2dmi {
 
     template <class Top>
     void DMI_Handler::tick(Top *ptop) {
-        // Let the openocd interface run
-        dm_interface->tick();
-
         if (latency > 0) {
             // Request flag is only set for one cycle -> clear it
             ptop->dmi_req = 0;
@@ -56,6 +53,11 @@ namespace v2dmi {
                             response.payload = 0x0C751;
                             response.responseStatus = SUCCESS;
                             response.isRead = isRead;
+
+                            if (!isRead) {
+                                std::cout << "Strange Request!" << std::endl;
+                            }
+
                             returnResponse(response);
                             break;
                         }
@@ -66,6 +68,11 @@ namespace v2dmi {
                             response.payload = 0x0D41;
                             response.responseStatus = SUCCESS;
                             response.isRead = isRead;
+
+                            if (!isRead) {
+                                std::cout << "Strange Request!" << std::endl;
+                            }
+
                             returnResponse(response);
                             break;
                         }
@@ -76,6 +83,11 @@ namespace v2dmi {
                             response.payload = 0x0D74C;
                             response.responseStatus = SUCCESS;
                             response.isRead = isRead;
+
+                            if (!isRead) {
+                                std::cout << "Strange Request!" << std::endl;
+                            }
+
                             returnResponse(response);
                             break;
                         }
