@@ -94,7 +94,7 @@ namespace v2dmi {
 
                         case DMI_ADDR_REG_ADDR: {
                             // Apply a new addr value
-                            std::cout << "Write DMI addr: " << std::hex << request.payload << std::endl;
+                            //std::cout << "Write DMI addr: " << std::hex << request.payload << std::endl;
                             ptop->dmi_addr = request.payload & 0x7F;
 
                             // AxiToDMI always returns the same values here
@@ -108,7 +108,7 @@ namespace v2dmi {
 
                         case DMI_REG_ADDR: {
                             // Set wdata register and issue a new DM request
-                            std::cout << "Write DMI wdata: " << std::hex << request.payload << std::endl;
+                            //std::cout << "Write DMI wdata: " << std::hex << request.payload << std::endl;
                             // Apply data
                             ptop->dmi_wdata = request.payload;
 
