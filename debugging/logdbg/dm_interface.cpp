@@ -184,13 +184,11 @@ namespace dm
         }
 
         std::thread recv_thread([connection_fd, this]() {
-            std::cout << "recv_thread started" << std::endl;
             //RingBuf ring_buf(4096);
             std::vector<char> buf(4096);
             ssize_t n;
 
             while (run_server) {
-                std::cout << "Calling recv()" << std::endl;
                 n = recv(connection_fd, buf.data(), buf.size(), 0);
 
                 if (n < 0) {
@@ -200,8 +198,6 @@ namespace dm
                     }
                     break; /* some error */
                 }
-
-                std::cout << "got " << n << "bytes" << std::endl;
 
                 if (n == 0)
                     continue; /* nothing interesting */
@@ -220,8 +216,6 @@ namespace dm
 
                 fifo->push_request(req);
             }
-
-            std::cout << "exiting recv_thread()" << std::endl;
         });
 
         while (run_server) {
@@ -251,8 +245,6 @@ namespace dm
             if (result < 0)
                 break; /* some error */
         }
-
-        std::cout << "exiting send_thread()" << std::endl;
 
         recv_thread.join();
 
