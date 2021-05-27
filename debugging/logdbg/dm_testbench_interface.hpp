@@ -24,7 +24,7 @@ namespace dm
         void write_dm(uint32_t addr, uint32_t data) override;
 
         /* interface for test bench */
-        std::optional<v2dmi::DMI_Request> pop_dmi_request();
+        std::optional<v2dmi::DMI_Request> pop_dmi_request(const volatile bool& run);
         void push_dmi_response(const v2dmi::DMI_Response& resp);
     };
 }

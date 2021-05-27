@@ -11,13 +11,13 @@ namespace v2dmi {
         static constexpr int minIdleCyclesBetweenRequests = 5;
 
         void returnResponse(const DMI_Response &response);
-        bool receiveRequest(DMI_Request &request);
+        bool receiveRequest(DMI_Request &request, const volatile bool& run);
 
       public:
         DMI_Handler(const std::shared_ptr<dm::DM_TestBenchInterface> &dm_interface) : dm_interface(dm_interface) {}
 
         template <class Top>
-        void tick(Top *ptop);
+        void tick(Top *ptop, const volatile bool &run);
 
       private:
         std::shared_ptr<dm::DM_TestBenchInterface> dm_interface;

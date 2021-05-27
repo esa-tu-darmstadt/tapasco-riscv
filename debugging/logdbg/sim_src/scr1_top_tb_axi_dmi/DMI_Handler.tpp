@@ -8,8 +8,8 @@ namespace v2dmi {
         dm_interface->push_dmi_response(response);
     }
 
-    bool DMI_Handler::receiveRequest(DMI_Request &request) {
-        if (auto req = dm_interface->pop_dmi_request()) {
+    bool DMI_Handler::receiveRequest(DMI_Request &request, const volatile bool &run) {
+        if (auto req = dm_interface->pop_dmi_request(run)) {
             request = *req;
             return true;
         }
@@ -18,7 +18,7 @@ namespace v2dmi {
     }
 
     template <class Top>
-    void DMI_Handler::tick(Top *ptop) {
+    void DMI_Handler::tick(Top *ptop, const volatile bool &run) {
         if (latency > 0) {
             // Request flag is only set for one cycle -> clear it
             ptop->dmi_req = 0;
@@ -41,7 +41,7 @@ namespace v2dmi {
             } else {
                 DMI_Request request;
 
-                if (receiveRequest(request)) {
+                if (receiveRequest(request, run)) {
                     // Returns true if a request is available for processing
                     isRead = request.dmiAccessType == WRITE ? 0 : 1;
 

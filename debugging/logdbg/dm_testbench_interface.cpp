@@ -32,8 +32,7 @@ namespace dm
         dmi_request_queue.push(req);
     }
 
-
-    std::optional<v2dmi::DMI_Request> DM_TestBenchInterface::pop_dmi_request()
+    std::optional<v2dmi::DMI_Request> DM_TestBenchInterface::pop_dmi_request(const volatile bool &run)
     {
         // Loop until we have a dmi request!
         do {
@@ -46,7 +45,7 @@ namespace dm
 
             // No more waiting request, check for new ones and wait if there is none
             if (!fifo->has_requests()) {
-                fifo->wait_for_request();
+                fifo->wait_for_request(run);
             }
 
             /* try to fetch request from socket */
@@ -69,7 +68,7 @@ namespace dm
                         break;
                 }
             }
-        }while(1);
+        } while (run);
 
         return std::optional<v2dmi::DMI_Request>();
     }

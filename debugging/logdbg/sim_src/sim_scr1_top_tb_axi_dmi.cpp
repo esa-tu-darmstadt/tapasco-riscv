@@ -108,7 +108,7 @@ static void onRisingEdge() {
 
 static void onFallingEdge() {
     if (dmiHandler) {
-        dmiHandler->tick(ptop);
+        dmiHandler->tick(ptop, runSim);
     }
 }
 
@@ -173,9 +173,6 @@ int main(int argc, char **argv) {
     do {
         run(0, true);
     } while (!stopCondition());
-
-    // Execute a few more cycles
-    run(4 * 10, true, false);
 
     if (server) {
         server->stop_listening();

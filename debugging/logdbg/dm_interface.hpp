@@ -41,12 +41,12 @@ namespace dm
         void push_request(const Request& req); /* blocking */
         std::optional<Response> pop_response();
         bool has_response();
-        void wait_for_response(volatile bool& early_abort_neg);
+        void wait_for_response(const volatile bool& early_abort_neg);
         /* client side */
         void push_response(const Response& resp); /* blocking */
         std::optional<Request> pop_request(); /* non-blocking */
         bool has_requests();
-        void wait_for_request();
+        void wait_for_request(const volatile bool &early_abort_neg);
     };
 
     /* This can later be extended to forwarding and test bench connection. */
