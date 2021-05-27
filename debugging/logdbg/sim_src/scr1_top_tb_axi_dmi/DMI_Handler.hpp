@@ -8,7 +8,7 @@ namespace v2dmi {
     class DMI_Handler {
       private:
         static constexpr int waitForResponseLatency = 2;
-        static constexpr int minIdleCyclesBetweenRequests = 5;
+        static constexpr int minIdleCyclesBetweenRequests = 50;
 
         void returnResponse(const DMI_Response &response);
         bool receiveRequest(DMI_Request &request, const volatile bool& run);
