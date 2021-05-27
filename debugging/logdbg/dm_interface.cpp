@@ -261,29 +261,21 @@ namespace dm
     {
         std::vector<std::thread> connection_threads;
 
-        fd_set rfds;
-        FD_ZERO(&rfds);
-        FD_SET(socket_fd, &rfds);
-        int nfds = socket_fd + 1;
-
-        struct timeval tv;
-        tv.tv_sec = 1;
-        tv.tv_usec = 0;
-
         while (run_server) {
-            int ret = select(nfds, &rfds, nullptr, nullptr, &tv);
+            /* only 1 connection at a time */
+            int connection_fd = accept(socket_fd, nullptr, nullptr);
 
-            if (ret == -1) {
+            if (connection_fd == -1) {
+                if (errno == EWOULDBLOCK || errno == EAGAIN) {
+                    using namespace std::chrono_literals;
+                    std::this_thread::sleep_for(1000ms);
+                    continue;
+                }
                 std::cout << "Error when accepting connection!" << std::endl;
                 break;
-            } else if (ret == 0) {
-                continue;
             }
 
             std::cout << "Accepting connection..." << std::endl;
-
-            /* only 1 connection at a time */
-            int connection_fd = accept(socket_fd, nullptr, nullptr);
 
             if (connection_fd == -1) {
                 std::cout << "Error when accepting connection!" << std::endl;
@@ -304,7 +296,7 @@ namespace dm
         socket_file(socket_path),
         fifo(fifo)
     {
-        socket_fd = socket(PF_UNIX, SOCK_STREAM, 0);
+        socket_fd = socket(PF_UNIX, SOCK_STREAM | SOCK_NONBLOCK, 0);
 
         if (socket_fd < 0)
             throw std::runtime_error("Could not create socket!");
