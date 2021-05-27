@@ -1,5 +1,7 @@
 #include "dm_interface.hpp"
 
+#include "ringbuf.hpp"
+
 
 namespace dm
 {
@@ -149,60 +151,74 @@ namespace dm
 
     void OpenOCDServer::handle_connection(int connection_fd)
     {
-        std::vector<char> buf(4096);
-        ssize_t n;
+        std::thread recv_thread([connection_fd, this]() {
+            std::cout << "recv_thread started" << std::endl;
+            //RingBuf ring_buf(4096);
+            std::vector<char> buf(4096);
+            ssize_t n;
 
-        /* read data */
-        while (true) {
-            n = recv(connection_fd, buf.data(), buf.size(), MSG_DONTWAIT);
+            while (true) {
+                n = recv(connection_fd, buf.data(), buf.size(), 0);
 
-            if (n < 0) {
-                if (errno != EAGAIN && errno != EWOULDBLOCK)
+                if (!run_server)
+                    break;
+
+                if (n < 0)
                     break; /* some error */
 
-                /* check for response and build it */
-                auto dm_resp = fifo->pop_response();
+                std::cout << "got " << n << "bytes" << std::endl;
 
-                if (dm_resp) {
+                if (n == 0)
+                    continue; /* nothing interesting */
+
+                Request req;
+
+                capn c;
+                capn_init_mem(&c, reinterpret_cast<const uint8_t *>(buf.data()), n, 0 /* packed */);
+
+                Request_ptr ptr;
+                
+                ptr.p = capn_getp(capn_root(&c), 0 /* off */, 1 /* resolve */);
+                read_Request(&req, ptr);
+
+                capn_free(&c);
+
+                fifo->push_request(req);
+            }
+        });
+
+        std::thread send_thread([connection_fd, this]() {
+            while (true) {
+                if (!run_server)
+                    break;
+
+                std::optional<Response> opt_resp = fifo->pop_response();
+
+                if (opt_resp) {
+                    /* this must be done every time, idk why */
                     capn c;
                     capn_init_malloc(&c);
                     capn_ptr cr = capn_root(&c);
                     capn_segment *cs = cr.seg;
-
-                    /* THIS IS NOT THREAD SAFE! IT'S THE USER'S RESPONSIBILITY TO ONLY HAVE ONE CONNECTION AT ONCE! */
-                    //resp = dm_interface->process_request(req);
-
-                    Response resp = *dm_resp;
+                
+                    Response resp = *opt_resp;
 
                     Response_ptr ptr = new_Response(cs);
                     write_Response(&resp, ptr);
                     capn_setp(capn_root(&c), 0, ptr.p);
 
-                    capn_write_fd(&c, write /* function ptr! */ , connection_fd, 0 /* packed */);
-
-                    capn_free(&c);
-                }
-            } else {
-                //std::cout << "Received " << n << " bytes!" << std::endl;
-
-                /* parse request */
-                if (n > 0) {
-                    Request req;
-
-                    capn c;
-                    capn_init_mem(&c, reinterpret_cast<const uint8_t *>(buf.data()), n, 0 /* packed */);
-
-                    Request_ptr ptr;
-                    
-                    ptr.p = capn_getp(capn_root(&c), 0 /* off */, 1 /* resolve */);
-                    read_Request(&req, ptr);
+                    int result = capn_write_fd(&c, write /* function ptr! */ , connection_fd, 0 /* packed */);
 
                     capn_free(&c);
 
-                    fifo->push_request(req);
+                    if (result < 0)
+                        break; /* some error */
                 }
-            }            
-        }
+            }
+        });
+
+        recv_thread.join();
+        send_thread.join();
 
         std::cout << "Connection closed!" << std::endl;
 
