@@ -41,7 +41,7 @@ namespace dm
     void RequestResponseFIFO::wait_for_response(const volatile bool &early_abort_neg)
     {
         std::unique_lock<std::mutex> lk(response_queue_mutex);
-        while (response_cv.wait_for(lk, std::chrono::seconds(1), [this] { return !response_queue.empty(); })) {
+        while (!response_cv.wait_for(lk, std::chrono::seconds(1), [this] { return !response_queue.empty(); })) {
             if (!early_abort_neg) {
                 break;
             }
@@ -83,7 +83,7 @@ namespace dm
     void RequestResponseFIFO::wait_for_request(const volatile bool &early_abort_neg)
     {
         std::unique_lock<std::mutex> lk(request_queue_mutex);
-        while (request_cv.wait_for(lk, std::chrono::seconds(1), [this] { return !request_queue.empty(); })) {
+        while (!request_cv.wait_for(lk, std::chrono::seconds(1), [this] { return !request_queue.empty(); })) {
             if (!early_abort_neg) {
                 break;
             }
