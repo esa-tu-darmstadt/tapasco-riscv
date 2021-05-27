@@ -179,7 +179,7 @@ namespace dm
         struct timeval tv;
         tv.tv_sec = 1;
         tv.tv_usec = 0;
-        if (setsockopt(socket_fd, SOL_SOCKET, SO_RCVTIMEO, (const char *)&tv, sizeof(tv)) == -1) {
+        if (setsockopt(connection_fd, SOL_SOCKET, SO_RCVTIMEO, (const char *)&tv, sizeof(tv)) == -1) {
             std::cout << "Could not set socket options" << std::endl;
         }
 
@@ -193,8 +193,13 @@ namespace dm
                 std::cout << "Calling recv()" << std::endl;
                 n = recv(connection_fd, buf.data(), buf.size(), 0);
 
-                if (n < 0)
+                if (n < 0) {
+                    if (errno == EWOULDBLOCK || errno == EAGAIN) {
+                        // Receive timeout
+                        continue;
+                    }
                     break; /* some error */
+                }
 
                 std::cout << "got " << n << "bytes" << std::endl;
 
@@ -311,13 +316,6 @@ namespace dm
 
         if (bind(socket_fd, (struct sockaddr *)&addr_str, addr_len)) {
             throw std::runtime_error("Could not bind socket!");
-        }
-
-        struct timeval tv;
-        tv.tv_sec = 1;
-        tv.tv_usec = 0;
-        if (setsockopt(socket_fd, SOL_SOCKET, SO_RCVTIMEO, (const char *)&tv, sizeof(tv)) == -1) {
-            std::cout << "Could not set socket options" << std::endl;
         }
 
         if (listen(socket_fd, 5)) {
