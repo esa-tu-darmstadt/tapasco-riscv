@@ -33,15 +33,18 @@ namespace dm
         std::mutex request_queue_mutex;
         std::queue<Request> request_queue;
 
+        std::condition_variable response_cv;
         std::mutex response_queue_mutex;
         std::queue<Response> response_queue;
     public:
         /* server side */
-        void push_request(const Request& req);
+        void push_request(const Request& req); /* blocking */
         std::optional<Response> pop_response();
+        bool has_response();
+        void wait_for_response(volatile bool& early_abort_neg);
         /* client side */
-        void push_response(const Response& resp);
-        std::optional<Request> pop_request();
+        void push_response(const Response& resp); /* blocking */
+        std::optional<Request> pop_request(); /* non-blocking */
         bool has_requests();
         void wait_for_request();
     };

@@ -17,18 +17,31 @@ namespace dm
 
     std::optional<Response> RequestResponseFIFO::pop_response()
     {
-        std::optional<Response> result;
+        if (!response_queue_mutex.try_lock())
+            return std::optional<Response>();
 
-        if (response_queue_mutex.try_lock()) {
-            if (!response_queue.empty()) {
-                result = response_queue.front();
-                response_queue.pop();
-            }
-
+        if (response_queue.empty()) {
             response_queue_mutex.unlock();
+            return std::optional<Response>();
         }
 
-        return result;
+        Response resp = response_queue.front();
+        response_queue.pop();
+        response_queue_mutex.unlock();
+
+        return resp;
+    }
+
+    bool RequestResponseFIFO::has_response()
+    {
+        std::lock_guard<std::mutex> lk(response_queue_mutex);
+        return !response_queue.empty();
+    }
+
+    void RequestResponseFIFO::wait_for_response(volatile bool& early_abort_neg)
+    {
+        std::unique_lock<std::mutex> lk(response_queue_mutex);
+        response_cv.wait(lk, [this, &early_abort_neg]{ return !response_queue.empty() || !early_abort_neg; });
     }
 
     void RequestResponseFIFO::push_response(const Response& resp)
@@ -36,6 +49,9 @@ namespace dm
         response_queue_mutex.lock();
         response_queue.push(resp);
         response_queue_mutex.unlock();
+
+        /* notfiy AFTER unlocking */
+        response_cv.notify_one();
     }
 
     std::optional<Request> RequestResponseFIFO::pop_request()
@@ -158,6 +174,7 @@ namespace dm
             ssize_t n;
 
             while (true) {
+                std::cout << "Calling recv()" << std::endl;
                 n = recv(connection_fd, buf.data(), buf.size(), 0);
 
                 if (!run_server)
@@ -185,6 +202,8 @@ namespace dm
 
                 fifo->push_request(req);
             }
+
+            std::cout << "exiting recv_thread()" << std::endl;
         });
 
         std::thread send_thread([connection_fd, this]() {
@@ -192,29 +211,34 @@ namespace dm
                 if (!run_server)
                     break;
 
+                //fifo->wait_for_response(run_server);
+
                 std::optional<Response> opt_resp = fifo->pop_response();
 
-                if (opt_resp) {
-                    /* this must be done every time, idk why */
-                    capn c;
-                    capn_init_malloc(&c);
-                    capn_ptr cr = capn_root(&c);
-                    capn_segment *cs = cr.seg;
-                
-                    Response resp = *opt_resp;
+                if (!opt_resp)
+                    continue;
 
-                    Response_ptr ptr = new_Response(cs);
-                    write_Response(&resp, ptr);
-                    capn_setp(capn_root(&c), 0, ptr.p);
+                Response resp = *opt_resp;
 
-                    int result = capn_write_fd(&c, write /* function ptr! */ , connection_fd, 0 /* packed */);
+                /* this must be done every time, idk why */
+                capn c;
+                capn_init_malloc(&c);
+                capn_ptr cr = capn_root(&c);
+                capn_segment *cs = cr.seg;
 
-                    capn_free(&c);
+                Response_ptr ptr = new_Response(cs);
+                write_Response(&resp, ptr);
+                capn_setp(capn_root(&c), 0, ptr.p);
 
-                    if (result < 0)
-                        break; /* some error */
-                }
+                int result = capn_write_fd(&c, write /* function ptr! */ , connection_fd, 0 /* packed */);
+
+                capn_free(&c);
+
+                if (result < 0)
+                    break; /* some error */
             }
+
+            std::cout << "exiting send_thread()" << std::endl;
         });
 
         recv_thread.join();
@@ -228,6 +252,8 @@ namespace dm
 
     void OpenOCDServer::do_listen()
     {
+        std::vector<std::thread> connection_threads;
+
         while (run_server) {
             /* only 1 connection at a time */
             int connection_fd = accept(socket_fd, nullptr, nullptr);
@@ -244,20 +270,30 @@ namespace dm
             }
             
             std::cout << "Accepting connection..." << std::endl;
-            std::thread th(&OpenOCDServer::handle_connection, this, connection_fd);
-            th.detach();
+            
+            connection_threads.emplace_back(&OpenOCDServer::handle_connection, this, connection_fd);
         }
+
+        for (auto& th : connection_threads)
+            if (th.joinable())
+                th.join();
     }
 
     OpenOCDServer::OpenOCDServer(const char *socket_path, const std::shared_ptr<RequestResponseFIFO>& fifo):
         socket_file(socket_path),
         fifo(fifo)
     {
-        socket_fd = socket(PF_UNIX, SOCK_STREAM | SOCK_NONBLOCK, 0);
+        socket_fd = socket(PF_UNIX, SOCK_STREAM, 0);
 
         if (socket_fd < 0)
             throw std::runtime_error("Could not create socket!");
         
+        struct timeval tv;
+        tv.tv_sec = 1;
+        tv.tv_usec = 0;
+        if (setsockopt(socket_fd, SOL_SOCKET, SO_RCVTIMEO, (const char*)&tv, sizeof(tv)) == -1)
+            std::cout << "Could not set socket options" << std::endl;
+
         std::cout << "Socket created!" << std::endl;
 
         unlink(socket_path);
