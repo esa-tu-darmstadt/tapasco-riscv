@@ -183,7 +183,9 @@ namespace dm
             std::cout << "Could not set socket options" << std::endl;
         }
 
-        std::thread recv_thread([connection_fd, this]() {
+        volatile bool connectionActive = true;
+
+        std::thread recv_thread([&connectionActive, connection_fd, this]() {
             //RingBuf ring_buf(4096);
             std::vector<char> buf(4096);
             ssize_t n;
@@ -199,8 +201,11 @@ namespace dm
                     break; /* some error */
                 }
 
-                if (n == 0)
-                    continue; /* nothing interesting */
+                if (n == 0) {
+                    // Open ocd connection closed
+                    std::cout << "Got Message of size 0, closing connection" << std::endl;
+                    break;
+                }
 
                 Request req;
 
@@ -216,10 +221,12 @@ namespace dm
 
                 fifo->push_request(req);
             }
+
+            connectionActive = false;
         });
 
-        while (run_server) {
-            fifo->wait_for_response(run_server);
+        while (connectionActive) {
+            fifo->wait_for_response(connectionActive);
 
             std::experimental::optional<Response> opt_resp = fifo->pop_response();
 
