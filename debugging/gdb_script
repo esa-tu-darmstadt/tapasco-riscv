@@ -1,0 +1,21 @@
+# Usage: gdb -x gdb_script -f prog.elf
+# Turn off splitting large output in multiple pages with required user interaction
+set pagination off
+set logging file gdb_output.log
+set logging on
+
+# Connect to openocd
+target remote 127.0.0.1:3333
+
+# Load program specified with -f option
+load
+
+# Some test commands
+disas _start,+150
+
+# Disconnect from openocd server
+mon shutdown
+disconnect
+
+set logging off
+quit
