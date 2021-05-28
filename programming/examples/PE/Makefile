@@ -8,7 +8,13 @@ ifndef SWERV_CCM
 ifndef SCR1_CCM
 	RV_FLAGS+= -T rv_$(SIZE).ld startup_$(SIZE)1.s
 else
+
+ifdef ESOTERIC
+	RV_FLAGS+= -T rv_scr1.ld startup_scr1_esoteric.s
+else
 	RV_FLAGS+= -T rv_scr1.ld startup_scr1.s
+endif
+
 endif
 else
 	RV_FLAGS+= -T rv_swerv.ld startup_swerv.s
