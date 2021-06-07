@@ -4,7 +4,7 @@ endif
 
 SRC ?= cva6/src
 SRC_FILES ?= ../../../riscv/cva6/core.files
-ADD_SCRS ?= 
+ADD_SCRS ?= cva6/tb/ariane_custom_tb_top.sv cva6/tb/ariane_soc_pkg.sv
 INCLUDE_DIR ?= cva6/include
 SIM_SRC ?= sim_src
 V_DIR ?= sim_build
@@ -42,19 +42,19 @@ preparebuild:
 #	cp tapasco-riscv.capnp.* $(SIM_SRC)/$(DEFAULT_TOP_MODULE)
 
 cva6:
-	git clone https://github.com/jschj/cva6 && cd cva6 && git checkout trials || cd cva6 && git pull
+	git clone https://github.com/jschj/cva6 && cd cva6 && git checkout master || cd cva6 && git pull
 
 define GEN_SIM_RULES
 .PHONY: sim_$(sim_top)
 
 sim_$(sim_top): $$(V_DIR)/$(sim_top)/Vsim_$(sim_top).mk $$(SIM_SRC)/sim_$(sim_top).cpp $$(call rwildcard,$$(SIM_SRC)/$(sim_top),*.cpp) $$(call rwildcard,$$(SIM_SRC)/$(sim_top),*.c) $(CAPN_PATH)/lib/*.o $$(srcs)
-	@make -C $$(V_DIR)/$(sim_top) -f V$(sim_top).mk V$(sim_top)
+	@make -j$$(shell nproc) -C $$(V_DIR)/$(sim_top) -f V$(sim_top).mk V$(sim_top)
 	@echo "============================================================================================"
 
 $$(V_DIR)/$(sim_top)/Vsim_$(sim_top).mk: $$(call rwildcard,$$(SIM_SRC)/$(sim_top),*.cpp) $$(call rwildcard,$$(SIM_SRC)/$(sim_top),*.c) $(CAPN_PATH)/lib/*.o $$(srcs)
 	@mkdir -p $$(V_DIR)/$(sim_top)
 	@mkdir -p $$(V_DIR)/$(sim_top)/$$(SIM_SRC)
-	$$(VERILATOR) \
+	$$(VERILATOR) -j $$(shell nproc) \
 		-Wall -Werror-IMPLICIT -Werror-PINMISSING \
 		--MMD --MP $$(SIM_DEFS) \
 	 	--Mdir $$(V_DIR)/$(sim_top) --cc -O3 \

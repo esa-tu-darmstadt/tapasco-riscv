@@ -48,7 +48,7 @@ preparebuild:
 #	cp *.hpp $(SIM_SRC)/$(DEFAULT_TOP_MODULE)
 
 scr1:
-	git clone https://github.com/7FM/scr1.git && cd scr1 && git checkout trials || cd scr1 && git pull
+	git clone https://github.com/7FM/scr1.git && cd scr1 && git checkout master || cd scr1 && git pull
 
 define GEN_SIM_RULES
 .PHONY: sim_$(sim_top)
