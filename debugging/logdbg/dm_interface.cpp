@@ -228,7 +228,7 @@ namespace dm
         while (connectionActive) {
             fifo->wait_for_response(connectionActive);
 
-            std::experimental::optional<Response> opt_resp = fifo->pop_response();
+            std::optional<Response> opt_resp = fifo->pop_response();
 
             if (!opt_resp)
                 continue;
