@@ -41,7 +41,6 @@ all: preparebuild scr1 sim
 preparebuild:
 	cp dm_interface.* $(SIM_SRC)/$(DEFAULT_TOP_MODULE)
 	cp dm_testbench_interface.* $(SIM_SRC)/$(DEFAULT_TOP_MODULE)
-	cp ringbuf.* $(SIM_SRC)/$(DEFAULT_TOP_MODULE)
 	cp tapasco-riscv.capnp.* $(SIM_SRC)/$(DEFAULT_TOP_MODULE)
 #	cp *.cpp $(SIM_SRC)/$(DEFAULT_TOP_MODULE)
 #	cp *.c $(SIM_SRC)/$(DEFAULT_TOP_MODULE)
