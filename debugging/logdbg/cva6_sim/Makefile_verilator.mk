@@ -44,7 +44,7 @@ preparebuild:
 #	cp tapasco-riscv.capnp.* $(SIM_SRC)/$(DEFAULT_TOP_MODULE)
 
 cva6:
-	git clone https://github.com/jschj/cva6 && cd cva6 && git checkout master || cd cva6 && git pull
+	git clone --recursive https://github.com/jschj/cva6 && cd cva6 && git checkout master || cd cva6 && git pull
 
 define GEN_SIM_RULES
 .PHONY: sim_$(sim_top)
