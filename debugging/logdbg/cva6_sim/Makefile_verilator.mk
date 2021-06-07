@@ -5,8 +5,8 @@ endif
 SRC ?= cva6/src
 SRC_PREFIX ?= cva6/
 SRC_FILES ?= ../../../riscv/cva6/core.files
-ADD_SCRS ?= cva6/tb/ariane_custom_tb_top.sv cva6/tb/ariane_soc_pkg.sv
-INCLUDE_DIR ?= cva6/include
+ADD_SCRS ?= $(SRC_PREFIX)include/axi_intf.sv $(SRC_PREFIX)tb/ariane_soc_pkg.sv $(SRC_PREFIX)tb/ariane_axi_soc_pkg.sv $(SRC_PREFIX)tb/ariane_custom_tb_top.sv
+INCLUDE_DIR ?= $(SRC_PREFIX)include -I$(SRC_PREFIX)src/common_cells/include -I$(SRC_PREFIX)src/common_cells/include/common_cells
 SIM_SRC ?= sim_src
 V_DIR ?= sim_build
 
