@@ -1,0 +1,10 @@
+*.vcd
+*.log
+build/
+*_build/
+bin/
+elf/
+*.bin
+*.elf
+*.jou
+.vscode/
