@@ -3,6 +3,7 @@ ifndef CAPN_PATH
 endif
 
 SRC ?= cva6/src
+SRC_PREFIX ?= cva6/
 SRC_FILES ?= ../../../riscv/cva6/core.files
 ADD_SCRS ?= cva6/tb/ariane_custom_tb_top.sv cva6/tb/ariane_soc_pkg.sv
 INCLUDE_DIR ?= cva6/include
@@ -18,6 +19,7 @@ VERILATOR := $(VERILATOR_PREFIX)verilator
 
 rwildcard=$(foreach d,$(wildcard $(1:=/*)),$(call rwildcard,$d,$2) $(filter $(subst *,%,$2),$d))
 
+srcs := $(addprefix $(SRC_PREFIX),$(shell cat $(SRC_FILES)))
 srcs += $(ADD_SCRS)
 #srcs += $(call rwildcard,$(SRC),*.v)
 #srcs += $(call rwildcard,$(SRC),*.sv)
