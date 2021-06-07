@@ -58,6 +58,14 @@ $$(V_DIR)/$(sim_top)/Vsim_$(sim_top).mk: $$(call rwildcard,$$(SIM_SRC)/$(sim_top
 	@mkdir -p $$(V_DIR)/$(sim_top)/$$(SIM_SRC)
 	$$(VERILATOR) -j $$(shell nproc) \
 		-Wall -Werror-IMPLICIT -Werror-PINMISSING \
+        -Wno-fatal \
+        -Wno-PINCONNECTEMPTY \
+        -Wno-ASSIGNDLY \
+        -Wno-DECLFILENAME \
+        -Wno-UNUSED \
+        -Wno-UNOPTFLAT \
+        -Wno-BLKANDNBLK \
+        -Wno-style \
 		--MMD --MP $$(SIM_DEFS) \
 	 	--Mdir $$(V_DIR)/$(sim_top) --cc -O3 \
 		-CFLAGS "$$(V_CCFLAGS) -I$$(PWD)$$(SIM_SRC)/$(sim_top)" \
