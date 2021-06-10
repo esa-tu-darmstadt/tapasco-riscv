@@ -126,9 +126,10 @@ int main(int argc, char **argv) {
 
     int verbose = 0;
     int start = 0;
+    int pre_cycle_count = 0;
 
     int opt;
-    while ((opt = getopt(argc, argv, ":s:t:v:o")) != -1) {
+    while ((opt = getopt(argc, argv, ":s:t:v:n:o")) != -1) {
         switch (opt) {
             case 'v':
                 verbose = std::atoi(optarg);
@@ -151,6 +152,9 @@ int main(int argc, char **argv) {
                 // Run simulation with an openocd connection
                 server = new dm::OpenOCDServer("/tmp/riscv-debug.sock", rr_fifo);
                 break;
+            case 'n':
+                pre_cycle_count = std::atoi(optarg);
+                break;
             case '?': //used for some unknown options
                 std::cout << "unknown option: " << optopt << std::endl;
                 goto exitAndCleanup;
@@ -163,6 +167,10 @@ int main(int argc, char **argv) {
 
     if (start) {
         run(start, false);
+    }
+
+    if (pre_cycle_count) {
+        run(pre_cycle_count, true);
     }
 
     if (server) {
