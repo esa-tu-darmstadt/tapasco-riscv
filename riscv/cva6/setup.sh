@@ -30,6 +30,13 @@ if [ ! -d "../../../IP/riscv/CVA6/timer" ]; then
     unzip risc-v_cva6_timer.zip -d ../../../IP/riscv/CVA6/timer
 fi
 
+if [ ! -d "../../../IP/riscv/CVA6/dm" ]; then
+    mkdir -p "../../../IP/riscv/CVA6/dm"
+    echo "Unzipping CVA6 Debug Module..."
+    unzip risc-v_cva6_dm.zip -d ../../../IP/riscv/CVA6/dm
+fi
+
+
 cd ../../..
 #cd ../..
 

@@ -1,6 +1,7 @@
 # Create instance: cva6_0, and set properties
   set cva6_0 [ create_bd_cell -type ip -vlnv [dict get $cpu_vlnv $project_name] cva6_0 ]
   set cva6_timer_0 [ create_bd_cell -type ip -vlnv openhwgroup:cva6:cva6_timer:0.1 cva6_timer_0 ]
+  set cva6_dm_0 [ create_bd_cell -type ip -vlnv openhwgroup:cva6:cva6_dm:0.1 cva6_dm_0 ]
   set cpu_clk [get_bd_pins cva6_0/clk_i]
 
   # Create interface connections
@@ -9,11 +10,14 @@
 
   connect_bd_intf_net [get_bd_intf_pins cva6_0/io_axi_mem] -boundary_type upper [get_bd_intf_pins cva6_mem_splitter/S00_AXI]
   connect_bd_intf_net -boundary_type upper [get_bd_intf_pins cva6_mem_splitter/M00_AXI] [get_bd_intf_pins cva6_timer_0/axi_timer]
-  set_property CONFIG.NUM_MI 3 [get_bd_cells /cva6_mem_splitter]
+  set_property CONFIG.NUM_MI 4 [get_bd_cells /cva6_mem_splitter]
   connect_bd_intf_net -boundary_type upper [get_bd_intf_pins cva6_mem_splitter/M01_AXI] [get_bd_intf_pins axi_mem_intercon_1/S00_AXI]
+  connect_bd_intf_net -boundary_type upper [get_bd_intf_pins cva6_mem_splitter/M03_AXI] [get_bd_intf_pins cva6_dm_0/axi_dm]
   #connect_bd_intf_net -boundary_type upper [get_bd_intf_pins cva6_mem_splitter/M02_AXI] [get_bd_intf_pins rv_imem_ctrl/S_AXI]
   # Connect clocks
-  connect_bd_net [get_bd_ports CLK] [get_bd_pins cva6_mem_splitter/ACLK] [get_bd_pins cva6_mem_splitter/S00_ACLK] [get_bd_pins cva6_mem_splitter/M00_ACLK] [get_bd_pins cva6_mem_splitter/M01_ACLK] [get_bd_pins cva6_mem_splitter/M02_ACLK]
+  connect_bd_net [get_bd_ports CLK] [get_bd_pins cva6_mem_splitter/ACLK] [get_bd_pins cva6_mem_splitter/S00_ACLK] [get_bd_pins cva6_mem_splitter/M00_ACLK] [get_bd_pins cva6_mem_splitter/M01_ACLK] [get_bd_pins cva6_mem_splitter/M02_ACLK] [get_bd_pins cva6_mem_splitter/M03_ACLK]
+  connect_bd_net [get_bd_pins rst_CLK_100M/interconnect_aresetn] [get_bd_pins cva6_mem_splitter/ARESETN]
+  connect_bd_net [get_bd_pins rst_CLK_100M/peripheral_aresetn] [get_bd_pins cva6_mem_splitter/S00_ARESETN] [get_bd_pins cva6_mem_splitter/M00_ARESETN] [get_bd_pins cva6_mem_splitter/M01_ARESETN] [get_bd_pins cva6_mem_splitter/M02_ARESETN] [get_bd_pins cva6_mem_splitter/M03_ARESETN]
 
   # imem connection is done via the iaxi variable
   set iaxi [get_bd_intf_pins cva6_mem_splitter/M02_AXI]
@@ -45,29 +49,32 @@
   set_property -dict [list CONFIG.CONST_VAL {0}] [get_bd_cells test_mode_constant]
   connect_bd_net [get_bd_pins test_mode_constant/dout] [get_bd_pins cva6_timer_0/testmode_i]
 
+  # Connect Debug Module
+  connect_bd_net [get_bd_pins RVController_0/rv_rstn] [get_bd_pins cva6_dm_0/rst_ni]
+  connect_bd_net [get_bd_ports CLK] [get_bd_pins cva6_dm_0/clk_i]
+  connect_bd_net [get_bd_pins cva6_dm_0/debug_req_core_o] [get_bd_pins cva6_0/debug_req_i]
+
 #TODO handle unconnected pins:
 # irq_i[1:0]
 # ipi_i
-# time_irq_i
-# debug_req_i
 
 # Add debug module
-#if 0 {
-#  # Insert JTAG interface port and connect it to the core
-#  create_bd_intf_port -mode Slave -vlnv xilinx.com:interface:jtag_rtl:2.0 CoreJTAG
-#  connect_bd_intf_net [get_bd_intf_ports CoreJTAG] [get_bd_intf_pins cva6_0/jtag]
-#
-#  create_bd_port -dir I -type rst JTAG_RST
-#  set_property CONFIG.POLARITY ACTIVE_LOW [get_bd_ports JTAG_RST]
-#  connect_bd_net [get_bd_ports JTAG_RST] [get_bd_pins cva6_0/jtag_trst_n]
-#} else {
-#  set tapasco_toolflow $::env(TAPASCO_HOME_TOOLFLOW)
-#  set_property ip_repo_paths [concat [get_property ip_repo_paths [current_project]] $tapasco_toolflow/vivado/common/ip/DMI/] [current_project]
-#  update_ip_catalog
-#
-#  create_bd_intf_port -mode Slave -vlnv esa.informatik.tu-darmstadt.de:user:DMI_rtl:1.0 DMI
-#  connect_bd_intf_net [get_bd_intf_ports DMI] [get_bd_intf_pins cva6_0/DMI]
-#}
+if 0 {
+  # Insert JTAG interface port and connect it to the core
+  create_bd_intf_port -mode Slave -vlnv xilinx.com:interface:jtag_rtl:2.0 CoreJTAG
+  connect_bd_intf_net [get_bd_intf_ports CoreJTAG] [get_bd_intf_pins cva6_0/jtag]
+
+  create_bd_port -dir I -type rst JTAG_RST
+  set_property CONFIG.POLARITY ACTIVE_LOW [get_bd_ports JTAG_RST]
+  connect_bd_net [get_bd_ports JTAG_RST] [get_bd_pins cva6_0/jtag_trst_n]
+} else {
+  set tapasco_toolflow $::env(TAPASCO_HOME_TOOLFLOW)
+  set_property ip_repo_paths [concat [get_property ip_repo_paths [current_project]] $tapasco_toolflow/vivado/common/ip/DMI/] [current_project]
+  update_ip_catalog
+
+  create_bd_intf_port -mode Slave -vlnv esa.informatik.tu-darmstadt.de:user:DMI_rtl:1.0 DMI
+  connect_bd_intf_net [get_bd_intf_ports DMI] [get_bd_intf_pins cva6_dm_0/DMI]
+}
 
 proc create_specific_addr_segs {} {
   variable lmem
