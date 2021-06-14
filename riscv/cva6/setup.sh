@@ -16,6 +16,7 @@ export RV_ROOT=$(pwd)
 
 vivado -nolog -nojournal -mode batch -source ../package.tcl
 vivado -nolog -nojournal -mode batch -source ../package_timer.tcl
+vivado -nolog -nojournal -mode batch -source ../package_dm.tcl
 
 if [ ! -d "../../../IP/riscv/CVA6/cva6" ]; then
     mkdir -p "../../../IP/riscv/CVA6/cva6"
