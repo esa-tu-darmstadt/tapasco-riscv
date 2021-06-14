@@ -5,7 +5,7 @@ printf "Preprocessing files in core.files ...\n"
 SRC=$(pwd)
 INCLUDE_LINE="\`include \"tapasco_riscv_settings.sv\""
 
-for FILE in $(cat ../core.files)
+for FILE in $(sed '1d' ../core.files)
 do
     FILE_PATH="${SRC}/${FILE}"
     #echo "Applying include directive to file" "${SRC}/${FILE}"
@@ -14,7 +14,7 @@ do
     
     if ! echo $FIRST_LINE | grep -q "$INCLUDE_LINE"; then
         echo "Applying include directive to file" $FILE_PATH
-        printf "${INCLUDE_LINE}\n $(cat $FILE_PATH)" > $FILE_PATH
+        printf '%s\n%s' "${INCLUDE_LINE}" "$(cat $FILE_PATH)" > $FILE_PATH
     else
         echo "Not applying include directive to file" $FILE_PATH "; Include was already applied!"
     fi
