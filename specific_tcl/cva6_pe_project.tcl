@@ -94,6 +94,12 @@ proc create_specific_addr_segs {} {
   create_bd_addr_seg -range $lmem -offset $lmem [get_bd_addr_spaces cva6_0/io_axi_mem] [get_bd_addr_segs rv_dmem_ctrl/S_AXI/Mem0] SEG_rv_dmem_ctrl_Mem0
   #create_bd_addr_seg -range $lmem -offset 0x00000000 [get_bd_addr_spaces cva6_0/io_axi_imem] [get_bd_addr_segs rv_imem_ctrl/S_AXI/Mem0] SEG_rv_imem_ctrl_Mem0
   create_bd_addr_seg -range $lmem -offset 0x00000000 [get_bd_addr_spaces cva6_0/io_axi_mem] [get_bd_addr_segs rv_imem_ctrl/S_AXI/Mem0] SEG_rv_imem_ctrl_Mem0
+
+  # Custom section for DM and timer
+  # Timer TODO offset
+  create_bd_addr_seg -range 0xC0000 -offset 0x00000000 [get_bd_addr_spaces cva6_0/io_axi_mem] [get_bd_addr_segs cva6_timer_0/axi_timer] SEG_cva6_clint
+  # DM TODO offset
+  create_bd_addr_seg -range 0x1000 -offset 0x00000000 [get_bd_addr_spaces cva6_0/io_axi_mem] [get_bd_addr_segs cva6_dm_0/axi_dm] SEG_cva6_dm
 }
 
 proc get_external_mem_addr_space {} {
