@@ -1,6 +1,24 @@
   # constants
-  #set DEBUG_BASE_ADDRESS 0x0
-  #set DEBUG_LENGTH 0x1000
+  global DMEM_BASE
+  global DMEM_LENGTH
+  global IMEM_BASE
+  global IMEM_LENGTH
+  global CLINT_BASE
+  global CLINT_LENGTH
+  global DEBUG_BASE
+  global DEBUG_LENGTH
+
+  set CLINT_BASE 0x13000000
+  set CLINT_LENGTH 0x00000000000C0000
+  set DEBUG_BASE 0x12000000
+  set DEBUG_LENGTH 0x0000000000001000
+  set IMEM_BASE	0x0000000000000000
+  set IMEM_LENGTH	$lmem
+  set DMEM_BASE	$IMEM_LENGTH
+  set DMEM_LENGTH	$lmem
+  # TODO
+  # set DRAM_BASE 0xdeadbeef
+  # set DRAM_LENGTH 0xdeadbeef
 
   # Create instance: cva6_0, and set properties
   set cva6_0 [ create_bd_cell -type ip -vlnv [dict get $cpu_vlnv $project_name] cva6_0 ]
@@ -8,10 +26,19 @@
   set cva6_dm_0 [ create_bd_cell -type ip -vlnv openhwgroup:cva6:cva6_dm:0.1 cva6_dm_0 ]
   set cpu_clk [get_bd_pins cva6_0/clk_i]
 
-  #set_property -dict [ list \
-  #  CONFIG.ExecuteRegionAddrBase.DebugBase {DEBUG_BASE_ADDRESS} \
-  #  CONFIG.ExecuteRegionAddrBase.DebugLength {DEBUG_LENGTH} \
-  #] [get_bd_intf_pins /cva6_0]
+  # TODO add to config & adjust ariane_top.sv
+  # CONFIG.DRAM_BASE	{$DRAM_BASE}
+  # CONFIG.DRAM_LENGTH {$DRAM_LENGTH}
+  set_property -dict [list \
+    CONFIG.CLINT_BASE	$CLINT_BASE \
+    CONFIG.CLINT_LENGTH	$CLINT_LENGTH \
+    CONFIG.DEBUG_BASE	$DEBUG_BASE \
+    CONFIG.DEBUG_LENGTH	$DEBUG_LENGTH \
+    CONFIG.DMEM_BASE	$DMEM_BASE \
+    CONFIG.DMEM_LENGTH $DMEM_LENGTH \
+    CONFIG.IMEM_BASE	$IMEM_BASE \
+    CONFIG.IMEM_LENGTH	$IMEM_LENGTH \
+  ] [get_bd_cells cva6_0]
 
   # Create interface connections
   #TODO this core has a single axi interface for both memories and peripherals
@@ -40,7 +67,7 @@
   set mhartid_constant [create_bd_cell -type ip -vlnv xilinx.com:ip:xlconstant:1.1 mhartid_constant]
 
   set_property -dict [list CONFIG.CONST_WIDTH {64}] [get_bd_cells boot_addr_constant]
-  set_property -dict [list CONFIG.CONST_VAL {0x0000000000000000}] [get_bd_cells boot_addr_constant]
+  set_property -dict [list CONFIG.CONST_VAL $IMEM_BASE] [get_bd_cells boot_addr_constant]
 
   set_property -dict [list CONFIG.CONST_WIDTH {64}] [get_bd_cells mhartid_constant]
   set_property -dict [list CONFIG.CONST_VAL {0x000000000000108B}] [get_bd_cells mhartid_constant]
@@ -87,22 +114,28 @@ if 0 {
 
 proc create_specific_addr_segs {} {
   variable lmem
-  # Create specific address segments
-  #create_bd_addr_seg -range 0x00010000 -offset 0x11000000 [get_bd_addr_spaces cva6_0/io_axi_dmem] [get_bd_addr_segs RVController_0/saxi/reg0] SEG_RVController_0_reg0
-  create_bd_addr_seg -range 0x00010000 -offset 0x11000000 [get_bd_addr_spaces cva6_0/io_axi_mem] [get_bd_addr_segs RVController_0/saxi/reg0] SEG_RVController_0_reg0
-  #create_bd_addr_seg -range $lmem -offset $lmem [get_bd_addr_spaces cva6_0/io_axi_dmem] [get_bd_addr_segs rv_dmem_ctrl/S_AXI/Mem0] SEG_rv_dmem_ctrl_Mem0
-  create_bd_addr_seg -range $lmem -offset $lmem [get_bd_addr_spaces cva6_0/io_axi_mem] [get_bd_addr_segs rv_dmem_ctrl/S_AXI/Mem0] SEG_rv_dmem_ctrl_Mem0
-  #create_bd_addr_seg -range $lmem -offset 0x00000000 [get_bd_addr_spaces cva6_0/io_axi_imem] [get_bd_addr_segs rv_imem_ctrl/S_AXI/Mem0] SEG_rv_imem_ctrl_Mem0
-  create_bd_addr_seg -range $lmem -offset 0x00000000 [get_bd_addr_spaces cva6_0/io_axi_mem] [get_bd_addr_segs rv_imem_ctrl/S_AXI/Mem0] SEG_rv_imem_ctrl_Mem0
+  variable DMEM_BASE
+  variable DMEM_LENGTH
+  variable IMEM_BASE
+  variable IMEM_LENGTH
+  variable CLINT_BASE
+  variable CLINT_LENGTH
+  variable DEBUG_BASE
+  variable DEBUG_LENGTH
+  
 
-  # Custom section for DM and timer
-  # Timer TODO offset
-  create_bd_addr_seg -range 0xC0000 -offset 0x00000000 [get_bd_addr_spaces cva6_0/io_axi_mem] [get_bd_addr_segs cva6_timer_0/axi_timer] SEG_cva6_clint
-  # DM TODO offset
-  create_bd_addr_seg -range 0x1000 -offset 0x00000000 [get_bd_addr_spaces cva6_0/io_axi_mem] [get_bd_addr_segs cva6_dm_0/axi_dm] SEG_cva6_dm
+  # Create specific address segments
+  create_bd_addr_seg -range 0x00010000 -offset 0x11000000 [get_bd_addr_spaces cva6_0/io_axi_mem] [get_bd_addr_segs RVController_0/saxi/reg0] SEG_RVController_0_reg0
+  create_bd_addr_seg -range $DMEM_LENGTH -offset $DMEM_BASE [get_bd_addr_spaces cva6_0/io_axi_mem] [get_bd_addr_segs rv_dmem_ctrl/S_AXI/Mem0] SEG_rv_dmem_ctrl_Mem0
+  create_bd_addr_seg -range $IMEM_LENGTH -offset $IMEM_BASE [get_bd_addr_spaces cva6_0/io_axi_mem] [get_bd_addr_segs rv_imem_ctrl/S_AXI/Mem0] SEG_rv_imem_ctrl_Mem0
+
+  # Additional address sections for DM and timer
+  # Timer
+  create_bd_addr_seg -range $CLINT_LENGTH -offset $CLINT_BASE [get_bd_addr_spaces cva6_0/io_axi_mem] [get_bd_addr_segs cva6_timer_0/axi_timer/reg0] SEG_cva6_clint
+  # DM
+  create_bd_addr_seg -range $DEBUG_LENGTH -offset $DEBUG_BASE [get_bd_addr_spaces cva6_0/io_axi_mem] [get_bd_addr_segs cva6_dm_0/axi_dm/reg0] SEG_cva6_dm
 }
 
 proc get_external_mem_addr_space {} {
-  #return [get_bd_addr_spaces cva6_0/io_axi_dmem]
   return [get_bd_addr_spaces cva6_0/io_axi_mem]
 }
