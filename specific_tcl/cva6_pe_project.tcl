@@ -1,8 +1,17 @@
-# Create instance: cva6_0, and set properties
+  # constants
+  #set DEBUG_BASE_ADDRESS 0x0
+  #set DEBUG_LENGTH 0x1000
+
+  # Create instance: cva6_0, and set properties
   set cva6_0 [ create_bd_cell -type ip -vlnv [dict get $cpu_vlnv $project_name] cva6_0 ]
   set cva6_timer_0 [ create_bd_cell -type ip -vlnv openhwgroup:cva6:cva6_timer:0.1 cva6_timer_0 ]
   set cva6_dm_0 [ create_bd_cell -type ip -vlnv openhwgroup:cva6:cva6_dm:0.1 cva6_dm_0 ]
   set cpu_clk [get_bd_pins cva6_0/clk_i]
+
+  #set_property -dict [ list \
+  #  CONFIG.ExecuteRegionAddrBase.DebugBase {DEBUG_BASE_ADDRESS} \
+  #  CONFIG.ExecuteRegionAddrBase.DebugLength {DEBUG_LENGTH} \
+  #] [get_bd_intf_pins /cva6_0]
 
   # Create interface connections
   #TODO this core has a single axi interface for both memories and peripherals
