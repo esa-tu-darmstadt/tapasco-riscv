@@ -43,21 +43,22 @@
   # Create interface connections
   #TODO this core has a single axi interface for both memories and peripherals
   set cva6_mem_splitter [ create_bd_cell -type ip -vlnv xilinx.com:ip:axi_interconnect:2.1 cva6_mem_splitter ]
-  set_property CONFIG.NUM_MI 3 [get_bd_cells /cva6_mem_splitter]
+  set_property CONFIG.NUM_MI 4 [get_bd_cells /cva6_mem_splitter]
   set_property CONFIG.NUM_SI 2 [get_bd_cells /cva6_mem_splitter]
 
   # Axi masters
   connect_bd_intf_net [get_bd_intf_pins cva6_0/io_axi_mem] -boundary_type upper [get_bd_intf_pins cva6_mem_splitter/S00_AXI]
-  connect_bd_intf_net [get_bd_intf_pins cva6_dm_0/axi_dm] -boundary_type upper [get_bd_intf_pins cva6_mem_splitter/S01_AXI]
+  connect_bd_intf_net [get_bd_intf_pins cva6_dm_0/axi_dm_master] -boundary_type upper [get_bd_intf_pins cva6_mem_splitter/S01_AXI]
 
   # Axi slaves
   connect_bd_intf_net -boundary_type upper [get_bd_intf_pins cva6_mem_splitter/M00_AXI] [get_bd_intf_pins cva6_timer_0/axi_timer]
+  connect_bd_intf_net -boundary_type upper [get_bd_intf_pins cva6_mem_splitter/M03_AXI] [get_bd_intf_pins cva6_dm_0/axi_dm_slave]
   connect_bd_intf_net -boundary_type upper [get_bd_intf_pins cva6_mem_splitter/M01_AXI] [get_bd_intf_pins axi_mem_intercon_1/S00_AXI]
   #connect_bd_intf_net -boundary_type upper [get_bd_intf_pins cva6_mem_splitter/M02_AXI] [get_bd_intf_pins rv_imem_ctrl/S_AXI]
   # Connect clocks
-  connect_bd_net [get_bd_ports CLK] [get_bd_pins cva6_mem_splitter/ACLK] [get_bd_pins cva6_mem_splitter/S00_ACLK] [get_bd_pins cva6_mem_splitter/M00_ACLK] [get_bd_pins cva6_mem_splitter/M01_ACLK] [get_bd_pins cva6_mem_splitter/M02_ACLK] [get_bd_pins cva6_mem_splitter/S01_ACLK]
+  connect_bd_net [get_bd_ports CLK] [get_bd_pins cva6_mem_splitter/ACLK] [get_bd_pins cva6_mem_splitter/S00_ACLK] [get_bd_pins cva6_mem_splitter/M00_ACLK] [get_bd_pins cva6_mem_splitter/M01_ACLK] [get_bd_pins cva6_mem_splitter/M02_ACLK] [get_bd_pins cva6_mem_splitter/M03_ACLK] [get_bd_pins cva6_mem_splitter/S01_ACLK]
   connect_bd_net [get_bd_pins rst_CLK_100M/interconnect_aresetn] [get_bd_pins cva6_mem_splitter/ARESETN]
-  connect_bd_net [get_bd_pins rst_CLK_100M/peripheral_aresetn] [get_bd_pins cva6_mem_splitter/S00_ARESETN] [get_bd_pins cva6_mem_splitter/M00_ARESETN] [get_bd_pins cva6_mem_splitter/M01_ARESETN] [get_bd_pins cva6_mem_splitter/M02_ARESETN] [get_bd_pins cva6_mem_splitter/S01_ARESETN]
+  connect_bd_net [get_bd_pins rst_CLK_100M/peripheral_aresetn] [get_bd_pins cva6_mem_splitter/S00_ARESETN] [get_bd_pins cva6_mem_splitter/M00_ARESETN] [get_bd_pins cva6_mem_splitter/M01_ARESETN] [get_bd_pins cva6_mem_splitter/M02_ARESETN] [get_bd_pins cva6_mem_splitter/M03_ARESETN] [get_bd_pins cva6_mem_splitter/S01_ARESETN]
 
   # imem connection is done via the iaxi variable
   set iaxi [get_bd_intf_pins cva6_mem_splitter/M02_AXI]
@@ -137,7 +138,7 @@ proc create_specific_addr_segs {} {
   # Timer
   create_bd_addr_seg -range $CLINT_LENGTH -offset $CLINT_BASE [get_bd_addr_spaces cva6_0/io_axi_mem] [get_bd_addr_segs cva6_timer_0/axi_timer/reg0] SEG_cva6_clint
   # DM
-  create_bd_addr_seg -range $DEBUG_LENGTH -offset $DEBUG_BASE [get_bd_addr_spaces cva6_0/io_axi_mem] [get_bd_addr_segs cva6_dm_0/axi_dm/reg0] SEG_cva6_dm
+  create_bd_addr_seg -range $DEBUG_LENGTH -offset $DEBUG_BASE [get_bd_addr_spaces cva6_0/io_axi_mem] [get_bd_addr_segs cva6_dm_0/axi_dm_slave/reg0] SEG_cva6_dm
 }
 
 proc get_external_mem_addr_space {} {
