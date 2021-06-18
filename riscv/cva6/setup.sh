@@ -12,7 +12,8 @@ export RV_ROOT=$(pwd)
 #cd ..
 #cd src
 
-../preprocess_includes.sh
+../preprocess_includes.sh "core.files"
+../preprocess_includes.sh "dm_core.files"
 
 vivado -nolog -nojournal -mode batch -source ../package.tcl
 vivado -nolog -nojournal -mode batch -source ../package_timer.tcl

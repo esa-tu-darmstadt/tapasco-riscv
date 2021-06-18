@@ -1,0 +1,14 @@
+include/tapasco_riscv_settings.sv
+src/tapasco_dm_top.sv
+src/riscv-dbg/src/dm_pkg.sv
+src/riscv-dbg/src/dm_csrs.sv
+src/riscv-dbg/src/dm_sba.sv
+src/riscv-dbg/src/dm_mem.sv
+src/riscv-dbg/src/dm_top.sv
+src/common_cells/src/deprecated/fifo_v2.sv
+src/axi/src/axi_pkg.sv
+src/axi/src/axi_intf.sv
+src/axi_mem_if/src/axi2mem.sv
+src/axi_adapter.sv
+src/util/axi_slave_connect.sv
+src/util/axi_master_connect.sv

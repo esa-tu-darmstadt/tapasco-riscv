@@ -1,3 +1,20 @@
+diff --git a/src/axi/src/axi_intf.sv b/src/axi/src/axi_intf.sv
+index 431b5c1..e3d6fd6 100644
+--- a/src/axi/src/axi_intf.sv
++++ b/src/axi/src/axi_intf.sv
+@@ -383,6 +383,7 @@ endinterface
+ /// For each slave, multiple rules can be defined. Each rule consists of an
+ /// address mask and a base. Addresses are masked and then compared against the
+ /// base to decide where transfers need to go.
++`ifndef TAPASCO_DISABLE_FOR_VIVADO
+ interface AXI_ROUTING_RULES #(
+   /// The address width.
+   parameter int AXI_ADDR_WIDTH = -1,
+@@ -426,3 +427,4 @@ interface AXI_ARBITRATION #(
+   modport req(output in_req, out_ack, input  out_req, out_sel, in_ack);
+
+ endinterface
++`endif
 diff --git a/src/common_cells/src/cdc_fifo_gray.sv b/src/common_cells/src/cdc_fifo_gray.sv
 index 702eccd..7546f9e 100644
 --- a/src/common_cells/src/cdc_fifo_gray.sv
