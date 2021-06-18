@@ -11,7 +11,13 @@ add_files {src/tapasco_dm_top.sv \
             src/riscv-dbg/src/dm_mem.sv \
             src/riscv-dbg/src/dm_top.sv \
             src/common_cells/src/deprecated/fifo_v2.sv \
-            src/axi/src/axi_pkg.sv}
+            src/axi/src/axi_pkg.sv \
+            src/axi/src/axi_intf.sv \
+            src/axi_mem_if/src/axi2mem.sv \
+            src/axi_adapter.sv \
+            src/util/axi_slave_connect.sv \
+            src/util/axi_master_connect.sv \
+            }
 #add_files [exec find src/ -type f -name "*.sv"]
 #add_files [glob includes/*.{v,sv,h,svh}]
 #set_property file_type {Verilog Header} [get_files *.svh]
