@@ -35,7 +35,8 @@ V_CCFLAGS := -g -Wall -O3 -I$(PWD)$(SIM_SRC) -I$(CAPN_PATH)/lib
 V_LDFLAGS := -lpthread
 
 # Choose the correct cache version, the other one is deprecated
-V_FLAGS := -Wno-fatal \
+V_FLAGS := -DWT_DCACHE \
+           -Wno-fatal \
            -Wno-PINCONNECTEMPTY \
            -Wno-ASSIGNDLY \
            -Wno-DECLFILENAME \
