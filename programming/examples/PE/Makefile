@@ -1,23 +1,37 @@
+# Usage CORE={swerv, scr1, cva6} [RV64=1] [CCM=1] [ESOTERIC=1]
 SIZE?=0x4000
 STACK_START!=printf "0x%08x" $$(($(SIZE) + $(SIZE)))
-MARCH?=rv32im
-MABI?=ilp32
+
+ifdef RV64
+	MARCH?=rv64im
+	MABI?=lp64
+else
+	MARCH?=rv32im
+	MABI?=ilp32
+endif
+
 PROGRAM?=simple_sum
 RV_FLAGS:=-march=$(MARCH) -mabi=$(MABI) -nostdlib -g
-ifndef SWERV_CCM
-ifndef SCR1_CCM
-	RV_FLAGS+= -T rv_$(SIZE).ld startup_$(SIZE)1.s
-else
 
-ifdef ESOTERIC
-	RV_FLAGS+= -T rv_scr1.ld startup_scr1_esoteric.s
-else
-	RV_FLAGS+= -T rv_scr1.ld startup_scr1.s
-endif
-
-endif
-else
+ifeq ($(CORE),swerv)
+	# assumes CCM
 	RV_FLAGS+= -T rv_swerv.ld startup_swerv.s
+else ifeq ($(CORE),scr1)
+	ifndef CCM
+		RV_FLAGS+= -T rv_$(SIZE).ld startup_$(SIZE)1.s
+	else
+		ifdef ESOTERIC
+			RV_FLAGS+= -T rv_scr1.ld startup_scr1_esoteric.s
+		else
+			RV_FLAGS+= -T rv_scr1.ld startup_scr1.s
+		endif
+	endif
+else ifeq ($(CORE),cva6)
+	ifdef ESOTERIC
+		RV_FLAGS+= -T rv_cva6.ld startup_cva6_esoteric.s
+	else
+		$(error Unsupported)
+	endif
 endif
 
 TOP:=`echo $(STACK_START) | cut -c3-7`
