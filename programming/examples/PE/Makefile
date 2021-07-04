@@ -1,4 +1,4 @@
-# Usage CORE={swerv, scr1, cva6} [RV64=1] [CCM=1] [ESOTERIC=1]
+# Usage CORE={swerv, scr1, cva6} [RV64=1] [CCM=1] [ESOTERIC=1] [PROGRAM={simple_sum, localsum, readargs}]
 SIZE?=0x4000
 STACK_START!=printf "0x%08x" $$(($(SIZE) + $(SIZE)))
 
@@ -30,7 +30,7 @@ else ifeq ($(CORE),cva6)
 	ifdef ESOTERIC
 		RV_FLAGS+= -T rv_cva6.ld startup_cva6_esoteric.s
 	else
-		$(error Unsupported)
+		RV_FLAGS+= -T rv_cva6.ld startup_cva6.s
 	endif
 endif
 
