@@ -23,7 +23,6 @@ src/controller.sv
 src/csr_buffer.sv
 src/csr_regfile.sv
 src/decoder.sv
-src/dromajo_ram.sv
 src/ex_stage.sv
 src/fpu_wrap.sv
 src/id_stage.sv
