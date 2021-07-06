@@ -14,6 +14,14 @@ export RV_ROOT=$(pwd)
 
 ../preprocess_includes.sh "core.files"
 ../preprocess_includes.sh "dm_core.files"
+../preprocess_includes.sh "clint_core.files"
+
+# Pre compile system verilog files to verilog
+sv2v -D SYNTHESIS -D VERILATOR -I "include" -I "src/common_cells/include" -I "src/common_cells/include/common_cells" -w cva6_top.v `cat ../core.files`
+# Dirty hack to remove a type cast that vivado does not like...
+sed -i "s/int unsigned'//g" cva6_top.v
+sv2v -D SYNTHESIS -D VERILATOR -I "include" -I "src/common_cells/include" -I "src/common_cells/include/common_cells" -w dm_top.v `cat ../dm_core.files`
+sv2v -D SYNTHESIS -D VERILATOR -I "include" -I "src/common_cells/include" -I "src/common_cells/include/common_cells" -w clint_top.v `cat ../clint_core.files`
 
 vivado -nolog -nojournal -mode batch -source ../package.tcl
 vivado -nolog -nojournal -mode batch -source ../package_timer.tcl

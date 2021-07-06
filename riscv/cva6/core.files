@@ -83,7 +83,6 @@ src/cache_subsystem/wt_dcache_missunit.sv
 src/cache_subsystem/wt_dcache.sv
 src/cache_subsystem/wt_dcache_wbuffer.sv
 src/cache_subsystem/wt_l15_adapter.sv
-bootrom/dromajo_bootrom.sv
 src/clint/axi_lite_interface.sv
 src/clint/clint.sv
 fpga/src/axi2apb/src/axi2apb_64_32.sv
@@ -158,7 +157,6 @@ src/axi/src/axi_multicut.sv
 src/axi/src/axi_cut.sv
 src/axi/src/axi_join.sv
 src/axi/src/axi_delayer.sv
-src/axi/src/axi_to_axi_lite.sv
 src/fpga-support/rtl/SyncSpRamBeNx64.sv
 src/common_cells/src/sync.sv
 src/common_cells/src/cdc_2phase.sv

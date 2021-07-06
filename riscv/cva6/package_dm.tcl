@@ -4,11 +4,12 @@ set name cva6_dm
 set version 0.1
 create_project -in_memory
 
-add_files [exec cat ../dm_core.files]
+add_files [glob dm_top.v]
+#add_files [exec cat ../dm_core.files]
 #add_files [exec find src/ -type f -name "*.sv"]
 #add_files [glob includes/*.{v,sv,h,svh}]
 #set_property file_type {Verilog Header} [get_files *.svh]
-set_property include_dirs {"include" "src/common_cells/include"} [current_fileset]
+#set_property include_dirs {"include" "src/common_cells/include"} [current_fileset]
 
 # optionally remove unneeded files
 
