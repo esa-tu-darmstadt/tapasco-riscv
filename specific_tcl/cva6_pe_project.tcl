@@ -97,7 +97,6 @@
 
 #TODO handle unconnected pins:
 # irq_i[1:0]
-# ipi_i
 
 # Add debug module
 if 0 {
@@ -131,16 +130,25 @@ proc create_specific_addr_segs {} {
 
   # Create specific address segments
   create_bd_addr_seg -range 0x00010000 -offset 0x11000000 [get_bd_addr_spaces cva6_0/io_axi_mem] [get_bd_addr_segs RVController_0/saxi/reg0] SEG_RVController_0_reg0
+  create_bd_addr_seg -range 0x00010000 -offset 0x11000000 [get_bd_addr_spaces cva6_dm_0/axi_dm_master] [get_bd_addr_segs RVController_0/saxi/reg0] SEG_RVController_0_reg0
   create_bd_addr_seg -range $DMEM_LENGTH -offset $DMEM_BASE [get_bd_addr_spaces cva6_0/io_axi_mem] [get_bd_addr_segs rv_dmem_ctrl/S_AXI/Mem0] SEG_rv_dmem_ctrl_Mem0
+  create_bd_addr_seg -range $DMEM_LENGTH -offset $DMEM_BASE [get_bd_addr_spaces cva6_dm_0/axi_dm_master] [get_bd_addr_segs rv_dmem_ctrl/S_AXI/Mem0] SEG_rv_dmem_ctrl_Mem0
   create_bd_addr_seg -range $IMEM_LENGTH -offset $IMEM_BASE [get_bd_addr_spaces cva6_0/io_axi_mem] [get_bd_addr_segs rv_imem_ctrl/S_AXI/Mem0] SEG_rv_imem_ctrl_Mem0
+  create_bd_addr_seg -range $IMEM_LENGTH -offset $IMEM_BASE [get_bd_addr_spaces cva6_dm_0/axi_dm_master] [get_bd_addr_segs rv_imem_ctrl/S_AXI/Mem0] SEG_rv_imem_ctrl_Mem0
 
   # Additional address sections for DM and timer
   # Timer
   create_bd_addr_seg -range $CLINT_LENGTH -offset $CLINT_BASE [get_bd_addr_spaces cva6_0/io_axi_mem] [get_bd_addr_segs cva6_timer_0/axi_timer/reg0] SEG_cva6_clint
+  create_bd_addr_seg -range $CLINT_LENGTH -offset $CLINT_BASE [get_bd_addr_spaces cva6_dm_0/axi_dm_master] [get_bd_addr_segs cva6_timer_0/axi_timer/reg0] SEG_cva6_clint
   # DM
   create_bd_addr_seg -range $DEBUG_LENGTH -offset $DEBUG_BASE [get_bd_addr_spaces cva6_0/io_axi_mem] [get_bd_addr_segs cva6_dm_0/axi_dm_slave/reg0] SEG_cva6_dm
+  create_bd_addr_seg -range $DEBUG_LENGTH -offset $DEBUG_BASE [get_bd_addr_spaces cva6_dm_0/axi_dm_master] [get_bd_addr_segs cva6_dm_0/axi_dm_slave/reg0] SEG_cva6_dm
 }
 
 proc get_external_mem_addr_space {} {
   return [get_bd_addr_spaces cva6_0/io_axi_mem]
+}
+
+proc get_external_mem_addr_space2 {} {
+  return [get_bd_addr_spaces cva6_dm_0/axi_dm_master]
 }
