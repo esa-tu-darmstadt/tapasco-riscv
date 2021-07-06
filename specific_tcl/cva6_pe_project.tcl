@@ -96,7 +96,13 @@
   connect_bd_net [get_bd_pins cva6_dm_0/debug_req_core_o] [get_bd_pins cva6_0/debug_req_i]
 
 #TODO handle unconnected pins:
-# irq_i[1:0]
+# /cva6_0/irq_i[1:0]
+# /cva6_timer_0/axi_timer_awatop
+# /cva6_dm_0/axi_dm_slave_awatop
+# /cva6_dm_0/axi_dm_master_awatop (output)
+# /cva6_0/io_axi_mem_awatop (output)
+# /RVController_0/reqRDY_req_rdy
+# /RVController_0/resRDY_res_rdy
 
 # Add debug module
 if 0 {
