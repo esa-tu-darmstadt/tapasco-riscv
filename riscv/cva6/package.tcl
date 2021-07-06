@@ -4,7 +4,7 @@ set name cva6
 set version 0.1
 create_project -in_memory
 
-add_files [glob cva6_top.v]
+add_files [glob cva6_top.sv]
 #add_files [exec cat ../core.files]
 #add_files [exec find src/ -type f -name "*.sv"]
 #add_files [glob includes/*.{v,sv,h,svh}]

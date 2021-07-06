@@ -4,7 +4,7 @@ set name cva6_timer
 set version 0.1
 create_project -in_memory
 
-add_files [glob clint_top.v]
+add_files [glob clint_top.sv]
 #add_files [exec cat ../clint_core.files]
 #add_files [exec find src/ -type f -name "*.sv"]
 #add_files [glob includes/*.{v,sv,h,svh}]
