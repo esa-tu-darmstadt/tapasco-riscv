@@ -17,14 +17,14 @@ export RV_ROOT=$(pwd)
 ../preprocess_includes.sh "clint_core.files"
 
 # Pre compile system verilog files to verilog
-sv2v -D SYNTHESIS -D VERILATOR -I "include" -I "src/common_cells/include" -I "src/common_cells/include/common_cells" --exclude=interface -w cva6_top.v `cat ../core.files`
+#sv2v -D SYNTHESIS -D VERILATOR -I "include" -I "src/common_cells/include" -I "src/common_cells/include/common_cells" --exclude=interface -w cva6_top.v `cat ../core.files`
 # Dirty hack to remove a type cast that vivado does not like...
-sed -i "s/int unsigned'//g" cva6_top.v
-sv2v -D SYNTHESIS -D VERILATOR -I "include" -I "src/common_cells/include" -I "src/common_cells/include/common_cells" --exclude=interface -w dm_top.v `cat ../dm_core.files`
-sv2v -D SYNTHESIS -D VERILATOR -I "include" -I "src/common_cells/include" -I "src/common_cells/include/common_cells" --exclude=interface -w clint_top.v `cat ../clint_core.files`
-mv cva6_top.v cva6_top.sv
-mv dm_top.v dm_top.sv
-mv clint_top.v clint_top.sv
+#sed -i "s/int unsigned'//g" cva6_top.v
+#sv2v -D SYNTHESIS -D VERILATOR -I "include" -I "src/common_cells/include" -I "src/common_cells/include/common_cells" --exclude=interface -w dm_top.v `cat ../dm_core.files`
+#sv2v -D SYNTHESIS -D VERILATOR -I "include" -I "src/common_cells/include" -I "src/common_cells/include/common_cells" --exclude=interface -w clint_top.v `cat ../clint_core.files`
+#mv cva6_top.v cva6_top.sv
+#mv dm_top.v dm_top.sv
+#mv clint_top.v clint_top.sv
 
 vivado -nolog -nojournal -mode batch -source ../package.tcl
 vivado -nolog -nojournal -mode batch -source ../package_timer.tcl
