@@ -11,8 +11,16 @@
 #define COUNTERH 0x1d
 
 #ifndef RAM_OFFSET
-#define RAM_OFFSET 0x80000000
+	#ifdef RV64
+		#define RAM_OFFSET 0x0001000000000000ul
+	#else
+		#define RAM_OFFSET 0x80000000
+	#endif
 #endif
+
+#define XSTR(x) STR(x)
+#define STR(x) #x
+#pragma message "RAM_OFFSET = " XSTR(RAM_OFFSET)
 
 /**
 	Writes the value at the specified register.
@@ -103,8 +111,14 @@ void print(const char *str)
     out_buf[out_idx] = '\0';
 }
 
+void print_hex(unsigned int num)
+{
+	for (unsigned int base = (unsigned int)1 << (sizeof(unsigned int) * 8 - 1); base != 0; base /= 16) {
+		unsigned int d = num / base;
+		num -= base * d;
 
+		out_buf[out_idx++] = "0123456789abcdef"[d];
+	}
 
-
-
-
+	out_buf[out_idx] = '\0';
+}

@@ -2,16 +2,19 @@
 SIZE?=0x4000
 STACK_START!=printf "0x%08x" $$(($(SIZE) + $(SIZE)))
 
+RV_FLAGS ?= -Wall
+
 ifdef RV64
 	MARCH?=rv64im
 	MABI?=lp64
+	RV_FLAGS += -DRV64
 else
 	MARCH?=rv32im
 	MABI?=ilp32
 endif
 
 PROGRAM?=simple_sum
-RV_FLAGS:=-march=$(MARCH) -mabi=$(MABI) -nostdlib -g
+RV_FLAGS+= -march=$(MARCH) -mabi=$(MABI) -nostdlib -g
 
 ifeq ($(CORE),swerv)
 	# assumes CCM
@@ -38,8 +41,8 @@ TOP:=`echo $(STACK_START) | cut -c3-7`
 BOTTOM:=`echo $(STACK_START) | cut -c8-10`
 
 program: setup
-	riscv32-unknown-elf-gcc $(RV_FLAGS) $(PROGRAM)/$(PROGRAM).c -o elf/$(PROGRAM)_pe.elf
-	riscv32-unknown-elf-objcopy -O binary elf/$(PROGRAM)_pe.elf bin/$(PROGRAM).bin
+	riscv64-unknown-linux-gnu-gcc $(RV_FLAGS) $(PROGRAM)/$(PROGRAM).c -o elf/$(PROGRAM)_pe.elf
+	riscv64-unknown-linux-gnu-objcopy -O binary elf/$(PROGRAM)_pe.elf bin/$(PROGRAM).bin
 
 setup:
 	mkdir -p elf bin
