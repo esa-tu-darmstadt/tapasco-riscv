@@ -10,6 +10,8 @@ include/ariane_axi_pkg.sv
 src/fpu/src/fpnew_pkg.sv
 src/fpu/src/fpu_div_sqrt_mvp/hdl/defs_div_sqrt_mvp.sv
 src/ariane_top.sv
+src/raw_axi_master_struct_connect.sv
+src/raw_axi_slave_struct_connect.sv
 src/raw_axi_master_connect.sv
 src/raw_axi_slave_connect.sv
 src/alu.sv
