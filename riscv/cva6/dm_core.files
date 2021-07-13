@@ -7,6 +7,7 @@ include/wt_cache_pkg.sv
 src/axi/src/axi_pkg.sv
 src/register_interface/src/reg_intf_pkg.sv
 include/ariane_axi_pkg.sv
+src/tapasco_axi_pkg.sv
 src/fpu/src/fpnew_pkg.sv
 src/tapasco_dm_top.sv
 src/raw_axi_master_struct_connect.sv
