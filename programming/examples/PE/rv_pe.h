@@ -100,6 +100,12 @@ void initInterrupts()
 static char *out_buf = 0;
 static int out_idx = 0;
 
+void initPrint()
+{
+    out_buf = 0;
+    out_idx = 0;
+}
+
 void print(const char *str)
 {
     if (!out_buf)
@@ -111,14 +117,16 @@ void print(const char *str)
     out_buf[out_idx] = '\0';
 }
 
+static char printHexLut[] = "0123456789ABCDEF";
+
 void print_hex(unsigned int num)
 {
-	for (unsigned int base = (unsigned int)1 << (sizeof(unsigned int) * 8 - 1); base != 0; base /= 16) {
-		unsigned int d = num / base;
-		num -= base * d;
+    if (!out_buf)
+        out_buf = (char *)readFromCtrl(ARG3) + RAM_OFFSET;
 
-		out_buf[out_idx++] = "0123456789abcdef"[d];
-	}
+    for (int shift = sizeof(unsigned int) * 8 - 4; shift >= 0; shift -= 4) {
+        out_buf[out_idx++] = printHexLut[(num >> shift) & 0x0F];
+    }
 
-	out_buf[out_idx] = '\0';
+    out_buf[out_idx] = '\0';
 }
