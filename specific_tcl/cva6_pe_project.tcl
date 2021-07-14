@@ -75,7 +75,8 @@
   set_property -dict [list CONFIG.CONST_VAL $IMEM_BASE] [get_bd_cells boot_addr_constant]
 
   set_property -dict [list CONFIG.CONST_WIDTH {64}] [get_bd_cells mhartid_constant]
-  set_property -dict [list CONFIG.CONST_VAL {0x000000000000108B}] [get_bd_cells mhartid_constant]
+  # DONT TOUCH THIS VALUE!!!!
+  set_property -dict [list CONFIG.CONST_VAL {0x0}] [get_bd_cells mhartid_constant]
 
   connect_bd_net [get_bd_pins boot_addr_constant/dout] [get_bd_pins cva6_0/boot_addr_i]
   connect_bd_net [get_bd_pins mhartid_constant/dout] [get_bd_pins cva6_0/hart_id_i]

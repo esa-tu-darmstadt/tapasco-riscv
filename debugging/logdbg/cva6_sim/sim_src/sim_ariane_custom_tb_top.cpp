@@ -83,9 +83,12 @@ static void reset(const std::shared_ptr<dm::DM_TestBenchInterface>& dm_interface
     ptop->dmi_addr = 0;
     ptop->dmi_wdata = 0;
 
+    ptop->hart_id_i = 0;
+
     ptop->rst_n = 0;
     run(100, true, false);
     ptop->rst_n = 1;
+    run(1000, true, false);
 
     if (dmiHandler) {
         delete dmiHandler;
