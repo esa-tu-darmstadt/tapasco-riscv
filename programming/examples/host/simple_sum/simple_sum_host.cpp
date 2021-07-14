@@ -52,7 +52,7 @@ int main(int argc, char **argv) {
         exit(1);
     }
 
-#define STDOUT_BUF 1024
+#define STDOUT_BUF (1024 * 1024)
     char *stdoutBuf = new char[STDOUT_BUF]();
 
     // Wrap the program buffer into local memory object
