@@ -1,4 +1,4 @@
-# Usage CORE={swerv, scr1, cva6} [RV64=1] [CCM=1] [ESOTERIC=1] [PROGRAM={simple_sum, localsum, readargs}]
+# Usage CORE={swerv, scr1, cva6} [RV64=1] [CCM=1] [ESOTERIC=1] [PROGRAM={simple_sum, localsum, readargs, read_dm}]
 SIZE?=0x4000
 STACK_START!=printf "0x%08x" $$(($(SIZE) + $(SIZE)))
 
