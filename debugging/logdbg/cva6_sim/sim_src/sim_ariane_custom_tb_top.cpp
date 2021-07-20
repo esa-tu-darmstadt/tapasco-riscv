@@ -14,10 +14,6 @@
 #include "DMI_Handler.hpp"
 #include "dm_testbench_interface.hpp"
 
-#ifndef PHASE_LENGTH
-#define PHASE_LENGTH 5
-#endif
-
 static TOP_MODULE *ptop = nullptr; // Instantiation of module
 static VerilatedVcdC *tfp = nullptr;
 
@@ -47,15 +43,11 @@ double sc_time_stamp() {
 }
 
 /******************************************************************************/
-static void tick(int count, bool dump) {
-    do {
-        //if (tfp)
-        //tfp->dump(main_time); // dump traces (inputs stable before outputs change)
-        ptop->eval(); // Evaluate model
-        main_time++;  // Time passes...
-        if (tfp && dump)
-            tfp->dump(main_time); // inputs and outputs all updated at same time
-    } while (--count);
+static void tick(bool dump) {
+    ptop->eval(); // Evaluate model
+    main_time++;  // Time passes...
+    if (tfp && dump)
+        tfp->dump(main_time); // inputs and outputs all updated at same time
 }
 
 /******************************************************************************/
@@ -66,17 +58,17 @@ static void run(uint64_t limit, bool dump, bool checkStopCondition = true) {
         stop = checkStopCondition && stopCondition();
         ptop->clk = 1;
         onRisingEdge();
-        tick(PHASE_LENGTH, dump);
+        tick(dump);
 
         ptop->clk = 0;
         onFallingEdge();
-        tick(PHASE_LENGTH, dump);
+        tick(dump);
         sanityChecks();
     } while (--limit && !stop);
 }
 
 /******************************************************************************/
-static void reset(const std::shared_ptr<dm::DM_TestBenchInterface>& dm_interface) {
+static void reset(const std::shared_ptr<dm::DM_TestBenchInterface> &dm_interface) {
     // Initialize signals & perform reset
     ptop->dmi_req = 0;
     ptop->dmi_wr = 0;
