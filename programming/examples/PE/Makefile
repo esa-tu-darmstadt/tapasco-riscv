@@ -30,10 +30,14 @@ else ifeq ($(CORE),scr1)
 		endif
 	endif
 else ifeq ($(CORE),cva6)
-	ifdef ESOTERIC
-		RV_FLAGS+= -T rv_cva6.ld startup_cva6_esoteric.s
+	ifndef CCM
+		RV_FLAGS+= -T rv_$(SIZE).ld startup_$(SIZE)1.s
 	else
-		RV_FLAGS+= -T rv_cva6.ld startup_cva6.s
+		ifdef ESOTERIC
+			RV_FLAGS+= -T rv_cva6.ld startup_cva6_esoteric.s
+		else
+			RV_FLAGS+= -T rv_cva6.ld startup_cva6.s
+		endif
 	endif
 endif
 
