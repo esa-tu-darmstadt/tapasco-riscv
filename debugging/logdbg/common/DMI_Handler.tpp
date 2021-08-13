@@ -34,7 +34,7 @@ namespace v2dmi {
             // We have processed the request -> clear busy flag
             busy = false;
             // Ensure a minimum of x cycles between the next request!
-            idleCycles = minIdleCyclesBetweenRequests;
+            idleCycles = idleBetweenRequests;
         } else {
             if (idleCycles > 0) {
                 --idleCycles;

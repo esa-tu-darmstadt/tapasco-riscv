@@ -85,7 +85,7 @@ static void reset(const std::shared_ptr<dm::DM_TestBenchInterface> &dm_interface
     if (dmiHandler) {
         delete dmiHandler;
     }
-    dmiHandler = new v2dmi::DMI_Handler(dm_interface);
+    dmiHandler = new v2dmi::DMI_Handler(dm_interface, 500);
 }
 
 /******************************************************************************/

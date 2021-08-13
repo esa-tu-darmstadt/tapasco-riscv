@@ -31,7 +31,10 @@ sim_tops := $(patsubst sim_%.cpp,%,$(notdir $(sim_targets)))
 deps := $(call rwildcard,$(V_DIR),*.d)
 
 PWD := $(dir $(abspath $(lastword $(MAKEFILE_LIST))))
-V_CCFLAGS := -g -Wall -O3 -I$(PWD)$(SIM_SRC) -I$(CAPN_PATH)/lib
+COMMON_DIR := $(PWD)../common
+srcs += $(call rwildcard,$(COMMON_DIR),*.cpp)
+srcs += $(call rwildcard,$(COMMON_DIR),*.c)
+V_CCFLAGS := -g -Wall -O3 -I$(PWD)$(SIM_SRC) -I$(COMMON_DIR) -I$(CAPN_PATH)/lib
 V_LDFLAGS := -lpthread
 
 # Choose the correct cache version, the other one is deprecated
@@ -44,16 +47,11 @@ V_FLAGS := -DWT_DCACHE \
            -Wno-BLKANDNBLK \
            -Wno-style
 
-.PHONY: all clean sim preparebuild cva6
+.PHONY: all clean sim preparebuild
 
-all: preparebuild cva6 sim
+all: preparebuild sim
 
 preparebuild:
-#	cp dm_interface.* $(SIM_SRC)/$(DEFAULT_TOP_MODULE)
-#	cp dm_testbench_interface.* $(SIM_SRC)/$(DEFAULT_TOP_MODULE)
-#	cp tapasco-riscv.capnp.* $(SIM_SRC)/$(DEFAULT_TOP_MODULE)
-
-cva6:
 	git clone --recursive https://github.com/jschj/cva6 && cd cva6 && git checkout master || cd cva6 && git pull
 
 define GEN_SIM_RULES

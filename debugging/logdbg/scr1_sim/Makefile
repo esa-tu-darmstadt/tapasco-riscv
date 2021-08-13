@@ -31,23 +31,17 @@ sim_tops := $(patsubst sim_%.cpp,%,$(notdir $(sim_targets)))
 deps := $(call rwildcard,$(V_DIR),*.d)
 
 PWD := $(dir $(abspath $(lastword $(MAKEFILE_LIST))))
-V_CCFLAGS := -g -Wall -O3 -I$(PWD)$(SIM_SRC) -I$(CAPN_PATH)/lib
+COMMON_DIR := $(PWD)../common
+srcs += $(call rwildcard,$(COMMON_DIR),*.cpp)
+srcs += $(call rwildcard,$(COMMON_DIR),*.c)
+V_CCFLAGS := -g -Wall -O3 -I$(PWD)$(SIM_SRC) -I$(COMMON_DIR) -I$(CAPN_PATH)/lib
 V_LDFLAGS := -lpthread
 
-.PHONY: all clean sim preparebuild scr1
+.PHONY: all clean sim preparebuild
 
-all: preparebuild scr1 sim
+all: preparebuild sim
 
 preparebuild:
-#	cp dm_interface.* $(SIM_SRC)/$(DEFAULT_TOP_MODULE)
-#	cp dm_testbench_interface.* $(SIM_SRC)/$(DEFAULT_TOP_MODULE)
-#	cp tapasco-riscv.capnp.* $(SIM_SRC)/$(DEFAULT_TOP_MODULE)
-#	cp *.cpp $(SIM_SRC)/$(DEFAULT_TOP_MODULE)
-#	cp *.c $(SIM_SRC)/$(DEFAULT_TOP_MODULE)
-#	cp *.h $(SIM_SRC)/$(DEFAULT_TOP_MODULE)
-#	cp *.hpp $(SIM_SRC)/$(DEFAULT_TOP_MODULE)
-
-scr1:
 	git clone https://github.com/7FM/scr1.git && cd scr1 && git checkout master || cd scr1 && git pull
 
 define GEN_SIM_RULES
