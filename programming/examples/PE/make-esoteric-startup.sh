@@ -1,4 +1,5 @@
 #!/bin/bash
+# use this script to generate program bytes that are easily traceable in GTKwave
 
 N=$1
 
