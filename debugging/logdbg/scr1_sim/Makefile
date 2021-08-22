@@ -21,10 +21,7 @@ rwildcard=$(foreach d,$(wildcard $(1:=/*)),$(call rwildcard,$d,$2) $(filter $(su
 
 srcs := $(addprefix $(SRC_PREFIX),$(shell cat $(SRC_FILES)))
 srcs += $(ADD_SCRS)
-#srcs += $(call rwildcard,$(SRC),*.v)
-#srcs += $(call rwildcard,$(SRC),*.sv)
 
-#sim_srcs := $(call rwildcard,$(SIM_SRC),*.cpp)
 sim_targets := $(wildcard $(SIM_SRC)/sim_*.cpp)
 sim_tops := $(patsubst sim_%.cpp,%,$(notdir $(sim_targets)))
 
@@ -74,8 +71,5 @@ sim: sim_$(DEFAULT_TOP_MODULE)
 
 clean:
 	rm -rf $(V_DIR)
-#	rm -f $(SIM_SRC)/$(DEFAULT_TOP_MODULE)/dm_interface.*
-#	rm -f $(SIM_SRC)/$(DEFAULT_TOP_MODULE)/dm_testbench_interface.*
-#	rm -f $(SIM_SRC)/$(DEFAULT_TOP_MODULE)/tapasco-riscv.capnp.*
 
 -include $(deps)
