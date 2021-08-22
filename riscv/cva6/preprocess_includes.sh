@@ -1,4 +1,5 @@
 #!/bin/bash
+# This script writes '`include "tapasco_riscv_settings.sv'  line in all sv files. 
 
 printf "Preprocessing files in $1 ...\n"
 

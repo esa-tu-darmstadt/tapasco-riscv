@@ -10,6 +10,7 @@
 #define COUNTER 0x1c
 #define COUNTERH 0x1d
 
+/* these offsets are taken from common/common_addr_segments.tcl */
 #ifndef RAM_OFFSET
 	#ifdef RV64
 		#define RAM_OFFSET 0x0001000000000000ul
