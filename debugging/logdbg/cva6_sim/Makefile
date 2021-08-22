@@ -11,7 +11,7 @@ SRC_FILES ?= ../../../riscv/cva6/core.files
 # Optionally specify a prefix that should be added to all entries in the files listed in $SRC_FILES
 SRC_PREFIX ?= cva6/
 # Additional (system-)verilog that are required in the simulation but not listed in $SRC_FILES
-ADD_SCRS ?= $(SRC_PREFIX)include/axi_intf.sv $(SRC_PREFIX)tb/ariane_soc_pkg.sv $(SRC_PREFIX)tb/ariane_axi_soc_pkg.sv $(SRC_PREFIX)tb/ariane_custom_tb_top.sv
+ADD_SRCS ?= $(SRC_PREFIX)include/axi_intf.sv $(SRC_PREFIX)tb/ariane_soc_pkg.sv $(SRC_PREFIX)tb/ariane_axi_soc_pkg.sv $(SRC_PREFIX)tb/ariane_custom_tb_top.sv
 # Include directories, which verilator should use to resolve `include directives in the (system-)verilog code
 INCLUDE_DIR ?= $(SRC_PREFIX)include -I$(SRC_PREFIX)src/common_cells/include -I$(SRC_PREFIX)src/common_cells/include/common_cells
 # Specify the top module to use for the simulation
@@ -48,7 +48,7 @@ rwildcard=$(foreach d,$(wildcard $(1:=/*)),$(call rwildcard,$d,$2) $(filter $(su
 # Get all source files listed in the $SRC_FILES and prepend the $SRC_PREFIX
 srcs := $(addprefix $(SRC_PREFIX),$(shell cat $(SRC_FILES)))
 # Also add the additional source files
-srcs += $(ADD_SCRS)
+srcs += $(ADD_SRCS)
 
 sim_targets := $(wildcard $(SIM_SRC)/sim_*.cpp)
 sim_tops := $(patsubst sim_%.cpp,%,$(notdir $(sim_targets)))
