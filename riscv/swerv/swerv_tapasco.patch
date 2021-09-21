@@ -1,3 +1,15 @@
+diff --git a/configs/swerv.config b/configs/swerv.config
+index bd6f694..261cc6c 100755
+--- a/configs/swerv.config
++++ b/configs/swerv.config
+@@ -738,7 +738,6 @@ our %config = (#{{{
+         "clock_period"      => "100",
+         "build_ahb_lite"    => "$ahb_lite",       # one and only one bus build arg will ever be defined
+         "build_axi4"        => "",
+-        "assert_on"         => "",
+         "datawidth"         => "64",                        # deprecate this !! FIXME
+         "ext_datawidth"     => "64",
+         "ext_addrwidth"     => "32",
 diff --git a/design/README.md b/design/README.md
 deleted file mode 100644
 index dabec53..0000000
