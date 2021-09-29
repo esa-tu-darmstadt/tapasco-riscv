@@ -9,3 +9,9 @@ if {$maxi_ports == 2} {
 	connect_bd_net -net CLK_1 [get_bd_pins dmaOffset2/CLK]
 	connect_bd_net -net rst_CLK_100M_peripheral_aresetn [get_bd_pins dmaOffset2/RST_N]
 }
+
+for { set i 0 } { $i < $stream_ports } { incr i } {
+	set midx [format "%02d" [expr $i + 1]]
+	connect_bd_net -net CLK_1 [get_bd_pins axi_mm_stream_adapter_$i/CLK] [get_bd_pins axi_interconnect_0/M${midx}_ACLK]
+	connect_bd_net -net rst_CLK_100M_peripheral_aresetn [get_bd_pins axi_mm_stream_adapter_$i/RST_N] [get_bd_pins axi_interconnect_0/M${midx}_ARESETN]
+}

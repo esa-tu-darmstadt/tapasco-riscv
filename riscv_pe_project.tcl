@@ -94,6 +94,7 @@ proc cr_bd_riscv_pe { parentCell lmem } {
   variable project_name
   variable cache
   variable maxi_ports
+  variable stream_ports
   # CHANGE DESIGN NAME HERE
   set design_name ${project_name}
 

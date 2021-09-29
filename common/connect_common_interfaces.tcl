@@ -17,6 +17,14 @@ if {$maxi_ports == 2} {
 	lappend axi_mem_slaves [get_bd_intf_pins dmaOffset2/S_AXI]
 }
 
+for { set i 0 } { $i < $stream_ports } { incr i } {
+	set midx [format "%02d" [expr $i + 1]]
+	set iidx [format "%02d" $i]
+	connect_bd_intf_net -intf_net axi_interconnect_0_M${midx}_AXI [get_bd_intf_pins axi_mm_stream_adapter_$i/S_AXI] [get_bd_intf_pins axi_interconnect_0/M${midx}_AXI]
+	connect_bd_intf_net -intf_net S${iidx}_AXIS [get_bd_intf_pins S${iidx}_AXIS] [get_bd_intf_pins axi_mm_stream_adapter_$i/S_AXIS]
+	connect_bd_intf_net -intf_net M${iidx}_AXIS [get_bd_intf_pins M${iidx}_AXIS] [get_bd_intf_pins axi_mm_stream_adapter_$i/M_AXIS]
+}
+
 if {[info exists axi_io_port]} {
 	connect_bd_intf_net $axi_io_port [get_bd_intf_pins axi_interconnect_0/S01_AXI]
 } {

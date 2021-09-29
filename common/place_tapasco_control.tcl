@@ -15,6 +15,19 @@ if {$maxi_ports == 2} {
     ] $M_AXI2
 }
 
+for { set i 0 } { $i < $stream_ports } { incr i } {
+	set data_width [get_property CONFIG.DATA_WIDTH $cpu_dmem]
+	set idx [format "%02d" $i]
+    set S_AXIS [create_bd_intf_port -mode Slave -vlnv xilinx.com:interface:axis_rtl:1.0 S${idx}_AXIS]
+	set_property -dict [ list \
+      CONFIG.TDATA_NUM_BYTES [expr $data_width / 8] \
+    ] $S_AXIS
+    set M_AXIS [create_bd_intf_port -mode Master -vlnv xilinx.com:interface:axis_rtl:1.0 M${idx}_AXIS]
+	set_property -dict [ list \
+      CONFIG.TDATA_NUM_BYTES [expr $data_width / 8] \
+    ] $M_AXIS
+}
+
   set S_AXI_BRAM [ create_bd_intf_port -mode Slave -vlnv xilinx.com:interface:aximm_rtl:1.0 S_AXI_BRAM ]
   set_property -dict [ list \
    CONFIG.ADDR_WIDTH [expr log10($lmem*2)/log10(2)] \
@@ -120,9 +133,14 @@ if {$maxi_ports == 2} {
   # Create instance: axi_interconnect_0, and set properties
   set axi_interconnect_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:axi_interconnect:2.1 axi_interconnect_0 ]
   set_property -dict [ list \
-   CONFIG.NUM_MI {1} \
+   CONFIG.NUM_MI [expr 1 + $stream_ports] \
    CONFIG.NUM_SI {2} \
  ] $axi_interconnect_0
+
+# Create instances: AXIMMStreamAdapter
+for { set i 0 } { $i < $stream_ports } { incr i } {
+	create_bd_cell -type ip -vlnv esa.informatik.tu-darmstadt.de:tapasco:AXIMMStreamAdapter:1.0 axi_mm_stream_adapter_$i
+}
  
  # Create instance: dmaOffset, and set properties
   set dmaOffset [ create_bd_cell -type ip -vlnv esa.cs.tu-darmstadt.de:axi:axi_offset dmaOffset ]

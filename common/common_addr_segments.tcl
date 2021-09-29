@@ -21,6 +21,13 @@ if {$maxi_ports == 2} {
 	set_property CONFIG.OVERWRITE_BITS 16 [get_bd_cells dmaOffset2]
 }
 
+# address segments for the stream adapters
+for { set i 0 } { $i < $stream_ports } { incr i } {
+  set offset [expr 0x11000000 + ($i + 1) * 0x00010000]
+  puts offset
+  create_bd_addr_seg -range 0x00010000 -offset $offset [get_external_mem_addr_space] [get_bd_addr_segs axi_mm_stream_adapter_$i/S_AXI/reg0] SEG_axi_mm_stream_adapter_${i}_reg0
+}
+
 create_bd_addr_seg -range 0x00010000 -offset 0x00000000 [get_bd_addr_spaces S_AXI_CTRL] [get_bd_addr_segs AXIGate_0/saxi/reg0] SEG_AXIGate_0_reg0
 create_bd_addr_seg -range $lmem -offset $lmem [get_bd_addr_spaces S_AXI_BRAM] [get_bd_addr_segs ps_dmem_ctrl/S_AXI/Mem0] SEG_ps_dmem_ctrl_Mem0
 create_bd_addr_seg -range $lmem -offset 0x00000000 [get_bd_addr_spaces S_AXI_BRAM] [get_bd_addr_segs ps_imem_ctrl/S_AXI/Mem0] SEG_ps_imem_ctrl_Mem0

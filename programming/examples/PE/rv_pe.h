@@ -10,6 +10,12 @@
 #define COUNTER 0x1c
 #define COUNTERH 0x1d
 
+#define STREAM0 0x10000
+#define STREAM1 0x20000
+#define STREAM2 0x30000
+#define STREAM3 0x40000
+
+
 /**
 	Writes the value at the specified register.
 	Example: writeToCtrl(RETL, 42); writes 42 to the lower 32 bits of return value register.

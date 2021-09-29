@@ -12,6 +12,7 @@ set bCheckIPsPassed 1
   $current_core\
   xilinx.com:ip:axi_bram_ctrl\
   xilinx.com:ip:proc_sys_reset:5.0\
+  esa.informatik.tu-darmstadt.de:tapasco:AXIMMStreamAdapter:1.0\
   "
 
    set list_ips_missing ""
