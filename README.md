@@ -42,15 +42,16 @@ The Makefile then downloads the processor, builds an IP core for the processor (
 PE is directly imported into TaPaSCo. The corresponding names of the processors can be taken from the following table.
 
 ##### Table 1: Processors
-| Processor                  | Target       |
-|----------------------------|--------------|
-| SpinalHDL VexRiscv         | vexriscv_pe  |
-| Vectorblox Orca            | orca_pe      |
+| Processor                      | Target       |
+|--------------------------------|--------------|
+| SpinalHDL VexRiscv         	 | vexriscv_pe  |
+| Vectorblox Orca                | orca_pe      |
 | Bluespec Inc. Piccolo (32 Bit) | piccolo32_pe |
-| Bluespec Inc. Flute (32 Bit) | flute32_pe |
-| PicoRV32                   | picorv32_pe  |
-| WDC's SweRV                | swerv_pe     |
-| Taiga                      | taiga_pe     |
+| Bluespec Inc. Flute (32 Bit)   | flute32_pe   |
+| PicoRV32                   	 | picorv32_pe  |
+| WDC's SweRV                	 | swerv_pe     |
+| WDC's SweRV_eh2            	 | swerv_eh2_pe |
+| Taiga                      	 | taiga_pe     |
 
 ### Configuration parameters
 You can configure the build of the PEs with several parameters. These can either work for all PEs or just for specific ones. You can find the configuration parameters in the following table

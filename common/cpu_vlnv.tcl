@@ -8,5 +8,6 @@ set cpu_vlnv [list \
   "flute64_pe"                  {bluespec.com:flute:RV64ACIMU} \
   "picorv32_pe"                 {user.org:riscv:picorv32:1.0} \
   "swerv_pe"                    {wdc:swerv:swerv_eh1} \
+  "swerv_eh2_pe"                {wdc:swerv_eh2:swerv_eh2:1.4} \
   "taiga_pe"                    {sfu-rcl:taiga:taiga} \
 ]

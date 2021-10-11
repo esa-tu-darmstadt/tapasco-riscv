@@ -29,6 +29,7 @@ list:
 	vivado -nolog -nojournal -mode batch -source riscv_pe_project.tcl -tclargs --part $(PYNQ) --bram $(BRAM_SIZE) --cache $(CACHE) --maxi $(MAXI) --project_name $@
 	@PE_ID=$$(($$(echo $(PE_LIST) | sed s/$@.*// | wc -w) + 1742)); \
 	tapasco -v import IP/$@/esa.informatik.tu-darmstadt.de_tapasco_$@_1.0.zip as $$PE_ID --skipEvaluation
+	cp -f IP/$@/esa.informatik.tu-darmstadt.de_tapasco_$@_1.0.zip ../tapasco-pe-tb/tapasco_pe.zip
 
 %_setup: riscv/%/setup.sh
 	$<
@@ -43,5 +44,7 @@ clean: uninstall
 	rm -rf riscv/piccolo32/{Piccolo,*RV*}
 	rm -rf riscv/picorv32/picorv32
 	rm -rf riscv/swerv/{swerv_eh1,wdc_risc-v_swerv_eh1.zip}
+	rm -rf riscv/swerv_eh2/{swerv_eh2,wdc_risc-v_swerv_eh2.zip,.Xil,component.xml}
+	rm -rf riscv/swerv_eh2/Cores-SweRV-EH2/snapshots
 	rm -rf riscv/taiga/{Taiga,sfu-rcl_risc-v_taiga.zip,taiga}
 	rm -rf riscv/vexriscv/{SpinalHDL,VexRiscv}
