@@ -6,11 +6,11 @@ set bCheckIPsPassed 1
   if { $bCheckIPs == 1 } {
      set list_check_ips "\ 
   esa.informatik.tu-darmstadt.de:tapasco:AXIGate:1.0\
-  esa.informatik.tu-darmstadt.de:user:RVController:\
-  esa.cs.tu-darmstadt.de:axi:axi_offset\
+  esa.informatik.tu-darmstadt.de:user:RVController:1.0\
+  esa.cs.tu-darmstadt.de:axi:axi_offset:0.1\
   xilinx.com:ip:blk_mem_gen:8.4\
   $current_core\
-  xilinx.com:ip:axi_bram_ctrl\
+  esa.cs.tu-darmstadt.de:axi:axi_ctrl:0.1\
   xilinx.com:ip:proc_sys_reset:5.0\
   "
 
