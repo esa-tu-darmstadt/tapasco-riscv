@@ -1,31 +1,23 @@
 puts "package WDC's SweRV_eh2"
-# start_gui
 
 # set path variables
 set proj_name swerv_eh2
 set version 1.4
 set src_origin Cores-SweRV-EH2
-# -part xc7vx485tffg1157-1
 
-create_project ${proj_name} ${proj_name} -part xc7vx485tffg1157-1
-# create_project -in_memory
+# create_project ${proj_name} ${proj_name} -part xc7vx485tffg1157-1
+create_project ${proj_name} ${proj_name}
+
 add_files -scan_for_includes ${src_origin}/snapshots/default/pd_defines.vh ${src_origin}/snapshots/default/eh2_param.vh ${src_origin}/snapshots/default/pic_map_auto.h ${src_origin}/snapshots/default/eh2_pdef.vh ${src_origin}/snapshots/default/defines.h ${src_origin}/snapshots/default/common_defines.vh ${src_origin}/design/lib/ahb_to_axi4.sv ${src_origin}/design/dec/eh2_dec.sv ${src_origin}/design/ifu/eh2_ifu_bp_ctl.sv ${src_origin}/design/eh2_swerv.sv ${src_origin}/design/lib/eh2_lib.sv ${src_origin}/design/eh2_pic_ctrl.sv ${src_origin}/design/lsu/eh2_lsu_bus_buffer.sv ${src_origin}/design/lib/mem_lib.sv ${src_origin}/design/lsu/eh2_lsu_bus_intf.sv ${src_origin}/design/lib/beh_lib.sv ${src_origin}/design/lsu/eh2_lsu_trigger.sv ${src_origin}/design/eh2_dma_ctrl.sv ${src_origin}/design/dmi/dmi_jtag_to_core_sync.v ${src_origin}/design/dmi/dmi_wrapper.v ${src_origin}/design/ifu/eh2_ifu_tb_memread.sv ${src_origin}/design/lsu/eh2_lsu_dccm_mem.sv ${src_origin}/design/exu/eh2_exu_alu_ctl.sv ${src_origin}/design/lsu/eh2_lsu.sv ${src_origin}/design/ifu/eh2_ifu.sv ${src_origin}/design/exu/eh2_exu.sv ${src_origin}/design/dec/eh2_dec_tlu_top.sv ${src_origin}/design/lib/axi4_to_ahb.sv ${src_origin}/design/lsu/eh2_lsu_clkdomain.sv ${src_origin}/design/eh2_swerv_wrapper.sv ${src_origin}/design/ifu/eh2_ifu_btb_mem.sv ${src_origin}/design/dmi/rvjtag_tap.v ${src_origin}/design/ifu/eh2_ifu_compress_ctl.sv ${src_origin}/design/dbg/eh2_dbg.sv ${src_origin}/design/ifu/eh2_ifu_iccm_mem.sv ${src_origin}/design/ifu/eh2_ifu_ifc_ctl.sv ${src_origin}/design/dec/eh2_dec_csr.sv ${src_origin}/design/lsu/eh2_lsu_ecc.sv ${src_origin}/design/ifu/eh2_ifu_mem_ctl.sv ${src_origin}/design/dec/eh2_dec_ib_ctl.sv ${src_origin}/design/exu/eh2_exu_mul_ctl.sv ${src_origin}/design/eh2_mem.sv ${src_origin}/design/include/eh2_def.sv ${src_origin}/design/lsu/eh2_lsu_dccm_ctl.sv ${src_origin}/design/lsu/eh2_lsu_stbuf.sv ${src_origin}/design/exu/eh2_exu_div_ctl.sv ${src_origin}/design/lsu/eh2_lsu_amo.sv ${src_origin}/design/dec/eh2_dec_decode_ctl.sv ${src_origin}/design/ifu/eh2_ifu_aln_ctl.sv ${src_origin}/design/dec/eh2_dec_gpr_ctl.sv ${src_origin}/design/dec/eh2_dec_tlu_ctl.sv ${src_origin}/design/dec/eh2_dec_trigger.sv ${src_origin}/design/ifu/eh2_ifu_ic_mem.sv ${src_origin}/design/lsu/eh2_lsu_lsc_ctl.sv ${src_origin}/design/lsu/eh2_lsu_addrcheck.sv ${src_origin}/design/TOP_eh2_swerv_wrapper.v
 import_files ${src_origin}/snapshots/default/pd_defines.vh ${src_origin}/snapshots/default/eh2_param.vh ${src_origin}/snapshots/default/pic_map_auto.h ${src_origin}/snapshots/default/eh2_pdef.vh ${src_origin}/snapshots/default/defines.h ${src_origin}/snapshots/default/common_defines.vh ${src_origin}/design/lib/ahb_to_axi4.sv ${src_origin}/design/dec/eh2_dec.sv ${src_origin}/design/ifu/eh2_ifu_bp_ctl.sv ${src_origin}/design/eh2_swerv.sv ${src_origin}/design/lib/eh2_lib.sv ${src_origin}/design/eh2_pic_ctrl.sv ${src_origin}/design/lsu/eh2_lsu_bus_buffer.sv ${src_origin}/design/lib/mem_lib.sv ${src_origin}/design/lsu/eh2_lsu_bus_intf.sv ${src_origin}/design/lib/beh_lib.sv ${src_origin}/design/lsu/eh2_lsu_trigger.sv ${src_origin}/design/eh2_dma_ctrl.sv ${src_origin}/design/dmi/dmi_jtag_to_core_sync.v ${src_origin}/design/dmi/dmi_wrapper.v ${src_origin}/design/ifu/eh2_ifu_tb_memread.sv ${src_origin}/design/lsu/eh2_lsu_dccm_mem.sv ${src_origin}/design/exu/eh2_exu_alu_ctl.sv ${src_origin}/design/lsu/eh2_lsu.sv ${src_origin}/design/ifu/eh2_ifu.sv ${src_origin}/design/exu/eh2_exu.sv ${src_origin}/design/dec/eh2_dec_tlu_top.sv ${src_origin}/design/lib/axi4_to_ahb.sv ${src_origin}/design/lsu/eh2_lsu_clkdomain.sv ${src_origin}/design/eh2_swerv_wrapper.sv ${src_origin}/design/ifu/eh2_ifu_btb_mem.sv ${src_origin}/design/dmi/rvjtag_tap.v ${src_origin}/design/ifu/eh2_ifu_compress_ctl.sv ${src_origin}/design/dbg/eh2_dbg.sv ${src_origin}/design/ifu/eh2_ifu_iccm_mem.sv ${src_origin}/design/ifu/eh2_ifu_ifc_ctl.sv ${src_origin}/design/dec/eh2_dec_csr.sv ${src_origin}/design/lsu/eh2_lsu_ecc.sv ${src_origin}/design/ifu/eh2_ifu_mem_ctl.sv ${src_origin}/design/dec/eh2_dec_ib_ctl.sv ${src_origin}/design/exu/eh2_exu_mul_ctl.sv ${src_origin}/design/eh2_mem.sv ${src_origin}/design/include/eh2_def.sv ${src_origin}/design/lsu/eh2_lsu_dccm_ctl.sv ${src_origin}/design/lsu/eh2_lsu_stbuf.sv ${src_origin}/design/exu/eh2_exu_div_ctl.sv ${src_origin}/design/lsu/eh2_lsu_amo.sv ${src_origin}/design/dec/eh2_dec_decode_ctl.sv ${src_origin}/design/ifu/eh2_ifu_aln_ctl.sv ${src_origin}/design/dec/eh2_dec_gpr_ctl.sv ${src_origin}/design/dec/eh2_dec_tlu_ctl.sv ${src_origin}/design/dec/eh2_dec_trigger.sv ${src_origin}/design/ifu/eh2_ifu_ic_mem.sv ${src_origin}/design/lsu/eh2_lsu_lsc_ctl.sv ${src_origin}/design/lsu/eh2_lsu_addrcheck.sv
-update_compile_order -fileset sources_1
 
 # fix buggy filetypes
 set_property file_type SystemVerilog [get_files  ${proj_name}/${proj_name}.srcs/sources_1/imports/Cores-SweRV-EH2/design/dmi/dmi_jtag_to_core_sync.v]
 set_property file_type SystemVerilog [get_files  ${proj_name}/${proj_name}.srcs/sources_1/imports/Cores-SweRV-EH2/design/dmi/rvjtag_tap.v]
-# set_property file_type SystemVerilog [get_files  ${proj_name}/${proj_name}.srcs/sources_1/imports/Cores-SweRV-EH2/snapshots/default/eh2_pdef.vh]
 
-# verilog (1) or ...
 set_property top TOP_eh2_swerv_wrapper [current_fileset]
-# ... (2) system verilog top file
-# set_property top eh2_swerv_wrapper [current_fileset]
-update_compile_order -fileset sources_1
 
-# debugging: run synthesis to find bugs
-# launch_runs synth_1 -jobs 4
+update_compile_order -fileset sources_1
 
 # packaging
 ipx::package_project -root_dir [pwd]/${proj_name} -import_files -force
@@ -37,8 +29,6 @@ set_property display_name ${proj_name} $core
 set_property description ${proj_name} $core
 set_property version $version $core
 set_property core_revision 1 $core
-
-# # start_gui
 
 # # Get IP definition of DMI
 # set tapasco_toolflow $::env(TAPASCO_HOME_TOOLFLOW)
