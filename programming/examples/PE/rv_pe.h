@@ -10,6 +10,19 @@
 #define COUNTER 0x1c
 #define COUNTERH 0x1d
 
+/* these offsets are taken from common/common_addr_segments.tcl */
+#ifndef RAM_OFFSET
+	#ifdef RV64
+		#define RAM_OFFSET 0x0001000000000000ul
+	#else
+		#define RAM_OFFSET 0x80000000
+	#endif
+#endif
+
+#define XSTR(x) STR(x)
+#define STR(x) #x
+#pragma message "RAM_OFFSET = " XSTR(RAM_OFFSET)
+
 /**
 	Writes the value at the specified register.
 	Example: writeToCtrl(RETL, 42); writes 42 to the lower 32 bits of return value register.
@@ -45,4 +58,76 @@ void setIntr()
 	int* addr = start + IAR;
 	*addr = 1;
 	while(1){}
+}
+
+
+void fallbackDefaultIRQ()
+{
+	writeToCtrl(RETL, -2);
+	setIntr();
+}
+
+void defaultIRQ() __attribute__((aligned(64), weak, alias("fallbackDefaultIRQ")));
+
+void initInterrupts()
+{
+	/* set trap base vector address */
+	const int addr_and_mode = (int)defaultIRQ | 0x0; // 0x0 is direct mode
+
+	/* https://wiki.osdev.org/Inline_Assembly */
+	__asm__(
+		"csrw mtvec, %0"
+		:
+		: "r" (addr_and_mode)
+	);
+
+	int current_mtvec;
+
+	/* check if mtvec is writeable */
+	__asm__(
+		"csrr %0, mtvec"
+		: "=r" (current_mtvec)
+		:
+	);
+
+	if (current_mtvec != addr_and_mode) {
+		// MTVEC is not writeable -> PANIC!
+		writeToCtrl(RETL, -1);
+		setIntr();
+	}
+}
+
+/* printing */
+static char *out_buf = 0;
+static int out_idx = 0;
+
+void initPrint()
+{
+    out_buf = 0;
+    out_idx = 0;
+}
+
+void print(const char *str)
+{
+    if (!out_buf)
+        out_buf = (char *)readFromCtrl(ARG3) + RAM_OFFSET;
+
+    for (const char *c = str; *c; ++c, ++out_idx)
+        out_buf[out_idx] = *c;
+
+    out_buf[out_idx] = '\0';
+}
+
+static char printHexLut[] = "0123456789ABCDEF";
+
+void print_hex(unsigned int num)
+{
+    if (!out_buf)
+        out_buf = (char *)readFromCtrl(ARG3) + RAM_OFFSET;
+
+    for (int shift = sizeof(unsigned int) * 8 - 4; shift >= 0; shift -= 4) {
+        out_buf[out_idx++] = printHexLut[(num >> shift) & 0x0F];
+    }
+
+    out_buf[out_idx] = '\0';
 }

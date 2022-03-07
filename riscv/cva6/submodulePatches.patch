@@ -1,0 +1,108 @@
+diff --git a/src/axi/src/axi_intf.sv b/src/axi/src/axi_intf.sv
+index 431b5c1..e3d6fd6 100644
+--- a/src/axi/src/axi_intf.sv
++++ b/src/axi/src/axi_intf.sv
+@@ -383,6 +383,7 @@ endinterface
+ /// For each slave, multiple rules can be defined. Each rule consists of an
+ /// address mask and a base. Addresses are masked and then compared against the
+ /// base to decide where transfers need to go.
++`ifndef TAPASCO_DISABLE_FOR_VIVADO
+ interface AXI_ROUTING_RULES #(
+   /// The address width.
+   parameter int AXI_ADDR_WIDTH = -1,
+@@ -426,3 +427,4 @@ interface AXI_ARBITRATION #(
+   modport req(output in_req, out_ack, input  out_req, out_sel, in_ack);
+
+ endinterface
++`endif
+diff --git a/src/common_cells/src/cdc_fifo_gray.sv b/src/common_cells/src/cdc_fifo_gray.sv
+index 702eccd..7546f9e 100644
+--- a/src/common_cells/src/cdc_fifo_gray.sv
++++ b/src/common_cells/src/cdc_fifo_gray.sv
+@@ -71,7 +71,7 @@
+ ///     -through [get_pins -hierarchical -filter async]
+ /// ```
+ 
+-`include "common_cells/registers.svh"
++`include "registers.svh"
+ 
+ (* no_ungroup *)
+ (* no_boundary_optimization *)
+diff --git a/src/fpu/src/fpnew_cast_multi.sv b/src/fpu/src/fpnew_cast_multi.sv
+index 9d54c79..d5842ac 100644
+--- a/src/fpu/src/fpnew_cast_multi.sv
++++ b/src/fpu/src/fpnew_cast_multi.sv
+@@ -11,7 +11,7 @@
+ 
+ // Author: Stefan Mach <smach@iis.ee.ethz.ch>
+ 
+-`include "common_cells/registers.svh"
++`include "registers.svh"
+ 
+ module fpnew_cast_multi #(
+   parameter fpnew_pkg::fmt_logic_t   FpFmtConfig  = '1,
+diff --git a/src/fpu/src/fpnew_divsqrt_multi.sv b/src/fpu/src/fpnew_divsqrt_multi.sv
+index 1331f5f..f42f9c9 100644
+--- a/src/fpu/src/fpnew_divsqrt_multi.sv
++++ b/src/fpu/src/fpnew_divsqrt_multi.sv
+@@ -11,7 +11,7 @@
+ 
+ // Author: Stefan Mach <smach@iis.ee.ethz.ch>
+ 
+-`include "common_cells/registers.svh"
++`include "registers.svh"
+ 
+ module fpnew_divsqrt_multi #(
+   parameter fpnew_pkg::fmt_logic_t   FpFmtConfig  = '1,
+diff --git a/src/fpu/src/fpnew_fma.sv b/src/fpu/src/fpnew_fma.sv
+index f9fa813..741f160 100644
+--- a/src/fpu/src/fpnew_fma.sv
++++ b/src/fpu/src/fpnew_fma.sv
+@@ -11,7 +11,7 @@
+ 
+ // Author: Stefan Mach <smach@iis.ee.ethz.ch>
+ 
+-`include "common_cells/registers.svh"
++`include "registers.svh"
+ 
+ module fpnew_fma #(
+   parameter fpnew_pkg::fp_format_e   FpFormat    = fpnew_pkg::fp_format_e'(0),
+diff --git a/src/fpu/src/fpnew_fma_multi.sv b/src/fpu/src/fpnew_fma_multi.sv
+index 6b52237..db65e48 100644
+--- a/src/fpu/src/fpnew_fma_multi.sv
++++ b/src/fpu/src/fpnew_fma_multi.sv
+@@ -11,7 +11,7 @@
+ 
+ // Author: Stefan Mach <smach@iis.ee.ethz.ch>
+ 
+-`include "common_cells/registers.svh"
++`include "registers.svh"
+ 
+ module fpnew_fma_multi #(
+   parameter fpnew_pkg::fmt_logic_t   FpFmtConfig = '1,
+diff --git a/src/fpu/src/fpnew_noncomp.sv b/src/fpu/src/fpnew_noncomp.sv
+index 9e485f9..69f496f 100644
+--- a/src/fpu/src/fpnew_noncomp.sv
++++ b/src/fpu/src/fpnew_noncomp.sv
+@@ -11,7 +11,7 @@
+ 
+ // Author: Stefan Mach <smach@iis.ee.ethz.ch>
+ 
+-`include "common_cells/registers.svh"
++`include "registers.svh"
+ 
+ module fpnew_noncomp #(
+   parameter fpnew_pkg::fp_format_e   FpFormat    = fpnew_pkg::fp_format_e'(0),
+diff --git a/src/fpu/src/fpnew_opgroup_multifmt_slice.sv b/src/fpu/src/fpnew_opgroup_multifmt_slice.sv
+index 14c1b45..d69b868 100644
+--- a/src/fpu/src/fpnew_opgroup_multifmt_slice.sv
++++ b/src/fpu/src/fpnew_opgroup_multifmt_slice.sv
+@@ -11,7 +11,7 @@
+ 
+ // Author: Stefan Mach <smach@iis.ee.ethz.ch>
+ 
+-`include "common_cells/registers.svh"
++`include "registers.svh"
+ 
+ module fpnew_opgroup_multifmt_slice #(
+   parameter fpnew_pkg::opgroup_e     OpGroup       = fpnew_pkg::CONV,
