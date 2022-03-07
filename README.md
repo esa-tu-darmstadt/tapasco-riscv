@@ -15,8 +15,8 @@ The folder **specific_tcl** contains one TCL script per processor and places/con
 
 ## Dependencies
 The project might work with other configurations, but it was tested with the following setup:
-* Vivado 2018.3
-* TaPaSCo 2019.10
+* Vivado 2020.2
+* [TaPaSCo](https://github.com/esa-tu-darmstadt/tapasco) 2021.1
 * Git
 * Bash
 
@@ -28,7 +28,7 @@ If you provide a setup with these components (and their own dependencies) the pr
 * [Bluespec Inc.'s Piccolo](https://github.com/bluespec/Piccolo) in RV32ACIMU configuration
 * [Bluespec Inc.'s Flute](https://github.com/bluespec/Flute) in RV32ACIMU configuration
 * [Western Digital's SweRV](https://github.com/westerndigitalcorporation/swerv_eh1)
-* [Taiga](https://gitlab.com/sfu-rcl/Taiga)
+* [OpenHW Group cva5](https://github.com/openhwgroup/cva5)
 * [PicoRV32](https://github.com/cliffordwolf/picorv32)
 
 ## Building and using a PE in TaPaSCo
@@ -42,15 +42,16 @@ The Makefile then downloads the processor, builds an IP core for the processor (
 PE is directly imported into TaPaSCo. The corresponding names of the processors can be taken from the following table.
 
 ##### Table 1: Processors
-| Processor                  | Target       |
-|----------------------------|--------------|
-| SpinalHDL VexRiscv         | vexriscv_pe  |
-| Vectorblox Orca            | orca_pe      |
+| Processor                      | Target       |
+|--------------------------------|--------------|
+| SpinalHDL VexRiscv             | vexriscv_pe  |
+| Vectorblox Orca                | orca_pe      |
 | Bluespec Inc. Piccolo (32 Bit) | piccolo32_pe |
-| Bluespec Inc. Flute (32 Bit) | flute32_pe |
-| PicoRV32                   | picorv32_pe  |
-| WDC's SweRV                | swerv_pe     |
-| Taiga                      | taiga_pe     |
+| Bluespec Inc. Flute (32 Bit)   | flute32_pe   |
+| PicoRV32                       | picorv32_pe  |
+| WDC's SweRV                    | swerv_pe     |
+| WDC's SweRV_eh2                | swerv_eh2_pe |
+| OpenHW Group cva5              | cva5_pe      |
 
 ### Configuration parameters
 You can configure the build of the PEs with several parameters. These can either work for all PEs or just for specific ones. You can find the configuration parameters in the following table

@@ -1,60 +1,11 @@
-diff --git a/core/taiga_config.sv b/core/taiga_config.sv
-index 9507d5f..244b651 100755
---- a/core/taiga_config.sv
-+++ b/core/taiga_config.sv
-@@ -78,26 +78,26 @@ package taiga_config;
-     localparam bus_type_t BUS_TYPE = AXI_BUS;
- 
-     //Caches
--    localparam USE_DCACHE = 0;
-+    localparam USE_DCACHE = 1;
-     localparam USE_ICACHE = 0;
- 
- 
-     ////////////////////////////////////////////////////
-     //Address space
--    localparam SCRATCH_ADDR_L = 32'h80000000;
--    localparam SCRATCH_ADDR_H = 32'h8001FFFF;
-+    localparam SCRATCH_ADDR_L = 32'h00000000;
-+    localparam SCRATCH_ADDR_H = 32'h0000FFFF;
-     localparam SCRATCH_BIT_CHECK = 4;
- 
--    localparam MEMORY_ADDR_L = 32'h40000000;
--    localparam MEMORY_ADDR_H = 32'h4FFFFFFF;
--    localparam MEMORY_BIT_CHECK = 4;
-+    localparam MEMORY_ADDR_L = 32'h80000000;
-+    localparam MEMORY_ADDR_H = 32'hFFFFFFFF;
-+    localparam MEMORY_BIT_CHECK = 1;
- 
--    localparam BUS_ADDR_L = 32'h60000000;
--    localparam BUS_ADDR_H = 32'h6FFFFFFF;
-+    localparam BUS_ADDR_L = 32'h11000000;
-+    localparam BUS_ADDR_H = 32'h11FFFFFF;
-     localparam BUS_BIT_CHECK = 4;
- 
-     //PC address on reset
--    localparam bit[31:0] RESET_VEC = 32'h80000000;
-+    localparam bit[31:0] RESET_VEC = 32'h00000000;
- 
-     ////////////////////////////////////////////////////
-     //Bus Options
-@@ -146,7 +146,7 @@ package taiga_config;
- 
-     ////////////////////////////////////////////////////
-     //Branch Predictor Options
--    localparam USE_BRANCH_PREDICTOR = 1;
-+    localparam USE_BRANCH_PREDICTOR = 0;
-     localparam BRANCH_PREDICTOR_WAYS = 2;
-     localparam BRANCH_TABLE_ENTRIES = 512; //min 512
-     localparam RAS_DEPTH = 8;
-diff --git a/core/taiga_wrapper.sv b/core/taiga_wrapper.sv
+diff --git a/core/cva5_wrapper.sv b/core/cva5_wrapper.sv
 new file mode 100644
-index 0000000..7468bbb
+index 0000000..b28bdaa
 --- /dev/null
-+++ b/core/taiga_wrapper.sv
-@@ -0,0 +1,227 @@
++++ b/core/cva5_wrapper.sv
+@@ -0,0 +1,228 @@
 +/*
-+ * Copyright © 2019 Carsten Heinz
++ * Copyright © 2022 Carsten Heinz
 + *
 + * Licensed under the Apache License, Version 2.0 (the "License");
 + * you may not use this file except in compliance with the License.
@@ -69,11 +20,12 @@ index 0000000..7468bbb
 + * limitations under the License.
 + */
 +
-+import taiga_config::*;
-+import taiga_types::*;
-+import l2_config_and_types::*;
-+
-+module taiga_wrapper (
++module cva5_wrapper
++    import taiga_config::*;
++    import l2_config_and_types::*;
++    import riscv_types::*;
++    import taiga_types::*;
++ (
 +	input logic clk,
 +	input logic rst,
 +
@@ -261,8 +213,8 @@ index 0000000..7468bbb
 +	.m_wishbone(m_wishbone),
 +	.l2(l2[0]),
 +
-+	.timer_interrupt(0),
-+	.interrupt(0)
++	.s_interrupt(0),
++	.m_interrupt(0)
 +);
 +
 +l2_arbiter l2_arb (
@@ -280,14 +232,14 @@ index 0000000..7468bbb
 +);
 +
 +endmodule
-diff --git a/core/taiga_wrapper_verilog.v b/core/taiga_wrapper_verilog.v
+diff --git a/core/cva5_wrapper_verilog.v b/core/cva5_wrapper_verilog.v
 new file mode 100644
-index 0000000..872e62c
+index 0000000..944ebef
 --- /dev/null
-+++ b/core/taiga_wrapper_verilog.v
++++ b/core/cva5_wrapper_verilog.v
 @@ -0,0 +1,267 @@
 +/*
-+ * Copyright © 2019 Carsten Heinz
++ * Copyright © 2022 Carsten Heinz
 + *
 + * Licensed under the Apache License, Version 2.0 (the "License");
 + * you may not use this file except in compliance with the License.
@@ -302,7 +254,7 @@ index 0000000..872e62c
 + * limitations under the License.
 + */
 +
-+module taiga_wrapper_verilog (
++module cva5_wrapper_verilog (
 +	input wire clk,
 +	input wire rst,
 +
@@ -442,7 +394,7 @@ index 0000000..872e62c
 +wire [5:0]                      m_axi_rid;
 +
 +
-+taiga_wrapper taiga_wrapper (
++cva5_wrapper cva5_wrapper (
 +	.clk(clk),
 +	.rst(rst),
 +
@@ -553,3 +505,86 @@ index 0000000..872e62c
 +);
 +
 +endmodule
+diff --git a/core/taiga_config.sv b/core/taiga_config.sv
+index 14741a4..bbe0856 100755
+--- a/core/taiga_config.sv
++++ b/core/taiga_config.sv
+@@ -149,19 +149,19 @@ package taiga_config;
+     localparam cpu_config_t EXAMPLE_CONFIG = '{
+         //ISA options
+         INCLUDE_M_MODE : 1,
+-        INCLUDE_S_MODE : 1,
+-        INCLUDE_U_MODE : 1,
++        INCLUDE_S_MODE : 0,
++        INCLUDE_U_MODE : 0,
+         INCLUDE_MUL : 1,
+-        INCLUDE_DIV : 1,
+-        INCLUDE_IFENCE : 1,
+-        INCLUDE_CSRS : 1,
++        INCLUDE_DIV : 0,
++        INCLUDE_IFENCE : 0,
++        INCLUDE_CSRS : 0,
+         INCLUDE_AMO : 0,
+         //CSR constants
+         CSRS : '{
+             MACHINE_IMPLEMENTATION_ID : 0,
+             CPU_ID : 0,
+-            RESET_VEC : 32'h80000000,
+-            RESET_MTVEC : 32'h80000100,
++            RESET_VEC : 32'h00000000,
++            RESET_MTVEC : 32'h00000100,
+             NON_STANDARD_OPTIONS : '{
+                 COUNTER_W : 33,
+                 MCYCLE_WRITEABLE : 1,
+@@ -205,22 +205,22 @@ package taiga_config;
+         },
+         INCLUDE_ILOCAL_MEM : 1,
+         ILOCAL_MEM_ADDR : '{
+-            L : 32'h80000000, 
+-            H : 32'h8FFFFFFF
++            L : 32'h00000000, 
++            H : 32'h0FFFFFFF
+         },
+         INCLUDE_DLOCAL_MEM : 1,
+         DLOCAL_MEM_ADDR : '{
+-            L : 32'h80000000,
+-            H : 32'h8FFFFFFF
++            L : 32'h00000000,
++            H : 32'h0FFFFFFF
+         },
+         INCLUDE_PERIPHERAL_BUS : 1,
+         PERIPHERAL_BUS_ADDR : '{
+-            L : 32'h60000000,
+-            H : 32'h6FFFFFFF
++            L : 32'h11000000,
++            H : 32'h11FFFFFF
+         },
+         PERIPHERAL_BUS_TYPE : AXI_BUS,
+         //Branch Predictor Options
+-        INCLUDE_BRANCH_PREDICTOR : 1,
++        INCLUDE_BRANCH_PREDICTOR : 0,
+         BP : '{
+             WAYS : 2,
+             ENTRIES : 512,
+@@ -285,7 +285,7 @@ package taiga_config;
+     ////////////////////////////////////////////////////
+     //Trace Options
+     //Trace interface is necessary for verilator simulation
+-    localparam ENABLE_TRACE_INTERFACE = 1;
++    localparam ENABLE_TRACE_INTERFACE = 0;
+ 
+ 
+     ////////////////////////////////////////////////////
+diff --git a/core/writeback.sv b/core/writeback.sv
+index 38d66d4..b92aa17 100644
+--- a/core/writeback.sv
++++ b/core/writeback.sv
+@@ -58,7 +58,7 @@ module writeback
+ 
+     function unit_count_t get_cumulative_unit_count();
+         unit_count_t counts;
+-        int unsigned cumulative_count = 0;
++        automatic int unsigned cumulative_count = 0;
+         for (int i = 0; i < CONFIG.NUM_WB_GROUPS; i++) begin
+             counts[i] = cumulative_count;
+             cumulative_count += NUM_UNITS[i];

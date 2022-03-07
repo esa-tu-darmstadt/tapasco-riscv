@@ -44,6 +44,8 @@ clean: uninstall
 	rm -rf riscv/picorv32/picorv32
 	rm -rf riscv/scr1/scr1
 	rm -rf riscv/swerv/{swerv_eh1,wdc_risc-v_swerv_eh1.zip}
-	rm -rf riscv/taiga/{Taiga,sfu-rcl_risc-v_taiga.zip,taiga}
+	rm -rf riscv/swerv_eh2/{swerv_eh2,wdc_risc-v_swerv_eh2.zip,.Xil,component.xml}
+	rm -rf riscv/swerv_eh2/Cores-SweRV-EH2/snapshots
+	rm -rf riscv/cva5/{cva5,openhwgroup_risc-v_cva5.zip}
 	rm -rf riscv/vexriscv/{SpinalHDL,VexRiscv}
 	rm -rf riscv/cva6/cva6
