@@ -24,11 +24,13 @@ If you provide a setup with these components (and their own dependencies) the pr
 
 ## Currently available PEs
 * [SpinalHDL's VexRiscv](https://github.com/SpinalHDL/VexRiscv)
+* [Syntacore's SCR1](https://github.com/syntacore/scr1)
 * [VectorBlox' Orca](https://github.com/cahz/orca)
 * [Bluespec Inc.'s Piccolo](https://github.com/bluespec/Piccolo) in RV32ACIMU configuration
 * [Bluespec Inc.'s Flute](https://github.com/bluespec/Flute) in RV32ACIMU configuration
 * [Western Digital's SweRV](https://github.com/westerndigitalcorporation/swerv_eh1)
-* [OpenHW Group cva5](https://github.com/openhwgroup/cva5)
+* [OpenHW Group's cva5](https://github.com/openhwgroup/cva5) (formerly _Taiga_)
+* [OpenHW Group's cva6](https://github.com/openhwgroup/cva6) (formerly _Ariane_, RV64)
 * [PicoRV32](https://github.com/cliffordwolf/picorv32)
 
 ## Building and using a PE in TaPaSCo
@@ -45,6 +47,7 @@ PE is directly imported into TaPaSCo. The corresponding names of the processors 
 | Processor                      | Target       |
 |--------------------------------|--------------|
 | SpinalHDL VexRiscv             | vexriscv_pe  |
+| Syntacore SCR1                 | scr1_pe      |
 | Vectorblox Orca                | orca_pe      |
 | Bluespec Inc. Piccolo (32 Bit) | piccolo32_pe |
 | Bluespec Inc. Flute (32 Bit)   | flute32_pe   |
@@ -52,6 +55,7 @@ PE is directly imported into TaPaSCo. The corresponding names of the processors 
 | WDC's SweRV                    | swerv_pe     |
 | WDC's SweRV_eh2                | swerv_eh2_pe |
 | OpenHW Group cva5              | cva5_pe      |
+| OpenHW Group cva6              | cva6_pe      |
 
 ### Configuration parameters
 You can configure the build of the PEs with several parameters. These can either work for all PEs or just for specific ones. You can find the configuration parameters in the following table
