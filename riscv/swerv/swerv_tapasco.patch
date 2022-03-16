@@ -1,2551 +1,442 @@
-diff --git a/configs/swerv.config b/configs/swerv.config
-index bd6f694..261cc6c 100755
---- a/configs/swerv.config
-+++ b/configs/swerv.config
-@@ -738,7 +738,6 @@ our %config = (#{{{
-         "clock_period"      => "100",
-         "build_ahb_lite"    => "$ahb_lite",       # one and only one bus build arg will ever be defined
-         "build_axi4"        => "",
--        "assert_on"         => "",
-         "datawidth"         => "64",                        # deprecate this !! FIXME
-         "ext_datawidth"     => "64",
-         "ext_addrwidth"     => "32",
-diff --git a/design/README.md b/design/README.md
-deleted file mode 100644
-index dabec53..0000000
---- a/design/README.md
-+++ /dev/null
-@@ -1 +0,0 @@
--# SweRV RISC-V core from Western Digital
 diff --git a/design/dbg/dbg.sv b/design/dbg/dbg.sv
-index 18b6014..7f48ca3 100644
+index 5a4651f..fa5e9d9 100644
 --- a/design/dbg/dbg.sv
 +++ b/design/dbg/dbg.sv
-@@ -21,6 +21,7 @@
- //           And then Resume the core to do the normal mode   
- // Author  : 
- //********************************************************************************
+@@ -1,3 +1,4 @@
 +`include "common_defines.vh"
- module dbg (
-    // outputs to the core for command and data interface
-    output logic [31:0]                 dbg_cmd_addr,
+ // SPDX-License-Identifier: Apache-2.0
+ // Copyright 2019 Western Digital Corporation or its affiliates.
+ //
 diff --git a/design/dec/dec.sv b/design/dec/dec.sv
-index 6062163..0fad615 100644
+index c415f9e..f9ce754 100644
 --- a/design/dec/dec.sv
 +++ b/design/dec/dec.sv
-@@ -26,7 +26,9 @@
- // A -> D -> EX1 ... WB
- // 
- //********************************************************************************
--    
-+
+@@ -1,3 +1,4 @@
 +`include "common_defines.vh"
-+
- module dec
-    import swerv_types::*;
- (
+ // SPDX-License-Identifier: Apache-2.0
+ // Copyright 2019 Western Digital Corporation or its affiliates.
+ //
 diff --git a/design/dec/dec_decode_ctl.sv b/design/dec/dec_decode_ctl.sv
-index f5126b3..d5dce67 100644
+index 02c0b05..07e2290 100644
 --- a/design/dec/dec_decode_ctl.sv
 +++ b/design/dec/dec_decode_ctl.sv
-@@ -13,6 +13,7 @@
- // See the License for the specific language governing permissions and
- // limitations under the License.
- 
+@@ -1,3 +1,4 @@
 +`include "common_defines.vh"
- 
- module dec_decode_ctl
-    import swerv_types::*;
+ // SPDX-License-Identifier: Apache-2.0
+ // Copyright 2019 Western Digital Corporation or its affiliates.
+ //
 diff --git a/design/dec/dec_gpr_ctl.sv b/design/dec/dec_gpr_ctl.sv
-index 02119db..3b622a7 100644
+index 5110c1b..1543829 100644
 --- a/design/dec/dec_gpr_ctl.sv
 +++ b/design/dec/dec_gpr_ctl.sv
-@@ -12,6 +12,7 @@
- // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- // See the License for the specific language governing permissions and
- // limitations under the License.
+@@ -1,3 +1,4 @@
 +`include "common_defines.vh"
- 
- module dec_gpr_ctl #(parameter GPR_BANKS      = 1,
- 		               GPR_BANKS_LOG2 = 1)  (
+ // SPDX-License-Identifier: Apache-2.0
+ // Copyright 2019 Western Digital Corporation or its affiliates.
+ //
 diff --git a/design/dec/dec_ib_ctl.sv b/design/dec/dec_ib_ctl.sv
-index 1f67efd..1955143 100644
+index 84780a0..db22a76 100644
 --- a/design/dec/dec_ib_ctl.sv
 +++ b/design/dec/dec_ib_ctl.sv
-@@ -12,6 +12,7 @@
- // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- // See the License for the specific language governing permissions and
- // limitations under the License.
+@@ -1,3 +1,4 @@
 +`include "common_defines.vh"
- 
- module dec_ib_ctl
-    import swerv_types::*;
+ // SPDX-License-Identifier: Apache-2.0
+ // Copyright 2019 Western Digital Corporation or its affiliates.
+ //
 diff --git a/design/dec/dec_tlu_ctl.sv b/design/dec/dec_tlu_ctl.sv
-index a53012d..ea4ad66 100644
+index 52a4393..9698d20 100644
 --- a/design/dec/dec_tlu_ctl.sv
 +++ b/design/dec/dec_tlu_ctl.sv
-@@ -22,6 +22,7 @@
- // Comments: 
- //
- //********************************************************************************
+@@ -1,3 +1,4 @@
 +`include "common_defines.vh"
- 
- module dec_tlu_ctl
-    import swerv_types::*;
+ // SPDX-License-Identifier: Apache-2.0
+ // Copyright 2019 Western Digital Corporation or its affiliates.
+ //
 diff --git a/design/dec/dec_trigger.sv b/design/dec/dec_trigger.sv
-index 012599f..142ea17 100644
+index 7ecb7d3..46ee25c 100644
 --- a/design/dec/dec_trigger.sv
 +++ b/design/dec/dec_trigger.sv
-@@ -22,6 +22,7 @@
- // Comments:
- //
- //********************************************************************************
+@@ -1,3 +1,4 @@
 +`include "common_defines.vh"
- module dec_trigger 
-    import swerv_types::*;
- (
+ // SPDX-License-Identifier: Apache-2.0
+ // Copyright 2019 Western Digital Corporation or its affiliates.
+ //
 diff --git a/design/dma_ctrl.sv b/design/dma_ctrl.sv
-index 881165a..5f1d332 100644
+index 98f1ed5..8527db6 100644
 --- a/design/dma_ctrl.sv
 +++ b/design/dma_ctrl.sv
-@@ -20,6 +20,7 @@
- // Comments: 
- //
- //********************************************************************************
+@@ -1,3 +1,4 @@
 +`include "common_defines.vh"
- 
- module dma_ctrl (
-    input logic         clk,
-diff --git a/design/dmi/dmi_jtag_to_core_sync.v b/design/dmi/dmi_jtag_to_core_sync.v
-index aa4c19f..7836418 100644
---- a/design/dmi/dmi_jtag_to_core_sync.v
-+++ b/design/dmi/dmi_jtag_to_core_sync.v
-@@ -17,6 +17,7 @@
- //                processor (clk)
+ // SPDX-License-Identifier: Apache-2.0
+ // Copyright 2019 Western Digital Corporation or its affiliates.
  //
- //-------------------------------------------------------------------------------------
-+`include "common_defines.vh"
- 
- module dmi_jtag_to_core_sync (
-    // JTAG signals
-@@ -48,8 +49,8 @@ module dmi_jtag_to_core_sync (
- // synchronizers  
- always @ ( posedge clk or negedge rst_n) begin
-     if(!rst_n) begin
--        rden <= '0;
--        wren <= '0;
-+        rden <= 'h0;
-+        wren <= 'h0;
-     end
-     else begin
-         rden <= {rden[1:0], rd_en};
-diff --git a/design/dmi/dmi_wrapper.v b/design/dmi/dmi_wrapper.v
-index 01d29d6..2fb4378 100644
---- a/design/dmi/dmi_wrapper.v
-+++ b/design/dmi/dmi_wrapper.v
-@@ -20,6 +20,7 @@
- //                Wrapper module for JTAG_TAP and DMI synchronizer
- //
- //-------------------------------------------------------------------------------------
-+`include "common_defines.vh"
- 
- module dmi_wrapper(
-   input              scan_mode,           // scan mode
-diff --git a/design/dmi/double_flop_sync.v b/design/dmi/double_flop_sync.v
-deleted file mode 100644
-index 0cb8878..0000000
---- a/design/dmi/double_flop_sync.v
-+++ /dev/null
-@@ -1,52 +0,0 @@
--// SPDX-License-Identifier: Apache-2.0
--// Copyright 2019 Western Digital Corporation or its affiliates.
--// 
--// Licensed under the Apache License, Version 2.0 (the "License");
--// you may not use this file except in compliance with the License.
--// You may obtain a copy of the License at
--// 
--// http://www.apache.org/licenses/LICENSE-2.0
--// 
--// Unless required by applicable law or agreed to in writing, software
--// distributed under the License is distributed on an "AS IS" BASIS,
--// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
--// See the License for the specific language governing permissions and
--// limitations under the License.
--//------------------------------------------------------------------------------------
--//
--//  Copyright Western Digital, 2019
--//  Owner : Anusha Narayanamoorthy
--//  Description:  
--//                Double flop synchronizer
--//
--//-------------------------------------------------------------------------------------
--
--
--module double_flop_sync (
--  input            clk,     // Input clock
--  input            rst_n,   // Input reset
--  input            inp,     // Input singal
--  output reg       op       // Double flopped output signal
--);
--
--reg       d_inp;
--
--
--  // Flop the enable signal in the Destination clock domain
--  always @ (posedge clk or negedge rst_n)
--    if(!rst_n)
--      d_inp <= 1'b0;
--    else
--      d_inp <= inp;
--
--
--
--  // Double flop the enable signal in the Destination clock domain
--  always @ (posedge clk or negedge rst_n)
--    if(!rst_n)
--      op <= 1'b0;
--    else
--      op <= d_inp;
--
--
--endmodule
 diff --git a/design/dmi/rvjtag_tap.sv b/design/dmi/rvjtag_tap.sv
-index 43c6e02..12cf52c 100644
+index 2553575..8cab57a 100644
 --- a/design/dmi/rvjtag_tap.sv
 +++ b/design/dmi/rvjtag_tap.sv
-@@ -12,6 +12,7 @@
- // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- // See the License for the specific language governing permissions and
- // limitations under the License
+@@ -1,3 +1,4 @@
 +`include "common_defines.vh"
- 
- module rvjtag_tap #(
- parameter AWIDTH = 7
-diff --git a/design/dmi/toggle_sync.v b/design/dmi/toggle_sync.v
-deleted file mode 100644
-index 99ebeb9..0000000
---- a/design/dmi/toggle_sync.v
-+++ /dev/null
-@@ -1,69 +0,0 @@
--// SPDX-License-Identifier: Apache-2.0
--// Copyright 2019 Western Digital Corporation or its affiliates.
--// 
--// Licensed under the Apache License, Version 2.0 (the "License");
--// you may not use this file except in compliance with the License.
--// You may obtain a copy of the License at
--// 
--// http://www.apache.org/licenses/LICENSE-2.0
--// 
--// Unless required by applicable law or agreed to in writing, software
--// distributed under the License is distributed on an "AS IS" BASIS,
--// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
--// See the License for the specific language governing permissions and
--// limitations under the License
--// //------------------------------------------------------------------------------------
--//
--//  Copyright Western Digital, 2019
--//  Owner : Anusha Narayanamoorthy
--//  Description:  
--//                Toggle synchronizer
--//
--//-------------------------------------------------------------------------------------
--
--module toggle_sync(
--  input  src_rst_n,  // Source reset
--  input  src_clk,  // Source clock
--  input  dst_clk,  // Destination clock 
--  input  dst_rst_n,  // Destination reset
--  input  src_enb,  // Enable signal in Source clock domain
--  output  dst_enb  // Enable signal in destination clock domain
--);
--
--
--// Reg declaration
--reg  tgle_s_en;
--reg  d3_en;
--
--// Wire Declararation
--wire dble_flp_en;
--
--
--  // Latching the enable signal in Source clock domain
--  always @ (posedge src_clk or negedge src_rst_n)
--    if(!src_rst_n)
--      tgle_s_en <= 1'b0;
--    else if (src_enb)
--      tgle_s_en <= ~tgle_s_en;
--
--  // Instantiation of Double flop synchronizer
--  double_flop_sync i_double_flop_sync(
--    .clk(dst_clk),
--    .rst_n(dst_rst_n),
--    .inp(tgle_s_en),
--    .op(dble_flp_en)
--);
--
--
--
--  // Triple flop the enable signal in the Destination clock domain
--  always @ (posedge dst_clk or negedge dst_rst_n)
--    if(!dst_rst_n)
--      d3_en <= 1'b0;
--    else
--      d3_en <= dble_flp_en;
--
--
--  assign dst_enb =  dble_flp_en ^ d3_en;
--
--endmodule
+ // SPDX-License-Identifier: Apache-2.0
+ // Copyright 2019 Western Digital Corporation or it's affiliates.
+ //
 diff --git a/design/exu/exu.sv b/design/exu/exu.sv
-index 20dfd2f..b4fa702 100644
+index 08b5dc3..bf282fb 100644
 --- a/design/exu/exu.sv
 +++ b/design/exu/exu.sv
-@@ -13,6 +13,7 @@
- // See the License for the specific language governing permissions and
- // limitations under the License.
- 
+@@ -1,3 +1,4 @@
 +`include "common_defines.vh"
- 
- module exu
-    import swerv_types::*;
+ // SPDX-License-Identifier: Apache-2.0
+ // Copyright 2019 Western Digital Corporation or its affiliates.
+ //
 diff --git a/design/exu/exu_alu_ctl.sv b/design/exu/exu_alu_ctl.sv
-index 3ca0d70..f59fd4d 100644
+index ee3ba4e..5518126 100644
 --- a/design/exu/exu_alu_ctl.sv
 +++ b/design/exu/exu_alu_ctl.sv
-@@ -13,6 +13,7 @@
- // See the License for the specific language governing permissions and
- // limitations under the License.
- 
+@@ -1,3 +1,4 @@
 +`include "common_defines.vh"
- 
- module exu_alu_ctl
-    import swerv_types::*;
+ // SPDX-License-Identifier: Apache-2.0
+ // Copyright 2019 Western Digital Corporation or its affiliates.
+ //
 diff --git a/design/exu/exu_div_ctl.sv b/design/exu/exu_div_ctl.sv
-index 1ae951b..1261646 100644
+index 1ae951b..b5d752b 100644
 --- a/design/exu/exu_div_ctl.sv
 +++ b/design/exu/exu_div_ctl.sv
-@@ -13,6 +13,7 @@
- // See the License for the specific language governing permissions and
- // limitations under the License.
- 
+@@ -1,3 +1,4 @@
 +`include "common_defines.vh"
- 
- module exu_div_ctl
-    import swerv_types::*;
+ // SPDX-License-Identifier: Apache-2.0
+ // Copyright 2019 Western Digital Corporation or its affiliates.
+ //
 diff --git a/design/exu/exu_mul_ctl.sv b/design/exu/exu_mul_ctl.sv
-index 3c7a0d0..ef28e82 100644
+index 41a86e8..c6dbd0a 100644
 --- a/design/exu/exu_mul_ctl.sv
 +++ b/design/exu/exu_mul_ctl.sv
-@@ -13,6 +13,7 @@
- // See the License for the specific language governing permissions and
- // limitations under the License.
- 
+@@ -1,3 +1,4 @@
 +`include "common_defines.vh"
- 
- module exu_mul_ctl
-    import swerv_types::*;
-diff --git a/design/flist.questa b/design/flist.questa
-index afbd089..8b6cc57 100644
---- a/design/flist.questa
-+++ b/design/flist.questa
-@@ -1,5 +1,5 @@
- $RV_ROOT/workspace/work/snapshots/default/common_defines.vh
--$RV_ROOT/design/include/def.sv
-+$RV_ROOT/design/include/swerv_types.sv
- +incdir+$RV_ROOT/workspace/work/snapshots/default
- +incdir+$RV_ROOT/design/lib
- +incdir+$RV_ROOT/design/include
-diff --git a/design/flist.spyglass b/design/flist.spyglass
-deleted file mode 100644
-index 0923b57..0000000
---- a/design/flist.spyglass
-+++ /dev/null
-@@ -1,45 +0,0 @@
--$RV_ROOT/design/swerv_wrapper.sv   
--$RV_ROOT/design/mem.sv                      
--$RV_ROOT/design/pic_ctrl.sv                      
--$RV_ROOT/design/swerv.sv   
--$RV_ROOT/design/dma_ctrl.sv                      
--$RV_ROOT/design/ifu/ifu_aln_ctl.sv            
--$RV_ROOT/design/ifu/ifu_compress_ctl.sv       
--$RV_ROOT/design/ifu/ifu_ifc_ctl.sv            
--$RV_ROOT/design/ifu/ifu_bp_ctl.sv            
--$RV_ROOT/design/ifu/ifu_ic_mem.sv            
--$RV_ROOT/design/ifu/ifu_mem_ctl.sv            
--$RV_ROOT/design/ifu/ifu_iccm_mem.sv            
--$RV_ROOT/design/ifu/ifu.sv                    
--$RV_ROOT/design/dec/dec_decode_ctl.sv         
--$RV_ROOT/design/dec/dec_gpr_ctl.sv            
--$RV_ROOT/design/dec/dec_ib_ctl.sv             
--$RV_ROOT/design/dec/dec_tlu_ctl.sv
--$RV_ROOT/design/dec/dec_trigger.sv                
--$RV_ROOT/design/dec/dec.sv   
--$RV_ROOT/design/exu/exu_alu_ctl.sv            
--$RV_ROOT/design/exu/exu_mul_ctl.sv            
--$RV_ROOT/design/exu/exu_div_ctl.sv    
--$RV_ROOT/design/exu/exu.sv                    
--$RV_ROOT/design/lsu/lsu.sv                    
--$RV_ROOT/design/lsu/lsu_clkdomain.sv                    
--$RV_ROOT/design/lsu/lsu_addrcheck.sv                    
--$RV_ROOT/design/lsu/lsu_lsc_ctl.sv                    
--$RV_ROOT/design/lsu/lsu_stbuf.sv
--$RV_ROOT/design/lsu/lsu_bus_read_buffer.sv
--$RV_ROOT/design/lsu/lsu_bus_write_buffer.sv
--$RV_ROOT/design/lsu/lsu_bus_intf.sv
--$RV_ROOT/design/lsu/lsu_ecc.sv
--$RV_ROOT/design/lsu/lsu_dccm_mem.sv
--$RV_ROOT/design/lsu/lsu_dccm_ctl.sv        
--$RV_ROOT/design/lsu/lsu_trigger.sv        
--$RV_ROOT/design/dbg/dbg.sv        
--$RV_ROOT/design/dmi/dmi_wrapper.v 
--$RV_ROOT/design/dmi/dmi_jtag_to_core_sync.v
--$RV_ROOT/design/dmi/rvjtag_tap.sv
--$RV_ROOT/design/dmi/double_flop_sync.v
--$RV_ROOT/design/dmi/toggle_sync.v
--$RV_ROOT/design/lib/beh_lib.sv 
--$RV_ROOT/design/lib/mem_lib.sv 
--$RV_ROOT/design/lib/ahb_to_axi4.sv 
--$RV_ROOT/design/lib/axi4_to_ahb.sv 
-diff --git a/design/flist.vcs b/design/flist.vcs
-deleted file mode 100644
-index 0923b57..0000000
---- a/design/flist.vcs
-+++ /dev/null
-@@ -1,45 +0,0 @@
--$RV_ROOT/design/swerv_wrapper.sv   
--$RV_ROOT/design/mem.sv                      
--$RV_ROOT/design/pic_ctrl.sv                      
--$RV_ROOT/design/swerv.sv   
--$RV_ROOT/design/dma_ctrl.sv                      
--$RV_ROOT/design/ifu/ifu_aln_ctl.sv            
--$RV_ROOT/design/ifu/ifu_compress_ctl.sv       
--$RV_ROOT/design/ifu/ifu_ifc_ctl.sv            
--$RV_ROOT/design/ifu/ifu_bp_ctl.sv            
--$RV_ROOT/design/ifu/ifu_ic_mem.sv            
--$RV_ROOT/design/ifu/ifu_mem_ctl.sv            
--$RV_ROOT/design/ifu/ifu_iccm_mem.sv            
--$RV_ROOT/design/ifu/ifu.sv                    
--$RV_ROOT/design/dec/dec_decode_ctl.sv         
--$RV_ROOT/design/dec/dec_gpr_ctl.sv            
--$RV_ROOT/design/dec/dec_ib_ctl.sv             
--$RV_ROOT/design/dec/dec_tlu_ctl.sv
--$RV_ROOT/design/dec/dec_trigger.sv                
--$RV_ROOT/design/dec/dec.sv   
--$RV_ROOT/design/exu/exu_alu_ctl.sv            
--$RV_ROOT/design/exu/exu_mul_ctl.sv            
--$RV_ROOT/design/exu/exu_div_ctl.sv    
--$RV_ROOT/design/exu/exu.sv                    
--$RV_ROOT/design/lsu/lsu.sv                    
--$RV_ROOT/design/lsu/lsu_clkdomain.sv                    
--$RV_ROOT/design/lsu/lsu_addrcheck.sv                    
--$RV_ROOT/design/lsu/lsu_lsc_ctl.sv                    
--$RV_ROOT/design/lsu/lsu_stbuf.sv
--$RV_ROOT/design/lsu/lsu_bus_read_buffer.sv
--$RV_ROOT/design/lsu/lsu_bus_write_buffer.sv
--$RV_ROOT/design/lsu/lsu_bus_intf.sv
--$RV_ROOT/design/lsu/lsu_ecc.sv
--$RV_ROOT/design/lsu/lsu_dccm_mem.sv
--$RV_ROOT/design/lsu/lsu_dccm_ctl.sv        
--$RV_ROOT/design/lsu/lsu_trigger.sv        
--$RV_ROOT/design/dbg/dbg.sv        
--$RV_ROOT/design/dmi/dmi_wrapper.v 
--$RV_ROOT/design/dmi/dmi_jtag_to_core_sync.v
--$RV_ROOT/design/dmi/rvjtag_tap.sv
--$RV_ROOT/design/dmi/double_flop_sync.v
--$RV_ROOT/design/dmi/toggle_sync.v
--$RV_ROOT/design/lib/beh_lib.sv 
--$RV_ROOT/design/lib/mem_lib.sv 
--$RV_ROOT/design/lib/ahb_to_axi4.sv 
--$RV_ROOT/design/lib/axi4_to_ahb.sv 
-diff --git a/design/flist.verilator b/design/flist.verilator
-deleted file mode 100644
-index 0923b57..0000000
---- a/design/flist.verilator
-+++ /dev/null
-@@ -1,45 +0,0 @@
--$RV_ROOT/design/swerv_wrapper.sv   
--$RV_ROOT/design/mem.sv                      
--$RV_ROOT/design/pic_ctrl.sv                      
--$RV_ROOT/design/swerv.sv   
--$RV_ROOT/design/dma_ctrl.sv                      
--$RV_ROOT/design/ifu/ifu_aln_ctl.sv            
--$RV_ROOT/design/ifu/ifu_compress_ctl.sv       
--$RV_ROOT/design/ifu/ifu_ifc_ctl.sv            
--$RV_ROOT/design/ifu/ifu_bp_ctl.sv            
--$RV_ROOT/design/ifu/ifu_ic_mem.sv            
--$RV_ROOT/design/ifu/ifu_mem_ctl.sv            
--$RV_ROOT/design/ifu/ifu_iccm_mem.sv            
--$RV_ROOT/design/ifu/ifu.sv                    
--$RV_ROOT/design/dec/dec_decode_ctl.sv         
--$RV_ROOT/design/dec/dec_gpr_ctl.sv            
--$RV_ROOT/design/dec/dec_ib_ctl.sv             
--$RV_ROOT/design/dec/dec_tlu_ctl.sv
--$RV_ROOT/design/dec/dec_trigger.sv                
--$RV_ROOT/design/dec/dec.sv   
--$RV_ROOT/design/exu/exu_alu_ctl.sv            
--$RV_ROOT/design/exu/exu_mul_ctl.sv            
--$RV_ROOT/design/exu/exu_div_ctl.sv    
--$RV_ROOT/design/exu/exu.sv                    
--$RV_ROOT/design/lsu/lsu.sv                    
--$RV_ROOT/design/lsu/lsu_clkdomain.sv                    
--$RV_ROOT/design/lsu/lsu_addrcheck.sv                    
--$RV_ROOT/design/lsu/lsu_lsc_ctl.sv                    
--$RV_ROOT/design/lsu/lsu_stbuf.sv
--$RV_ROOT/design/lsu/lsu_bus_read_buffer.sv
--$RV_ROOT/design/lsu/lsu_bus_write_buffer.sv
--$RV_ROOT/design/lsu/lsu_bus_intf.sv
--$RV_ROOT/design/lsu/lsu_ecc.sv
--$RV_ROOT/design/lsu/lsu_dccm_mem.sv
--$RV_ROOT/design/lsu/lsu_dccm_ctl.sv        
--$RV_ROOT/design/lsu/lsu_trigger.sv        
--$RV_ROOT/design/dbg/dbg.sv        
--$RV_ROOT/design/dmi/dmi_wrapper.v 
--$RV_ROOT/design/dmi/dmi_jtag_to_core_sync.v
--$RV_ROOT/design/dmi/rvjtag_tap.sv
--$RV_ROOT/design/dmi/double_flop_sync.v
--$RV_ROOT/design/dmi/toggle_sync.v
--$RV_ROOT/design/lib/beh_lib.sv 
--$RV_ROOT/design/lib/mem_lib.sv 
--$RV_ROOT/design/lib/ahb_to_axi4.sv 
--$RV_ROOT/design/lib/axi4_to_ahb.sv 
-diff --git a/design/flist.vlog b/design/flist.vlog
-deleted file mode 100644
-index 0923b57..0000000
---- a/design/flist.vlog
-+++ /dev/null
-@@ -1,45 +0,0 @@
--$RV_ROOT/design/swerv_wrapper.sv   
--$RV_ROOT/design/mem.sv                      
--$RV_ROOT/design/pic_ctrl.sv                      
--$RV_ROOT/design/swerv.sv   
--$RV_ROOT/design/dma_ctrl.sv                      
--$RV_ROOT/design/ifu/ifu_aln_ctl.sv            
--$RV_ROOT/design/ifu/ifu_compress_ctl.sv       
--$RV_ROOT/design/ifu/ifu_ifc_ctl.sv            
--$RV_ROOT/design/ifu/ifu_bp_ctl.sv            
--$RV_ROOT/design/ifu/ifu_ic_mem.sv            
--$RV_ROOT/design/ifu/ifu_mem_ctl.sv            
--$RV_ROOT/design/ifu/ifu_iccm_mem.sv            
--$RV_ROOT/design/ifu/ifu.sv                    
--$RV_ROOT/design/dec/dec_decode_ctl.sv         
--$RV_ROOT/design/dec/dec_gpr_ctl.sv            
--$RV_ROOT/design/dec/dec_ib_ctl.sv             
--$RV_ROOT/design/dec/dec_tlu_ctl.sv
--$RV_ROOT/design/dec/dec_trigger.sv                
--$RV_ROOT/design/dec/dec.sv   
--$RV_ROOT/design/exu/exu_alu_ctl.sv            
--$RV_ROOT/design/exu/exu_mul_ctl.sv            
--$RV_ROOT/design/exu/exu_div_ctl.sv    
--$RV_ROOT/design/exu/exu.sv                    
--$RV_ROOT/design/lsu/lsu.sv                    
--$RV_ROOT/design/lsu/lsu_clkdomain.sv                    
--$RV_ROOT/design/lsu/lsu_addrcheck.sv                    
--$RV_ROOT/design/lsu/lsu_lsc_ctl.sv                    
--$RV_ROOT/design/lsu/lsu_stbuf.sv
--$RV_ROOT/design/lsu/lsu_bus_read_buffer.sv
--$RV_ROOT/design/lsu/lsu_bus_write_buffer.sv
--$RV_ROOT/design/lsu/lsu_bus_intf.sv
--$RV_ROOT/design/lsu/lsu_ecc.sv
--$RV_ROOT/design/lsu/lsu_dccm_mem.sv
--$RV_ROOT/design/lsu/lsu_dccm_ctl.sv        
--$RV_ROOT/design/lsu/lsu_trigger.sv        
--$RV_ROOT/design/dbg/dbg.sv        
--$RV_ROOT/design/dmi/dmi_wrapper.v 
--$RV_ROOT/design/dmi/dmi_jtag_to_core_sync.v
--$RV_ROOT/design/dmi/rvjtag_tap.sv
--$RV_ROOT/design/dmi/double_flop_sync.v
--$RV_ROOT/design/dmi/toggle_sync.v
--$RV_ROOT/design/lib/beh_lib.sv 
--$RV_ROOT/design/lib/mem_lib.sv 
--$RV_ROOT/design/lib/ahb_to_axi4.sv 
--$RV_ROOT/design/lib/axi4_to_ahb.sv 
+ // SPDX-License-Identifier: Apache-2.0
+ // Copyright 2019 Western Digital Corporation or its affiliates.
+ //
 diff --git a/design/ifu/ifu.sv b/design/ifu/ifu.sv
-index 931f022..c6943ad 100644
+index b55c1f0..75e936f 100644
 --- a/design/ifu/ifu.sv
 +++ b/design/ifu/ifu.sv
-@@ -18,6 +18,7 @@
- // Function: Top level file for Icache, Fetch, Branch prediction & Aligner
- // BFF -> F1 -> F2 -> A
- //********************************************************************************
+@@ -1,3 +1,4 @@
 +`include "common_defines.vh"
- 
- module ifu
-    import swerv_types::*;
+ //********************************************************************************
+ // SPDX-License-Identifier: Apache-2.0
+ // Copyright 2019 Western Digital Corporation or its affiliates.
 diff --git a/design/ifu/ifu_aln_ctl.sv b/design/ifu/ifu_aln_ctl.sv
-index bccf893..8541c74 100644
+index 76d5e55..4e97d18 100644
 --- a/design/ifu/ifu_aln_ctl.sv
 +++ b/design/ifu/ifu_aln_ctl.sv
-@@ -18,6 +18,7 @@
- //********************************************************************************
- // Function: Instruction aligner
- //********************************************************************************
+@@ -1,3 +1,4 @@
 +`include "common_defines.vh"
- module ifu_aln_ctl
-    import swerv_types::*;
- (
+ //********************************************************************************
+ // SPDX-License-Identifier: Apache-2.0
+ // Copyright 2019 Western Digital Corporation or its affiliates.
 diff --git a/design/ifu/ifu_bp_ctl.sv b/design/ifu/ifu_bp_ctl.sv
-index 216452c..bb99758 100644
+index 215b369..80f75c6 100644
 --- a/design/ifu/ifu_bp_ctl.sv
 +++ b/design/ifu/ifu_bp_ctl.sv
-@@ -23,6 +23,7 @@
- //  Bank3 : Bank2 : Bank1 : Bank0
- //  FA  C       8       4       0
- //********************************************************************************
+@@ -1,3 +1,4 @@
 +`include "common_defines.vh"
- 
- module ifu_bp_ctl
-    import swerv_types::*;
+ //********************************************************************************
+ // SPDX-License-Identifier: Apache-2.0
+ // Copyright 2019 Western Digital Corporation or its affiliates.
 diff --git a/design/ifu/ifu_compress_ctl.sv b/design/ifu/ifu_compress_ctl.sv
-index 250a0c8..cd80fb3 100644
+index 43b68fc..9b710bf 100644
 --- a/design/ifu/ifu_compress_ctl.sv
 +++ b/design/ifu/ifu_compress_ctl.sv
-@@ -16,6 +16,7 @@
- //********************************************************************************
- 
- // purpose of this file is to convert 16b RISCV compressed instruction into 32b equivalent
+@@ -1,3 +1,4 @@
 +`include "common_defines.vh"
- 
- module ifu_compress_ctl
-   (
+ //********************************************************************************
+ // SPDX-License-Identifier: Apache-2.0
+ // Copyright 2019 Western Digital Corporation or its affiliates.
 diff --git a/design/ifu/ifu_ic_mem.sv b/design/ifu/ifu_ic_mem.sv
-index 7140728..446792f 100644
+index dded8fd..a90af95 100644
 --- a/design/ifu/ifu_ic_mem.sv
 +++ b/design/ifu/ifu_ic_mem.sv
-@@ -17,6 +17,7 @@
- ////////////////////////////////////////////////////
- //   ICACHE DATA & TAG MODULE WRAPPER              //
- /////////////////////////////////////////////////////
+@@ -1,3 +1,4 @@
 +`include "common_defines.vh"
- module ifu_ic_mem  
-   (
-       input logic clk,
+ //********************************************************************************
+ // SPDX-License-Identifier: Apache-2.0
+ // Copyright 2019 Western Digital Corporation or it's affiliates.
 diff --git a/design/ifu/ifu_iccm_mem.sv b/design/ifu/ifu_iccm_mem.sv
-index 5402b10..b72775e 100644
+index b636be1..7725940 100644
 --- a/design/ifu/ifu_iccm_mem.sv
 +++ b/design/ifu/ifu_iccm_mem.sv
-@@ -18,6 +18,7 @@
- //********************************************************************************
- // Icache closely coupled memory --- ICCM          
- //********************************************************************************
+@@ -1,3 +1,4 @@
 +`include "common_defines.vh"
- 
- module ifu_iccm_mem 
-    import swerv_types::*;
+ //********************************************************************************
+ // SPDX-License-Identifier: Apache-2.0
+ // Copyright 2019 Western Digital Corporation or its affiliates.
 diff --git a/design/ifu/ifu_ifc_ctl.sv b/design/ifu/ifu_ifc_ctl.sv
-index ba392b6..9b4244c 100644
+index e382e68..74fb721 100644
 --- a/design/ifu/ifu_ifc_ctl.sv
 +++ b/design/ifu/ifu_ifc_ctl.sv
-@@ -19,6 +19,7 @@
- //
- // Comments:
- //********************************************************************************
+@@ -1,3 +1,4 @@
 +`include "common_defines.vh"
- 
- module ifu_ifc_ctl
-   (
+ // SPDX-License-Identifier: Apache-2.0
+ // Copyright 2019 Western Digital Corporation or its affiliates.
+ //
 diff --git a/design/ifu/ifu_mem_ctl.sv b/design/ifu/ifu_mem_ctl.sv
-index 9ad2831..35e19c7 100644
+index 55acd10..9ad6596 100644
 --- a/design/ifu/ifu_mem_ctl.sv
 +++ b/design/ifu/ifu_mem_ctl.sv
-@@ -20,6 +20,7 @@
- // Function: Icache , iccm  control
- // BFF -> F1 -> F2 -> A
- //********************************************************************************
+@@ -1,3 +1,4 @@
 +`include "common_defines.vh"
- 
- module ifu_mem_ctl 
-    import swerv_types::*;
-diff --git a/design/include/def.sv b/design/include/def.sv
-deleted file mode 100644
-index f29612d..0000000
---- a/design/include/def.sv
-+++ /dev/null
-@@ -1,517 +0,0 @@
--// SPDX-License-Identifier: Apache-2.0
--// Copyright 2019 Western Digital Corporation or its affiliates.
--// 
--// Licensed under the Apache License, Version 2.0 (the "License");
--// you may not use this file except in compliance with the License.
--// You may obtain a copy of the License at
--// 
--// http://www.apache.org/licenses/LICENSE-2.0
--// 
--// Unless required by applicable law or agreed to in writing, software
--// distributed under the License is distributed on an "AS IS" BASIS,
--// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
--// See the License for the specific language governing permissions and
--// limitations under the License.
--
--// performance monitor stuff
--`ifndef DEFS_SV
--`define DEFS_SV
--
--typedef struct packed {
--		       logic [2:0] trace_rv_i_valid_ip;
--		       logic [95:0] trace_rv_i_insn_ip;
--		       logic [95:0] trace_rv_i_address_ip;  
--		       logic [2:0] trace_rv_i_exception_ip;
--		       logic [4:0] trace_rv_i_ecause_ip;	
--		       logic [2:0] trace_rv_i_interrupt_ip;	       		   
--		       logic [31:0] trace_rv_i_tval_ip;
--		       } trace_pkt_t;
--
--
--typedef enum logic [3:0] {
--			  NULL     = 4'b0000,
--			  MUL      = 4'b0001, 
--			  LOAD     = 4'b0010, 
--			  STORE    = 4'b0011,
--			  ALU      = 4'b0100,
--			  CSRREAD  = 4'b0101,
--			  CSRWRITE = 4'b0110,
--			  CSRRW    = 4'b0111,
--			  EBREAK   = 4'b1000,
--			  ECALL    = 4'b1001,
--			  FENCE    = 4'b1010,
--			  FENCEI   = 4'b1011,
--			  MRET     = 4'b1100,
--			  CONDBR   = 4'b1101,
--			  JAL      = 4'b1110
--			  } inst_t;
--
--typedef struct packed {
--`ifdef RV_ICACHE_ECC		       
--		       logic [39:0] ecc;
--`else
--		       logic [7:0] parity;
--`endif
--		       } icache_err_pkt_t;
--
--typedef struct packed {
--		       logic valid;
--		       logic wb;
--		       logic [`RV_LSU_NUM_NBLOAD_WIDTH-1:0] tag;
--		       logic [4:0] rd;
--		       } load_cam_pkt_t;
--
--typedef struct packed {
--		       logic pc0_call;
--		       logic pc0_ret;
--		       logic pc0_pc4;
--		       logic pc1_call;
--		       logic pc1_ret;
--		       logic pc1_pc4;
--		       } rets_pkt_t;
--typedef struct packed {
--		       logic valid;
--		       logic [11:0] toffset;
--		       logic [1:0] hist;
--		       logic br_error;
--		       logic br_start_error;
--		       logic [`RV_BTB_ADDR_HI:`RV_BTB_ADDR_LO] index;
--		       logic [1:0] bank;
--		       logic [31:1] prett;  // predicted ret target
--		       logic [`RV_BHT_GHR_RANGE] fghr;
--`ifdef RV_BTB_48
--		       logic [1:0] way;
--`else
--		       logic way;
--`endif
--		       logic ret;
--		       logic [`RV_BTB_BTAG_SIZE-1:0] btag;
--		       } br_pkt_t;
--
--typedef struct packed {
--		       logic valid;
--		       logic [1:0] hist;
--		       logic br_error;
--		       logic br_start_error;
--		       logic [`RV_BTB_ADDR_HI:`RV_BTB_ADDR_LO] index;
--		       logic [1:0] bank;
--		       logic [`RV_BHT_GHR_RANGE] fghr;
--`ifdef RV_BTB_48
--		       logic [1:0] way;
--`else
--		       logic way;
--`endif
--		       logic middle;
--		       } br_tlu_pkt_t;
--
--typedef struct packed {
--		       logic misp;   
--		       logic ataken;
--		       logic boffset; 
--		       logic pc4;
--		       logic [1:0] hist;    
--		       logic [11:0] toffset;
--		       logic [`RV_BTB_ADDR_HI:`RV_BTB_ADDR_LO] index;  
--		       logic [1:0] bank;    
--		       logic valid; 
--		       logic br_error;
--		       logic br_start_error;
--		       logic [31:1] prett;
--		       logic pcall;
--		       logic pret;
--		       logic pja;
--		       logic [`RV_BTB_BTAG_SIZE-1:0] btag;
--		       logic [`RV_BHT_GHR_RANGE] fghr;
--`ifdef RV_BTB_48
--		       logic [1:0] way;
--`else
--		       logic way;
--`endif
--		       } predict_pkt_t;
--
--typedef struct packed {
--		       logic legal;
--		       logic icaf;
--		       logic icaf_f1;		       
--		       logic perr;
--		       logic sbecc;
--		       logic fence_i;
--		       logic [3:0] i0trigger;
--		       logic [3:0] i1trigger;
--		       inst_t pmu_i0_itype;        // pmu - instruction type
--		       inst_t pmu_i1_itype;        // pmu - instruction type
--		       logic pmu_i0_br_unpred;     // pmu
--		       logic pmu_i1_br_unpred;     // pmu
--		       logic pmu_divide;
--		       logic pmu_lsu_misaligned;
--		       } trap_pkt_t;
--
--typedef struct packed {
--		       logic [4:0] i0rd;
--		       logic i0mul;		       
--		       logic i0load;
--		       logic i0store;
--		       logic i0div;
--		       logic i0v;
--		       logic i0valid;
--		       logic i0secondary;
--		       logic [1:0] i0rs1bype2;
--		       logic [1:0] i0rs2bype2;		       
--		       logic [3:0] i0rs1bype3;
--		       logic [3:0] i0rs2bype3;		       
--		       logic [4:0] i1rd;
--		       logic i1mul;		       
--		       logic i1load;
--		       logic i1store;
--		       logic i1v;
--		       logic i1valid;
--		       logic csrwen;
--		       logic csrwonly;
--		       logic [11:0] csrwaddr;
--		       logic i1secondary;		       
--		       logic [1:0] i1rs1bype2;
--		       logic [1:0] i1rs2bype2;		       
--		       logic [6:0] i1rs1bype3;
--		       logic [6:0] i1rs2bype3;		       
--		       } dest_pkt_t;
--
--typedef struct packed {
--                       logic mul;
--                       logic load;
--                       logic sec;
--                       logic alu;
--                       } class_pkt_t;
--
--typedef struct packed {
--		       logic [4:0] rs1;
--		       logic [4:0] rs2;
--		       logic [4:0] rd;
--		       } reg_pkt_t;
--
--
--typedef struct packed {
--		       logic valid;
--                       logic land;
--		       logic lor;
--		       logic lxor;
--		       logic sll; 
--		       logic srl;
--		       logic sra;
--		       logic beq;
--		       logic bne;
--		       logic blt;
--		       logic bge;
--		       logic add;
--		       logic sub;
--		       logic slt;
--		       logic unsign;
--		       logic jal;
--		       logic predict_t;
--		       logic predict_nt;
--		       logic csr_write;
--		       logic csr_imm;
--		       } alu_pkt_t;
--
--typedef struct packed {
--		       logic by;
--		       logic half;
--		       logic word;
--		       logic dword;  // for dma
--		       logic load;
--		       logic store;
--		       logic unsign;
--                       logic dma;    // dma pkt
--		       logic store_data_bypass_c1;
--		       logic load_ldst_bypass_c1;
--		       logic store_data_bypass_c2;
--		       logic store_data_bypass_i0_e2_c2;
--		       logic [1:0] store_data_bypass_e4_c1;
--		       logic [1:0] store_data_bypass_e4_c2;
--		       logic [1:0] store_data_bypass_e4_c3;
--		       logic valid;
--		       } lsu_pkt_t;
--
--typedef struct packed {
--                       logic exc_valid; 
--                       logic single_ecc_error; 
--                       logic inst_type;   //0: Load, 1: Store 
--                       logic inst_pipe;   //0: i0, 1: i1
--		       logic dma_valid;
--                       logic exc_type;    //0: MisAligned, 1: Access Fault  
--                       logic [31:0] addr; 
--                       } lsu_error_pkt_t;
--
--typedef struct packed {
--		       logic alu;
--		       logic rs1;
--		       logic rs2;
--		       logic imm12;
--		       logic rd;
--		       logic shimm5;
--		       logic imm20;
--		       logic pc;
--		       logic load;
--		       logic store;
--		       logic lsu;
--		       logic add;
--		       logic sub;
--		       logic land;
--		       logic lor;
--		       logic lxor;
--		       logic sll;
--		       logic sra;
--		       logic srl;
--		       logic slt;
--		       logic unsign;
--		       logic condbr;
--		       logic beq;
--		       logic bne;
--		       logic bge;
--		       logic blt;
--		       logic jal;
--		       logic by;
--		       logic half;
--		       logic word;
--		       logic csr_read;
--		       logic csr_clr;
--		       logic csr_set;
--		       logic csr_write;
--		       logic csr_imm;
--		       logic presync;
--		       logic postsync;		       
--		       logic ebreak;
--		       logic ecall;
--		       logic mret;
--		       logic mul;
--		       logic rs1_sign;
--		       logic rs2_sign;
--		       logic low;
--		       logic div;
--		       logic rem;
--		       logic fence;
--		       logic fence_i;
--		       logic pm_alu;
--		       logic legal;
--		       } dec_pkt_t;
--
--
--typedef struct packed {
--		       logic valid;
--		       logic rs1_sign;
--		       logic rs2_sign;
--		       logic low;
--		       logic load_mul_rs1_bypass_e1;
--		       logic load_mul_rs2_bypass_e1;		       
--		       } mul_pkt_t;
--
--typedef struct packed {
--		       logic valid;
--		       logic unsign;
--		       logic rem;
--		       } div_pkt_t;
--
--
--typedef struct packed {
--                       logic clk_en;
--                       } lsu_clken_pkt_t;
--
--typedef struct packed {
--                       logic clk_en;
--                       } ifu_clken_pkt_t;
--
--
--typedef struct packed {
--                       logic clk_en;
--                       } dec_clken_pkt_t;
--
--typedef struct packed {
--                       logic exu_mul_c1_e1_clken;
--                       logic exu_mul_c2_e1_clken;
--                       logic exu_mul_c1_e2_clken; 
--                       logic exu_mul_c2_e2_clken;
--                       logic exu_mul_c1_e3_clken;
--                       logic exu_mul_c2_e3_clken;
--		       // AU clock enables
--                       logic exu_au_i0_c1_e1_clken;
--                       logic exu_au_i0_c1_e2_clken;
--                       logic exu_au_i0_c1_e3_clken;
--                       logic exu_au_i0_c1_e4_clken; 
--                       logic exu_au_i1_c1_e1_clken;
--                       logic exu_au_i1_c1_e2_clken;
--                       logic exu_au_i1_c1_e3_clken;
--                       logic exu_au_i1_c1_e4_clken; 
--                       logic exu_au_i0_c2_e1_clken;
--                       logic exu_au_i0_c2_e2_clken;
--                       logic exu_au_i0_c2_e3_clken;
--                       logic exu_au_i0_c2_e4_clken; 
--                       logic exu_au_i1_c2_e1_clken;
--                       logic exu_au_i1_c2_e2_clken;
--                       logic exu_au_i1_c2_e3_clken;
--                       logic exu_au_i1_c2_e4_clken;
--                       } exu_clken_pkt_t;
--
--typedef struct packed {
--                       logic free_clk;
--                       } lsu_clk_pkt_t;
--
--typedef struct packed {
--                       logic free_clk;
--                       } ifu_clk_pkt_t;
--
--
--typedef struct packed {
--                       logic free_clk;
--                       } dec_clk_pkt_t;
--
--typedef struct packed {
--		       // Mul clocks
--                       logic exu_mul_c1_e1_clk; 
--                       logic exu_mul_c2_e1_clk;
--                       logic exu_mul_c1_e2_clk; 
--                       logic exu_mul_c2_e2_clk;
--		       logic exu_mul_c1_e3_clk; 
--                       logic exu_mul_c2_e3_clk;
--		       // AU clocks
--                       logic exu_au_i0_c1_e1_clk; 
--                       logic exu_au_i0_c1_e2_clk;
--                       logic exu_au_i0_c1_e3_clk; 
--                       logic exu_au_i0_c1_e4_clk;
--                       logic exu_au_i1_c1_e1_clk; 
--                       logic exu_au_i1_c1_e2_clk;
--                       logic exu_au_i1_c1_e3_clk; 
--                       logic exu_au_i1_c1_e4_clk;
--                       logic exu_au_i0_c2_e1_clk; 
--                       logic exu_au_i0_c2_e2_clk;
--                       logic exu_au_i0_c2_e3_clk; 
--                       logic exu_au_i0_c2_e4_clk;
--                       logic exu_au_i1_c2_e1_clk; 
--                       logic exu_au_i1_c2_e2_clk;
--                       logic exu_au_i1_c2_e3_clk; 
--                       logic exu_au_i1_c2_e4_clk;
--		       
--	               } exu_clk_pkt_t;
--
--
--typedef struct packed {
--                       logic        select;
--                       logic        match;
--                       logic        store;
--                       logic        load;
--		       logic        execute;
--		       logic        m;
--                       logic [31:0] tdata2;           
--		       } trigger_pkt_t;
--
--
--typedef struct packed {
--`ifdef RV_ICACHE_ECC		       
--                       logic [41:0]  icache_wrdata; // {dicad0[31:0], dicad1[1:0]}
--`else
--                       logic [33:0]  icache_wrdata; // {dicad0[31:0], dicad1[1:0]}
--`endif
--                       logic [18:2]  icache_dicawics;
--                       logic         icache_rd_valid;
--                       logic         icache_wr_valid;
--		       } cache_debug_pkt_t;
--
--typedef struct packed {
--                       // AXI Write Channels
--                       logic            axi_awvalid;
--                       logic [31:0]     axi_awaddr;
--                       logic [2:0]      axi_awsize;
--                       logic [2:0]      axi_awprot;
--                       logic [7:0]      axi_awlen;                                           
--                       logic [1:0]      axi_awburst;
--                       
--                       logic            axi_wvalid;                                       
--                       logic [63:0]     axi_wdata;
--                       logic [7:0]      axi_wstrb;
--                       logic            axi_wlast;
--                       
--                       logic            axi_bready;
--
--                       // AXI Read Channels
--                       logic            axi_arvalid;
--                       logic [31:0]     axi_araddr;                                     
--                       logic [2:0]      axi_arsize;
--                       logic [2:0]      axi_arprot;
--                       
--                       logic            axi_rready;
--                       } axi4_mstr_pkt_t; 
--
--typedef struct packed {
--                       // AXI Write Channels
--                       logic            axi_bvalid;
--                       logic            axi_bready;
--                       logic [1:0]      axi_bresp;
--
--                       logic            axi_awready;
--                       logic            axi_wready;
--                       
--                       // AXI Read Channels
--                       logic            axi_rvalid;
--                       logic [63:0]     axi_rdata;
--                       logic [1:0]      axi_rresp;
--
--                       logic            axi_arready;
--                       
--                       } axi4_slv_pkt_t; 
--
--
--typedef struct packed {
--                       axi4_mstr_pkt_t  axi4_pkt;
--                       logic [`RV_LSU_BUS_TAG-1:0]  axi_awid;
--                       logic [`RV_LSU_BUS_TAG-1:0]  axi_arid;
--
--                       } lsu_axi4_mstr_pkt_t;
--
--typedef struct packed {
--                       axi4_mstr_pkt_t  axi4_pkt;
--                       logic [`RV_IFU_BUS_TAG-1:0]  axi_awid;
--                       logic [`RV_IFU_BUS_TAG-1:0]  axi_arid;
--
--                       } ifu_axi4_mstr_pkt_t;
--
--typedef struct packed {
--                       axi4_mstr_pkt_t  axi4_pkt;
--                       logic [`RV_SB_BUS_TAG-1:0]  axi_awid;
--                       logic [`RV_SB_BUS_TAG-1:0]  axi_arid;
--
--                       } sb_axi4_mstr_pkt_t;
--
--typedef struct packed {
--                       axi4_slv_pkt_t  axi4_pkt;
--                       logic [`RV_DMA_BUS_TAG-1:0]  axi_awid;
--                       logic [`RV_DMA_BUS_TAG-1:0]  axi_arid;
--
--                       } dma_axi4_mstr_pkt_t;
--
--typedef struct packed {
--                       axi4_slv_pkt_t  axi4_pkt;
--                       logic [`RV_LSU_BUS_TAG-1:0]  axi_bid;
--                       logic [`RV_LSU_BUS_TAG-1:0]  axi_rid;
--
--                       } lsu_axi4_slv_pkt_t;
--
--typedef struct packed {
--                       axi4_slv_pkt_t  axi4_pkt;
--                       logic [`RV_IFU_BUS_TAG-1:0]  axi_bid;
--                       logic [`RV_IFU_BUS_TAG-1:0]  axi_rid;
--
--                       } ifu_axi4_slv_pkt_t;
--
--typedef struct packed {
--                       axi4_slv_pkt_t  axi4_pkt;
--                       logic [`RV_SB_BUS_TAG-1:0]  axi_bid;
--                       logic [`RV_SB_BUS_TAG-1:0]  axi_rid;
--
--                       } sb_axi4_slv_pkt_t;
--
--typedef struct packed {
--                       axi4_slv_pkt_t  axi4_pkt;
--                       logic [`RV_DMA_BUS_TAG-1:0]  axi_bid;
--                       logic [`RV_DMA_BUS_TAG-1:0]  axi_rid;
--
--                       } dma_axi4_slv_pkt_t;
--
--`endif // DEFS_SV
+ //********************************************************************************
+ // SPDX-License-Identifier: Apache-2.0
+ // Copyright 2019 Western Digital Corporation or its affiliates.
 diff --git a/design/include/swerv_types.sv b/design/include/swerv_types.sv
-index 483fb73..1a18644 100644
+index f66be3f..1f52192 100644
 --- a/design/include/swerv_types.sv
 +++ b/design/include/swerv_types.sv
-@@ -12,6 +12,7 @@
- // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- // See the License for the specific language governing permissions and
- // limitations under the License.
+@@ -1,3 +1,4 @@
 +`include "common_defines.vh"
- package swerv_types;
- 
- // performance monitor stuff
+ // SPDX-License-Identifier: Apache-2.0
+ // Copyright 2019 Western Digital Corporation or its affiliates.
+ //
 diff --git a/design/lib/ahb_to_axi4.sv b/design/lib/ahb_to_axi4.sv
-index ac36fea..a23139a 100644
+index 3a87b39..2b3b491 100644
 --- a/design/lib/ahb_to_axi4.sv
 +++ b/design/lib/ahb_to_axi4.sv
-@@ -20,6 +20,7 @@
- // Comments:
- //
- //********************************************************************************
+@@ -1,3 +1,4 @@
 +`include "common_defines.vh"
- module ahb_to_axi4 #(parameter TAG  = 1) (
- 
-    input                   clk,
-@@ -278,4 +279,4 @@ module ahb_to_axi4 #(parameter TAG  = 1) (
- 
- `endif
-    
--endmodule // ahb_to_axi4
-\ No newline at end of file
-+endmodule // ahb_to_axi4
+ // SPDX-License-Identifier: Apache-2.0
+ // Copyright 2019 Western Digital Corporation or its affiliates.
+ //
 diff --git a/design/lib/axi4_to_ahb.sv b/design/lib/axi4_to_ahb.sv
-index b3e2715..fd8a191 100644
+index 776e8d6..2f10498 100644
 --- a/design/lib/axi4_to_ahb.sv
 +++ b/design/lib/axi4_to_ahb.sv
-@@ -21,6 +21,7 @@
- // Comments:
- //
- //********************************************************************************
+@@ -1,3 +1,4 @@
 +`include "common_defines.vh"
- module axi4_to_ahb #(parameter TAG  = 1) (
- 
-    input                   clk,
+ // SPDX-License-Identifier: Apache-2.0
+ // Copyright 2019 Western Digital Corporation or its affiliates.
+ //
 diff --git a/design/lib/beh_lib.sv b/design/lib/beh_lib.sv
-index ba01eca..64b515b 100644
+index 31567d6..fd4691d 100644
 --- a/design/lib/beh_lib.sv
 +++ b/design/lib/beh_lib.sv
-@@ -15,6 +15,7 @@
- 
- // all flops call the rvdff flop
- 
+@@ -1,3 +1,4 @@
 +`include "common_defines.vh"
- 
- module rvdff #( parameter WIDTH=1 )
-    ( 
+ // SPDX-License-Identifier: Apache-2.0
+ // Copyright 2019 Western Digital Corporation or its affiliates.
+ //
 diff --git a/design/lib/mem_lib.sv b/design/lib/mem_lib.sv
-index daa8cab..0ea8e30 100644
+index 9582c8d..9d0121a 100644
 --- a/design/lib/mem_lib.sv
 +++ b/design/lib/mem_lib.sv
-@@ -17,6 +17,7 @@
- //=================================== START OF CCM  =======================================================================
- //============= Possible sram sizes for a 39 bit wide memory ( 4 bytes + 7 bits ECC ) =====================================
- //-------------------------------------------------------------------------------------------------------------------------
+@@ -1,3 +1,4 @@
 +`include "common_defines.vh"
- module ram_32768x39 
-   ( input logic CLK,
-     input logic [14:0] ADR,
+ // SPDX-License-Identifier: Apache-2.0
+ // Copyright 2019 Western Digital Corporation or its affiliates.
+ //
+diff --git a/design/lib/svci_to_axi4.sv b/design/lib/svci_to_axi4.sv
+index 20c6a8e..93c9a5c 100644
+--- a/design/lib/svci_to_axi4.sv
++++ b/design/lib/svci_to_axi4.sv
+@@ -1,3 +1,4 @@
++`include "common_defines.vh"
+ // SPDX-License-Identifier: Apache-2.0
+ // Copyright 2018 Western Digital Corporation or it's affiliates.
+ //
 diff --git a/design/lsu/lsu.sv b/design/lsu/lsu.sv
-index 20ea991..66275cd 100644
+index 20c7ef9..288c253 100644
 --- a/design/lsu/lsu.sv
 +++ b/design/lsu/lsu.sv
-@@ -24,6 +24,7 @@
- // DC1 -> DC2 -> DC3 -> DC4 (Commit)
- // 
- //********************************************************************************
+@@ -1,3 +1,4 @@
 +`include "common_defines.vh"
- 
- module lsu 
-    import swerv_types::*;
+ // SPDX-License-Identifier: Apache-2.0
+ // Copyright 2019 Western Digital Corporation or its affiliates.
+ //
 diff --git a/design/lsu/lsu_addrcheck.sv b/design/lsu/lsu_addrcheck.sv
-index 6bc483b..c3bb254 100644
+index 030b33e..8d846b7 100644
 --- a/design/lsu/lsu_addrcheck.sv
 +++ b/design/lsu/lsu_addrcheck.sv
-@@ -22,6 +22,7 @@
- // Comments: 
- //
- //********************************************************************************
+@@ -1,3 +1,4 @@
 +`include "common_defines.vh"
- module lsu_addrcheck 
-    import swerv_types::*;
- (
+ // SPDX-License-Identifier: Apache-2.0
+ // Copyright 2019 Western Digital Corporation or its affiliates.
+ //
 diff --git a/design/lsu/lsu_bus_buffer.sv b/design/lsu/lsu_bus_buffer.sv
-index a7fc5e8..7c4087c 100644
+index 7a0e807..54d229e 100644
 --- a/design/lsu/lsu_bus_buffer.sv
 +++ b/design/lsu/lsu_bus_buffer.sv
-@@ -22,6 +22,7 @@
- // Comments:
- //
- //********************************************************************************
+@@ -1,3 +1,4 @@
 +`include "common_defines.vh"
- 
- // Function to do 8 to 3 bit encoding
- function automatic logic [2:0] f_Enc8to3;
+ // SPDX-License-Identifier: Apache-2.0
+ // Copyright 2019 Western Digital Corporation or its affiliates.
+ //
 diff --git a/design/lsu/lsu_bus_intf.sv b/design/lsu/lsu_bus_intf.sv
-index fd27252..e2087e5 100644
+index bde813c..729bc43 100644
 --- a/design/lsu/lsu_bus_intf.sv
 +++ b/design/lsu/lsu_bus_intf.sv
-@@ -22,6 +22,7 @@
- // Comments:
- //
- //********************************************************************************
+@@ -1,3 +1,4 @@
 +`include "common_defines.vh"
- module lsu_bus_intf 
-    import swerv_types::*;
- (
-diff --git a/design/lsu/lsu_bus_read_buffer.sv b/design/lsu/lsu_bus_read_buffer.sv
-deleted file mode 100644
-index 5a9a038..0000000
---- a/design/lsu/lsu_bus_read_buffer.sv
-+++ /dev/null
-@@ -1,477 +0,0 @@
--// SPDX-License-Identifier: Apache-2.0
--// Copyright 2019 Western Digital Corporation or its affiliates.
--// 
--// Licensed under the Apache License, Version 2.0 (the "License");
--// you may not use this file except in compliance with the License.
--// You may obtain a copy of the License at
--// 
--// http://www.apache.org/licenses/LICENSE-2.0
--// 
--// Unless required by applicable law or agreed to in writing, software
--// distributed under the License is distributed on an "AS IS" BASIS,
--// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
--// See the License for the specific language governing permissions and
--// limitations under the License.
--
--//********************************************************************************
--// $Id$
--//   
--// 
--// Owner: 
--// Function: lsu to bus interface with interface queue
--// Comments:
--//
--//********************************************************************************
--function automatic logic [31:0] lsu_align;
--   input logic [31:0] data0;
--   input logic [63:0] data1;
--   input logic        data_sel;
--   input logic [2:0]  addr;
--   input logic [1:0]  size;
--   input logic        unsign;
--
--   logic [95:0]       data_int;
--   logic [31:0]       data_out;
--   logic [2:0]        shift;
--   
--   shift[2:0]     = data_sel ? {1'b0,addr[1:0]} : addr[2:0];   // This is need since we already save either upper/lower word for dual
--   data_int[95:0] = (data_sel ? {data1[63:0], data0[31:0]} : {data0[31:0], data1[63:0]}) >> 8*shift[2:0];
--   
--   data_out[31:0] = ({32{ unsign & (size == 2'b00)}} & {24'b0,data_int[7:0]}) |
--                    ({32{ unsign & (size == 2'b01)}} & {16'b0,data_int[15:0]}) |
--                    ({32{~unsign & (size == 2'b00)}} & {{24{data_int[7]}}, data_int[7:0]}) |
--                    ({32{~unsign & (size == 2'b01)}} & {{16{data_int[15]}},data_int[15:0]}) |
--                    ({32{(size == 2'b10)}} & data_int[31:0]);
--   return data_out[31:0]; 
--   
--endfunction // lsu_bus_read_buffer
--
--
--module lsu_bus_read_buffer (
--
--   input logic                  lsu_freeze_c2_dc3_clk,
--   input logic                  lsu_c2_dc3_clk,                   // per stage clock 
--   input logic                  lsu_c2_dc4_clk,                   // per stage clock 
--   input logic                  lsu_c2_dc5_clk,                   // per stage clock 
--   input logic                  lsu_rdbuf_c1_clk,                 // read_buf clock 
--   input logic                  lsu_free_c2_clk,                  // lsu clock 
--   input logic                  lsu_busm_clk,                     // bus clock 
--   input logic                  clk,                              // core clock
--   input logic                  rst_l,                            // reset
--
--   input logic                  lsu_busreq_dc2,                   // ld/st in dc2 to the external
--   input                        lsu_pkt_t lsu_pkt_dc2,            // lsu packet in dc2
--   input                        lsu_pkt_t lsu_pkt_dc3,            // lsu packet in dc3
--   input                        lsu_pkt_t lsu_pkt_dc5,            // lsu packet in dc5
--   input logic                  ldst_dual_dc2,                    // packet in dc2 is unaligned
--   input logic                  ldst_dual_dc3,                    // packet in dc3 is unaligned
--   input logic [31:0]           lsu_addr_dc2,                     // address
--   input logic [31:0]           end_addr_dc2,                     // ending address ( to calculate the banks ) 
--   input logic [31:0]           lsu_addr_dc3,                     // start address in dc5
--   input logic [31:0]           end_addr_dc3,                     // end address in dc5
--   input logic                  addr_external_dc2,                // the address is mapping to external
--   input logic                  lsu_read_buffer_block_dc2,        // block the read buffer - either because of a partial hit, or chicken bit set
--   input logic                  is_sideeffects_dc2,
--                            
--   input logic                  lsu_freeze_dc3,                   // Final lsu freeze
--   input logic                  lsu_commit_dc5,                   // Final qualified commit
--   input logic                  lsu_write_buffer_empty_any,       // write buffer is empty
--   input logic                  ld_full_hit_dc2,                  // load can get all its byte from a write buffer entry
--   input logic                  is_sideeffects_dc3,
--   input logic                  flush_dc2_up,                     // flush 
--   input logic                  flush_dc3,                        // flush 
--   input logic                  flush_dc4,                        // flush
--   input logic                  flush_dc5,                        // flush
--
--   output logic                 lsu_read_buffer_empty_any,        // Used for clock enable
--   output logic                 write_buffer_block_any,           // Block the write buffer if there are outstanding non-blocking loads
--   output logic                 lsu_ldbusreq_dc3,                 // pipe made it down to dc3 and is to external
--   output logic                 lsu_ldbusreq_dc5,                 // pipe made it down to dc5 and is to external
--   output logic                 ld_hit_rdbuf_hi,                  // load is unaligned and the upper hits
--   output logic                 ld_hit_rdbuf_lo,                  // load us unaligned and the lower hits
--   output logic [63:0]          ld_fwddata_rdbuf_hi,              // the fwd data 
--   output logic [63:0]          ld_fwddata_rdbuf_lo,              // the fwd data
--   output logic                 ld_freeze_dc3,                    // need to freeze as the load is to the external
--   output logic                 rdbuf_full_freeze_dc3,            // Freeze in dc2 since read buffer is full
--   output logic                 ld_bus_error_dc3,                 // Bus returns an precise error 
--   output logic [31:0]          ld_bus_error_addr_dc3,            // Address for precise load error
--   output logic                 ld_imprecise_bus_error_any,       // Bus returns an imprecise error 
--   output logic [31:0]          ld_imprecise_bus_error_addr,
--   output logic [31:0]          ld_read_buffer_data_dc3,          // the bus return data
--
--   // Non-blocking loads
--   input logic                                 dec_tlu_non_blocking_disable,
--   input  logic 	                       dec_nonblock_load_freeze_dc2,
--   output logic                                lsu_nonblock_load_valid_dc3,     // there is an external load -> put in the cam
--   output logic [`RV_LSU_NUM_NBLOAD_WIDTH-1:0] lsu_nonblock_load_tag_dc3,       // the tag of the external non block load
--   output logic                                lsu_nonblock_load_inv_dc5,       // invalidate signal for the cam entry for non block loads
--   output logic [`RV_LSU_NUM_NBLOAD_WIDTH-1:0] lsu_nonblock_load_inv_tag_dc5,   // tag of the enrty which needs to be invalidated
--   output logic                                lsu_nonblock_load_data_valid,    // the non block is valid - sending information back to the cam                                               
--   output logic                                lsu_nonblock_load_data_error,    // non block load has an error                 
--   output logic [`RV_LSU_NUM_NBLOAD_WIDTH-1:0] lsu_nonblock_load_data_tag,      // the tag of the non block load sending the data/error                                             
--   output logic [31:0]                         lsu_nonblock_load_data,          // Data of the non block load	
--
--   // AXI Read Channels
--   output logic                         lsu_axi_arvalid,
--   input  logic                         lsu_axi_arready,
--   output logic [`RV_LSU_BUS_TAG-1:0]   lsu_axi_arid,
--   output logic [31:0]                  lsu_axi_araddr,
--   output logic [3:0]                   lsu_axi_arregion,
--   output logic [7:0]                   lsu_axi_arlen,
--   output logic [2:0]                   lsu_axi_arsize,
--   output logic [1:0]                   lsu_axi_arburst,
--   output logic                         lsu_axi_arlock,
--   output logic [3:0]                   lsu_axi_arcache,
--   output logic [2:0]                   lsu_axi_arprot,
--   output logic [3:0]                   lsu_axi_arqos,
--
--   input  logic                         lsu_axi_rvalid,
--   output logic                         lsu_axi_rready,
--   input  logic [`RV_LSU_BUS_TAG-1:0]   lsu_axi_rid,
--   input  logic [63:0]                  lsu_axi_rdata,
--   input  logic [1:0]                   lsu_axi_rresp,
--   input  logic                         lsu_axi_rlast,
--                                          
--   input logic                          lsu_bus_clk_en,   
--   input logic                          lsu_bus_clk_en_q, 
--   input logic                          scan_mode                // scan mode
--
--);
--
--`include "global.h"
--
--   // States for entries
--   // For Ld: IDLE -> WAIT_COMMIT -> WAIT -> CMD -> RESP -> DONE -> IDLE
--   typedef enum logic [2:0] {IDLE=3'b000, WAIT_COMMIT=3'b001, WAIT=3'b010, CMD=3'b011, RESP=3'b100, DONE=3'b101} state_t;
--   
--   localparam DEPTH     = `RV_LSU_NUM_NBLOAD;
--   localparam DEPTH_LOG2 = `RV_LSU_NUM_NBLOAD_WIDTH;
--
--   state_t [DEPTH-1:0]       busfifo_state;
--   state_t [DEPTH-1:0]       busfifo_nxtstate;
--   logic   [DEPTH-1:0]       busfifo_block;
--   logic   [DEPTH-1:0]       busfifo_dual;
--   logic   [DEPTH-1:0]       busfifo_nb;
--   logic   [DEPTH-1:0]       busfifo_sideeffects;
--   logic   [DEPTH-1:0]       busfifo_unsign;
--   logic   [DEPTH-1:0][1:0]  busfifo_sz;
--   logic   [DEPTH-1:0][1:0]  busfifo_sent;
--   logic   [DEPTH-1:0][1:0]  busfifo_resp;
--   logic   [DEPTH-1:0][1:0]  busfifo_error;
--   logic   [DEPTH-1:0][31:0] busfifo_addr_lo;
--   logic   [DEPTH-1:0][31:0] busfifo_addr_hi;
--   logic   [DEPTH-1:0][31:0] busfifo_data;
--
--   logic   [DEPTH-1:0]       busfifo_rst;
--   logic   [DEPTH-1:0]       busfifo_block_rst;
--   logic   [DEPTH-1:0]       busfifo_error_rst;
--   logic   [DEPTH-1:0]       busfifo_state_en;
--   logic   [DEPTH-1:0]       busfifo_state_bus_en;
--   logic   [DEPTH-1:0]       busfifo_wr_en;
--   logic   [DEPTH-1:0]       busfifo_cmd_sent;
--   logic   [DEPTH-1:0]       busfifo_cmd_resp;
--   logic   [DEPTH-1:0][1:0]  busfifo_sent_en;
--   logic   [DEPTH-1:0][1:0]  busfifo_resp_en;
--   logic   [DEPTH-1:0][1:0]  busfifo_error_en;
--   logic   [DEPTH-1:0]       busfifo_data_en;
--   logic   [DEPTH-1:0][31:0] busfifo_data_in;
--
--   logic   [31:0]            busfifo_addr_lo_in;
--   logic   [31:0]            busfifo_addr_hi_in;
--   logic   [1:0]             busfifo_sz_in;
--   
--   logic                   lsu_ldbusreq_dc2, lsu_ldbusreq_dc4;
--   logic                   WrPtrEn;
--   logic [DEPTH_LOG2-1:0]  WrPtr, NxtWrPtr, WrPtr_dc3, WrPtr_dc4, WrPtr_dc5;
--   logic [DEPTH_LOG2-1:0]  CmdPtr, NxtCmdPtr, CmdPtrQ;
--   logic [DEPTH_LOG2-1:0]  FreezePtr;
--
--   logic                   FreezePtrEn;   
--   logic                   lsu_nonblock_load_valid_dc4, lsu_nonblock_load_valid_dc5;
--   logic                   ld_freeze_en, ld_freeze_rst;
--   logic                   rdbuf_full_freeze_en, rdbuf_full_freeze_rst;
--   logic                   ld_precise_bus_error;
--   logic                   read_buffer_full;
--   
--   logic [127:32]      ld_read_buffer_data_dc3_nc;
--
--   logic               found0, found1;
--
--   logic               dec_nonblock_load_freeze_dc3;
--   logic               lsu_read_buffer_block_dc3;
--   //assign dec_nonblock_load_freeze_dc2 = '0;
--   
--   logic               lsu_axi_arvalid_q, lsu_axi_arready_q;
--   logic               lsu_axi_rvalid_q, lsu_axi_rready_q;
--   logic [1:0]         lsu_axi_rresp_q;
--   logic [LSU_BUS_TAG-1:0] lsu_axi_rid_q;
--   logic [63:0]        lsu_axi_rdata_q;
--
--   logic               disable_nonblock_load;
--   //logic               lsu_wb_empty_any;
--   logic               store_hit_rdbuf_dc2;
--   
--   assign disable_nonblock_load = dec_tlu_non_blocking_disable;
--   
--   //assign busfifo_addr_in[0]  = lsu_addr_dc5[31:0];
--   //assign busfifo_addr_in[1]  = end_addr_dc5[31:0];
--   always_comb begin
--      NxtCmdPtr = CmdPtrQ;
--      found0 = '0;
--      for (int i=0; i<DEPTH; i++) begin
--         if (~found0 & (DEPTH > 1)) begin
--            NxtCmdPtr += 1'b1;
--            if (busfifo_state[NxtCmdPtr] == CMD)  found0 = 1'b1;
--         end
--      end
--   end
--   
--   assign WrPtrEn = (lsu_ldbusreq_dc3 & lsu_pkt_dc3.valid & lsu_pkt_dc3.load & ~rdbuf_full_freeze_dc3) | (|busfifo_rst[DEPTH-1:0]);
--   always_comb begin
--      NxtWrPtr = WrPtr;
--      found1 = '0;
--      for (int i=0; i<DEPTH; i++) begin
--         if (~found1 & (DEPTH > 1)) begin
--            NxtWrPtr += 1'b1;
--            if ((busfifo_state[NxtWrPtr] == IDLE) | ((busfifo_state[NxtWrPtr] == DONE) & busfifo_rst[NxtWrPtr])) found1 = 1'b1;
--         end
--      end
--   end
--
--   always_comb begin
--      read_buffer_full = 1'b1;
--      for (int i=0; i<DEPTH; i++) begin
--         read_buffer_full &= ((busfifo_state[i] != IDLE) | ((busfifo_state[i] == IDLE) & lsu_ldbusreq_dc3 & ~rdbuf_full_freeze_dc3 & (DEPTH_LOG2'(i) == WrPtr)));// (busfifo_state_en[i]));
--      end
--   end
--   
--   //assign CmdPtr  = (busfifo_state[CmdPtrQ] != CMD) ? NxtCmdPtr : CmdPtrQ;
--   assign CmdPtr  = (((busfifo_state[CmdPtrQ] == CMD) & busfifo_state_bus_en[CmdPtrQ]) | (busfifo_state[CmdPtrQ] != CMD)) ? NxtCmdPtr : CmdPtrQ;
--    
--   // Don't drive b2b reads for the time being (This is done to keep the signals constant over the entire bus clock)
--   //assign lsu_axi_arvalid                 = (busfifo_state[CmdPtr] == CMD) & (~busfifo_block[CmdPtr] | lsu_wb_empty_any) & ~(lsu_axi_arvalid_q & lsu_axi_arready_q);
--   //assign lsu_axi_arvalid                 = (busfifo_state[CmdPtr] == CMD) & ~busfifo_block[CmdPtr] & ~(lsu_axi_arvalid_q & lsu_axi_arready_q);
--   assign lsu_axi_arvalid                 = (busfifo_state[CmdPtr] == CMD) & ~busfifo_block[CmdPtr] & ~busfifo_state_bus_en[CmdPtr];
--   assign lsu_axi_arid[LSU_BUS_TAG-1:0]   = LSU_BUS_TAG'({CmdPtr, (busfifo_sent[CmdPtr][0] | busfifo_sent_en[CmdPtr][0])});
--   assign lsu_axi_araddr[31:0]            = busfifo_sideeffects[CmdPtr] ? busfifo_addr_lo[CmdPtr][31:0] :    // side effect loads are always aligned
--                                                                          (busfifo_sent[CmdPtr][0] | busfifo_sent_en[CmdPtr][0]) ? {busfifo_addr_hi[CmdPtr][31:3],3'b0} : {busfifo_addr_lo[CmdPtr][31:3],3'b0};
--   assign lsu_axi_arsize[2:0]             = busfifo_sideeffects[CmdPtr] ? {1'b0,busfifo_sz[CmdPtr][1:0]} : 3'b011;
--   assign lsu_axi_arcache[3:0]            = busfifo_sideeffects[CmdPtr] ? 4'b0 : 4'b1111;
--   assign lsu_axi_arprot[2:0]             = 3'b0;       
--   assign lsu_axi_arregion[3:0]           = lsu_axi_araddr[31:28];
--   assign lsu_axi_arlen[7:0]              = '0;
--   assign lsu_axi_arburst[1:0]            = 2'b01;
--   assign lsu_axi_arqos[3:0]              = '0;
--   assign lsu_axi_arlock                  = '0;
--   
--   assign lsu_axi_rready                  = 1'b1;
--
--   assign busfifo_addr_lo_in = lsu_addr_dc3[31:0];
--   assign busfifo_addr_hi_in = end_addr_dc3[31:0];
--   assign busfifo_sz_in      = {lsu_pkt_dc3.word, lsu_pkt_dc3.half};
--   
--   for (genvar i=0; i<DEPTH; i++) begin
--
--      always_comb begin
--         busfifo_wr_en[i]    = '0;
--         busfifo_data_in[i]  = '0;
--         busfifo_data_en[i]  = '0;
--         busfifo_error_en[i] = '0;
--         busfifo_nxtstate[i] = IDLE;
--         busfifo_state_en[i] = '0;
--         busfifo_state_bus_en[i] = '0;
--         busfifo_cmd_sent[i] = '0;
--         busfifo_cmd_resp[i] = '0;
--         busfifo_sent_en[i]  = '0;
--         busfifo_resp_en[i]  = '0;
--         busfifo_rst[i]      = '0;
--         busfifo_block_rst[i] = lsu_write_buffer_empty_any & lsu_bus_clk_en;
--         case (busfifo_state[i])
--            IDLE: begin
--                     busfifo_nxtstate[i] = WAIT_COMMIT;
--                     busfifo_state_en[i] = lsu_ldbusreq_dc3 & lsu_pkt_dc3.valid & lsu_pkt_dc3.load & (i == WrPtr) & ~rdbuf_full_freeze_dc3;
--                     //busfifo_state_en[i] = (i == 0) ? (lsu_ldbusreq_dc5 & ~flush_dc5) : (lsu_ldbusreq_dc5 & ldst_dual_dc5 & ~flush_dc5);
--                     busfifo_wr_en[i] = busfifo_state_en[i];
--                     busfifo_data_en[i] = busfifo_state_en[i];   // This is to initialize data to 0
--   	    end
--            WAIT_COMMIT: begin
--                    busfifo_nxtstate[i] = (lsu_ldbusreq_dc5 & (lsu_commit_dc5 | ld_freeze_dc3) & (i == WrPtr_dc5)) ? WAIT : IDLE;
--                    busfifo_state_en[i] = lsu_ldbusreq_dc5 & (i == WrPtr_dc5);
--            end
--            WAIT: begin
--                     busfifo_nxtstate[i] = CMD;
--                     busfifo_state_en[i] = lsu_bus_clk_en;
--            end
--            CMD: begin
--                     busfifo_nxtstate[i] = RESP;
--                     busfifo_cmd_sent[i] = (CmdPtrQ == i) & lsu_axi_arvalid_q & lsu_axi_arready_q;
--	             busfifo_cmd_resp[i] = lsu_axi_rready_q & lsu_axi_rvalid_q & (lsu_axi_rid_q[LSU_BUS_TAG-1:1] == (LSU_BUS_TAG-1)'(i));
--                     busfifo_sent_en[i]  = {(busfifo_cmd_sent[i] & busfifo_sent[i][0] & busfifo_dual[i]), (busfifo_cmd_sent[i] & ~busfifo_sent[i][0])};
--                     busfifo_resp_en[i]  = {(busfifo_cmd_resp[i] & lsu_axi_rid_q[0]),(busfifo_cmd_resp[i] & ~lsu_axi_rid_q[0])};
--                     busfifo_state_bus_en[i]  = (busfifo_dual[i] & busfifo_sent_en[i][1]) | (~busfifo_dual[i] & busfifo_sent_en[i][0]);
--                     busfifo_state_en[i] = busfifo_state_bus_en[i] & lsu_bus_clk_en;
--                     busfifo_data_in[i][31:0] = busfifo_resp_en[i][1] ? lsu_axi_rdata_q[31:0] : lsu_axi_rdata_q[63:32];
--                     busfifo_data_en[i]    = busfifo_cmd_resp[i] & lsu_bus_clk_en;
--                     busfifo_error_en[i]   = {2{busfifo_data_en[i] & lsu_axi_rresp_q[1]}} & {lsu_axi_rid_q[0], ~lsu_axi_rid_q[0]};
--	    end
--            RESP: begin
--                     busfifo_nxtstate[i] = DONE;
--	             busfifo_cmd_resp[i] = lsu_axi_rready_q & lsu_axi_rvalid_q & (lsu_axi_rid_q[LSU_BUS_TAG-1:1] == (LSU_BUS_TAG-1)'(i));
--                     busfifo_resp_en[i]  = {(busfifo_cmd_resp[i] & lsu_axi_rid_q[0]), (busfifo_cmd_resp[i] & ~lsu_axi_rid_q[0])};
--                     busfifo_state_bus_en[i] = busfifo_cmd_resp[i] & (~busfifo_dual[i] | (&(busfifo_resp[i] | busfifo_resp_en[i])));
--                     busfifo_state_en[i] = busfifo_state_bus_en[i] & lsu_bus_clk_en;
--	             busfifo_data_en[i]  = busfifo_cmd_resp[i] & lsu_bus_clk_en;
--	             busfifo_error_en[i] = {2{busfifo_data_en[i] & lsu_axi_rresp_q[1] & ~(|busfifo_error[i])}} & {lsu_axi_rid_q[0], ~lsu_axi_rid_q[0]};
--                     busfifo_data_in[i][31:0] = (busfifo_state_en[i] & ~(|busfifo_error_en[i])) ? lsu_align(busfifo_data[i][31:0],lsu_axi_rdata_q[63:0],busfifo_resp_en[i][1],busfifo_addr_lo[i][2:0],busfifo_sz[i],busfifo_unsign[i]) :
--                                                                                                  (busfifo_resp_en[i][1] ? lsu_axi_rdata_q[31:0] : lsu_axi_rdata_q[63:32]);
--                 
--  	    end
--            DONE: begin
--                     busfifo_nxtstate[i] = IDLE;
--                     busfifo_rst[i]      = lsu_bus_clk_en_q;
--                     busfifo_state_en[i] = busfifo_rst[i];
--   	    end 
--            default : begin
--                     busfifo_wr_en[i]    = '0;
--                     busfifo_data_in[i]  = '0;
--                     busfifo_data_en[i]  = '0;
--                     busfifo_error_en[i] = '0;
--                     busfifo_nxtstate[i] = IDLE;
--                     busfifo_state_en[i] = '0;
--                     busfifo_cmd_sent[i] = '0;
--                     busfifo_cmd_resp[i] = '0;
--                     busfifo_sent_en[i]  = '0;
--                     busfifo_resp_en[i]  = '0;
--                     busfifo_rst[i]      = '0;
--	       end
--         endcase
--      end
--
--      //rvdffsc #(.WIDTH($bits(state_t))) busfifo_state_ff (.din(busfifo_nxtstate[i]), .dout({busfifo_state[i]}), .sel(busfifo_state_en[i]), .clear(busfifo_rst), .clk(lsu_free_c2_clk), .*);
--      rvdffsc #(.WIDTH($bits(state_t))) busfifo_state_ff (.din(busfifo_nxtstate[i]), .dout({busfifo_state[i]}), .en(busfifo_state_en[i]), .clear(busfifo_rst[i]), .clk(lsu_free_c2_clk), .*);
--      rvdffsc  #(.WIDTH(1)) busfifo_blockff (.din(lsu_read_buffer_block_dc3), .dout(busfifo_block[i]), .en(busfifo_wr_en[i]), .clear(busfifo_block_rst[i]), .clk(lsu_rdbuf_c1_clk), .*);  // Stall the entry till write buffer is empty
--      rvdffs  #(.WIDTH(1)) busfifo_dualff (.din(ldst_dual_dc3), .dout(busfifo_dual[i]), .en(busfifo_wr_en[i]), .clk(lsu_rdbuf_c1_clk), .*);
--      rvdffs  #(.WIDTH(1)) busfifo_nbff (.din(lsu_nonblock_load_valid_dc3), .dout(busfifo_nb[i]), .en(busfifo_wr_en[i]), .clk(lsu_rdbuf_c1_clk), .*);
--      rvdffs  #(.WIDTH(1)) busfifo_sideeffectsff (.din(is_sideeffects_dc3), .dout(busfifo_sideeffects[i]), .en(busfifo_wr_en[i]), .clk(lsu_rdbuf_c1_clk), .*);
--      rvdffs  #(.WIDTH(1)) busfifo_unsignff (.din(lsu_pkt_dc3.unsign), .dout(busfifo_unsign[i]), .en(busfifo_wr_en[i]), .clk(lsu_rdbuf_c1_clk), .*);
--      rvdffs  #(.WIDTH(2)) busfifo_szff (.din(busfifo_sz_in[1:0]), .dout(busfifo_sz[i]), .en(busfifo_wr_en[i]), .clk(lsu_rdbuf_c1_clk), .*);
--      rvdffsc #(.WIDTH(1)) busfifo_sentloff (.din(1'b1), .dout(busfifo_sent[i][0]), .en(busfifo_sent_en[i][0] & lsu_bus_clk_en), .clear(busfifo_rst[i]), .clk(lsu_rdbuf_c1_clk), .*);
--      rvdffsc #(.WIDTH(1)) busfifo_senthiff (.din(1'b1), .dout(busfifo_sent[i][1]), .en(busfifo_sent_en[i][1] & lsu_bus_clk_en), .clear(busfifo_rst[i]), .clk(lsu_rdbuf_c1_clk), .*);
--      rvdffsc #(.WIDTH(1)) busfifo_resploff (.din(1'b1), .dout(busfifo_resp[i][0]), .en(busfifo_resp_en[i][0] & lsu_bus_clk_en), .clear(busfifo_rst[i]), .clk(lsu_rdbuf_c1_clk), .*);
--      rvdffsc #(.WIDTH(1)) busfifo_resphiff (.din(1'b1), .dout(busfifo_resp[i][1]), .en(busfifo_resp_en[i][1] & lsu_bus_clk_en), .clear(busfifo_rst[i]), .clk(lsu_rdbuf_c1_clk), .*);
--      rvdffe #(.WIDTH(32)) busfifo_addrloff (.din(busfifo_addr_lo_in), .dout(busfifo_addr_lo[i]), .en(busfifo_wr_en[i]), .*);
--      rvdffe #(.WIDTH(32)) busfifo_addrhiff (.din(busfifo_addr_hi_in), .dout(busfifo_addr_hi[i]), .en(busfifo_wr_en[i]), .*);
--      rvdffe #(.WIDTH(32)) busfifo_dataff (.din(busfifo_data_in[i][31:0]), .dout(busfifo_data[i]), .en(busfifo_data_en[i]), .*);
--      rvdffsc #(.WIDTH(1)) busfifo_errorloff (.din(1'b1), .dout(busfifo_error[i][0]), .en(busfifo_error_en[i][0]), .clear(busfifo_error_rst[i]), .clk(lsu_rdbuf_c1_clk), .*);
--      rvdffsc #(.WIDTH(1)) busfifo_errorhiff (.din(1'b1), .dout(busfifo_error[i][1]), .en(busfifo_error_en[i][1]), .clear(busfifo_error_rst[i]), .clk(lsu_rdbuf_c1_clk), .*);
--   end
--   
--   assign FreezePtrEn  = lsu_ldbusreq_dc3 & ld_freeze_dc3;
--   assign ld_freeze_en = addr_external_dc2 & (dec_nonblock_load_freeze_dc2 | disable_nonblock_load | is_sideeffects_dc2) & lsu_busreq_dc2 & lsu_pkt_dc2.load & ~lsu_freeze_dc3 & ~flush_dc2_up & ~ld_full_hit_dc2;
--   always_comb begin
--      ld_freeze_rst = flush_dc3;
--      for (int i=0; i<DEPTH; i++) begin
--         ld_freeze_rst |= (busfifo_rst[i] & (DEPTH_LOG2'(i) == FreezePtr) & ~FreezePtrEn & ld_freeze_dc3 & ~rdbuf_full_freeze_dc3);
--      end
--   end
--
--   assign rdbuf_full_freeze_en = lsu_busreq_dc2 & lsu_pkt_dc2.load & ~flush_dc2_up & ~flush_dc3 & ~lsu_freeze_dc3 & ~ld_full_hit_dc2 &
--                                 ((disable_nonblock_load & ~lsu_read_buffer_empty_any) | (~disable_nonblock_load & read_buffer_full));
--   assign rdbuf_full_freeze_rst = (|busfifo_rst[DEPTH-1:0]) | flush_dc3;
--
--   assign busfifo_error_rst[DEPTH-1:0]  = busfifo_rst[DEPTH-1:0];
--   assign ld_read_buffer_data_dc3[31:0] = busfifo_data[FreezePtr][31:0];
--   assign ld_precise_bus_error          = (|busfifo_error[FreezePtr][1:0]) & busfifo_rst[FreezePtr] & lsu_freeze_dc3 & ld_freeze_rst & ~flush_dc3;   // Don't give bus error for interrupts
--   assign ld_bus_error_addr_dc3[31:0]   = busfifo_addr_lo[FreezePtr][31:0];
--
--   assign lsu_read_buffer_empty_any = ~(|busfifo_state[DEPTH-1:0]);
--   
--   assign lsu_ldbusreq_dc2 = lsu_busreq_dc2 & lsu_pkt_dc2.load & ~ld_full_hit_dc2 & ~ld_freeze_dc3;
--   
--   // Zero out the load forwarding signals since there is no forwarding from read buffer
--   assign ld_hit_rdbuf_hi = '0;
--   assign ld_hit_rdbuf_lo = '0;
--   assign ld_fwddata_rdbuf_hi[63:0] = '0;
--   assign ld_fwddata_rdbuf_lo[63:0] = '0;
--
--   // Block the write buffer if store in dc2 matches a load in dc3/readbuf
--   always_comb begin
--      store_hit_rdbuf_dc2 = lsu_ldbusreq_dc3 & lsu_pkt_dc3.valid & lsu_pkt_dc3.load & 
--                            ((lsu_addr_dc2[31:3] == lsu_addr_dc3[31:3]) | 
--                             (ldst_dual_dc3 & (lsu_addr_dc2[31:3] == end_addr_dc3[31:3])) |
--                             (ldst_dual_dc2 & (end_addr_dc2[31:3] == lsu_addr_dc3[31:3])) |
--                             (ldst_dual_dc2 & ldst_dual_dc3 & (end_addr_dc2[31:3] == end_addr_dc3[31:3])));
--      for (int i=0; i<DEPTH; i++) begin
--         store_hit_rdbuf_dc2 |= ((busfifo_state[i] != IDLE) & (busfifo_state[i] != DONE)) & 
--                                ((lsu_addr_dc2[31:3] == busfifo_addr_lo[i][31:3]) | 
--                                 (busfifo_dual[i] & (lsu_addr_dc2[31:3] == busfifo_addr_hi[i][31:3])) |
--                                 (ldst_dual_dc2 & (end_addr_dc2[31:3] == busfifo_addr_lo[i][31:3])) |
--                                 (ldst_dual_dc2 & busfifo_dual[i] & (end_addr_dc2[31:3] == busfifo_addr_hi[i][31:3])));
--         
--      end
--   end
--   assign write_buffer_block_any = lsu_busreq_dc2 & lsu_pkt_dc2.valid & lsu_pkt_dc2.store & store_hit_rdbuf_dc2;
--
--   
--   // Non blocking ports
--   assign lsu_nonblock_load_valid_dc3 = lsu_ldbusreq_dc3 & lsu_pkt_dc3.valid & lsu_pkt_dc3.load & ~flush_dc3 & ~dec_nonblock_load_freeze_dc3 & ~disable_nonblock_load & ~lsu_freeze_dc3 & ~disable_nonblock_load;
--   assign lsu_nonblock_load_tag_dc3[DEPTH_LOG2-1:0] = WrPtr[DEPTH_LOG2-1:0];
--   assign lsu_nonblock_load_inv_dc5 = lsu_nonblock_load_valid_dc5 & ~lsu_commit_dc5;
--   assign lsu_nonblock_load_inv_tag_dc5[DEPTH_LOG2-1:0] = WrPtr_dc5[DEPTH_LOG2-1:0];      // dc5 tag needs to be accurate even if there is no invalidate
--
--   always_comb begin
--      lsu_nonblock_load_data_valid = '0;
--      lsu_nonblock_load_data_error = '0;
--      lsu_nonblock_load_data_tag[DEPTH_LOG2-1:0] = '0;
--      lsu_nonblock_load_data[31:0] = '0;
--      ld_imprecise_bus_error_any = '0;
--      ld_imprecise_bus_error_addr[31:0] = '0;
--      //write_buffer_block_any = '0;
--      for (int i=0; i<DEPTH; i++) begin
--          lsu_nonblock_load_data_valid      |= lsu_bus_clk_en_q & (busfifo_state[i] == DONE) & ~disable_nonblock_load & busfifo_nb[i] & ~(|busfifo_error[i]);
--          lsu_nonblock_load_data_error      |= lsu_bus_clk_en_q & (busfifo_state[i] == DONE) & ~disable_nonblock_load & (|busfifo_error[i]) & busfifo_nb[i];
--          lsu_nonblock_load_data_tag[DEPTH_LOG2-1:0]   |= DEPTH_LOG2'(i) & {DEPTH_LOG2{busfifo_state[i] == DONE}};
--          lsu_nonblock_load_data[31:0]      |= busfifo_data[i][31:0] & {32{busfifo_state[i] == DONE}};
--          ld_imprecise_bus_error_any        |= lsu_bus_clk_en_q & ~disable_nonblock_load & (busfifo_state[i] == DONE) & (|busfifo_error[i]) & busfifo_nb[i];
--          ld_imprecise_bus_error_addr[31:0] |= {32{lsu_bus_clk_en_q & (busfifo_state[i] == DONE) & (|busfifo_error[i]) & busfifo_nb[i]}} & busfifo_addr_lo[i][31:0];
--          //write_buffer_block_any            |= ~disable_nonblock_load & (((busfifo_state[i] != IDLE) & (busfifo_state[i] != RESP)) |
--          //                                                               ((busfifo_state[i] == IDLE) & lsu_ldbusreq_dc3 & lsu_pkt_dc3.valid & lsu_pkt_dc3.load & ~rdbuf_full_freeze_dc3 & (DEPTH_LOG2'(i) == WrPtr)));
--      end
--   end
--   
--   // Don't sent the ld to bus till write buffer is empty
--   rvdff #(.WIDTH(1)) read_buffer_blockff (.din(lsu_read_buffer_block_dc2), .dout(lsu_read_buffer_block_dc3), .clk(lsu_freeze_c2_dc3_clk), .*);
--
--   // Pointers should only update when there is flush or ahb clock. We should also come out of freeze on ahb clock
--   rvdffsc #(.WIDTH(1)) ld_freezeff (.din(1'b1), .dout(ld_freeze_dc3), .en(ld_freeze_en), .clear(ld_freeze_rst), .clk(lsu_free_c2_clk), .*);
--   rvdffsc #(.WIDTH(1)) rdbuf_full_freezeff (.din(1'b1), .dout(rdbuf_full_freeze_dc3), .en(rdbuf_full_freeze_en), .clear(rdbuf_full_freeze_rst), .clk(lsu_free_c2_clk), .*);
--   rvdff #(.WIDTH(DEPTH_LOG2)) lsu_CmdPtrff (.din(CmdPtr), .dout(CmdPtrQ), .clk(lsu_busm_clk), .*);
--   rvdffs #(.WIDTH(DEPTH_LOG2)) lsu_WrPtrff (.din(NxtWrPtr), .dout(WrPtr), .en(WrPtrEn), .clk(lsu_free_c2_clk), .*);
--   rvdffs #(.WIDTH(DEPTH_LOG2)) lsu_FreezePtrff (.din(WrPtr), .dout(FreezePtr), .en(FreezePtrEn), .clk(lsu_free_c2_clk), .*);
--   rvdff #(.WIDTH(1)) ld_bus_errorff (.din(ld_precise_bus_error), .dout(ld_bus_error_dc3), .clk(lsu_free_c2_clk), .*);
--   
--   //rvdff #(.WIDTH(1)) lsu_wb_empty_ff (.din(lsu_write_buffer_empty_any), .dout(lsu_wb_empty_any), .clk(lsu_busm_clk), .*);             // syncing to the bus clock
--  
--   rvdff #(.WIDTH(1)) axi_arvalid_ff (.din(lsu_axi_arvalid), .dout(lsu_axi_arvalid_q), .clk(lsu_busm_clk), .*);
--   rvdff #(.WIDTH(1)) axi_arready_ff (.din(lsu_axi_arready), .dout(lsu_axi_arready_q), .clk(lsu_busm_clk), .*);
--   rvdff #(.WIDTH(1)) axi_rvalid_ff (.din(lsu_axi_rvalid), .dout(lsu_axi_rvalid_q), .clk(lsu_busm_clk), .*);
--   rvdff #(.WIDTH(1)) axi_rready_ff (.din(lsu_axi_rready), .dout(lsu_axi_rready_q), .clk(lsu_busm_clk), .*);
--   rvdff #(.WIDTH(2)) axi_rresp_ff (.din(lsu_axi_rresp), .dout(lsu_axi_rresp_q), .clk(lsu_busm_clk), .*);
--   rvdff #(.WIDTH(LSU_BUS_TAG)) axi_rid_ff (.din(lsu_axi_rid[LSU_BUS_TAG-1:0]), .dout(lsu_axi_rid_q[LSU_BUS_TAG-1:0]), .clk(lsu_busm_clk), .*);
--   rvdffe #(.WIDTH(64)) axi_rdata_ff (.din(lsu_axi_rdata[63:0]), .dout(lsu_axi_rdata_q[63:0]), .en(lsu_axi_rvalid & lsu_axi_rready & lsu_bus_clk_en), .*);
--
--   // Fifo flops
--   rvdff #(.WIDTH(1)) dec_nonblock_load_freeze_dc3ff (.din(dec_nonblock_load_freeze_dc2), .dout(dec_nonblock_load_freeze_dc3), .clk(lsu_freeze_c2_dc3_clk), .*);
--   rvdffs #(.WIDTH(1)) lsu_ldbusreq_dc3ff (.din(lsu_ldbusreq_dc2), .dout(lsu_ldbusreq_dc3), .en(~(rdbuf_full_freeze_dc3 & lsu_freeze_dc3)), .clk(lsu_free_c2_clk), .*);   // ldbusreq_dc3 needs to stay high for rdbuf full freeze since it needs to go to bus once freeze is gone
--   rvdff #(.WIDTH(1)) lsu_ldbusreq_dc4ff (.din(lsu_ldbusreq_dc3 & ~(rdbuf_full_freeze_dc3 & lsu_freeze_dc3)), .dout(lsu_ldbusreq_dc4), .clk(lsu_c2_dc4_clk), .*);
--   rvdff #(.WIDTH(1)) lsu_ldbusreq_dc5ff (.din(lsu_ldbusreq_dc4), .dout(lsu_ldbusreq_dc5), .clk(lsu_c2_dc5_clk), .*);
--   
--   rvdff #(.WIDTH(1)) lsu_nonblock_load_valid_dc4ff (.din(lsu_nonblock_load_valid_dc3), .dout(lsu_nonblock_load_valid_dc4), .clk(lsu_c2_dc4_clk), .*);
--   rvdff #(.WIDTH(1)) lsu_nonblock_load_valid_dc5ff (.din(lsu_nonblock_load_valid_dc4), .dout(lsu_nonblock_load_valid_dc5), .clk(lsu_c2_dc5_clk), .*);
--   
--   // WrPtr flops to dc5
--   assign WrPtr_dc3[DEPTH_LOG2-1:0] = WrPtr[DEPTH_LOG2-1:0];
--   rvdff #(.WIDTH(DEPTH_LOG2)) WrPtr_dc4ff (.din(WrPtr_dc3[DEPTH_LOG2-1:0]), .dout(WrPtr_dc4[DEPTH_LOG2-1:0]), .clk(lsu_c2_dc4_clk), .*);
--   rvdff #(.WIDTH(DEPTH_LOG2)) WrPtr_dc5ff (.din(WrPtr_dc4[DEPTH_LOG2-1:0]), .dout(WrPtr_dc5[DEPTH_LOG2-1:0]), .clk(lsu_c2_dc5_clk), .*);
--
--endmodule // lsu_bus_read_buffer
-diff --git a/design/lsu/lsu_bus_write_buffer.sv b/design/lsu/lsu_bus_write_buffer.sv
-deleted file mode 100644
-index d195b9d..0000000
---- a/design/lsu/lsu_bus_write_buffer.sv
-+++ /dev/null
-@@ -1,570 +0,0 @@
--// SPDX-License-Identifier: Apache-2.0
--// Copyright 2019 Western Digital Corporation or its affiliates.
--// 
--// Licensed under the Apache License, Version 2.0 (the "License");
--// you may not use this file except in compliance with the License.
--// You may obtain a copy of the License at
--// 
--// http://www.apache.org/licenses/LICENSE-2.0
--// 
--// Unless required by applicable law or agreed to in writing, software
--// distributed under the License is distributed on an "AS IS" BASIS,
--// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
--// See the License for the specific language governing permissions and
--// limitations under the License.
--
--//********************************************************************************
--// $Id$
--//
--// 
--// Owner: 
--// Function: lsu to bus interface with interface queue
--// Comments:
--//
--//********************************************************************************
--
--// Function to get the length from byte enable
--function automatic logic [1:0] get_wrbuf_size;
--   input logic [7:0] byteen;
--
--   logic [1:0]       size;
--
--   if ((|byteen[3:0]) & (|byteen[7:4])) begin
--      size[1:0] = 2'b11;
--   end else if (|byteen[3:0]) begin
--      if ((|byteen[3:2]) & (|byteen[1:0])) begin                                                                                     
--         size[1:0] = 2'b10;
--      end else begin
--         size[1:0] = (|byteen[1:0]) ? ((&byteen[1:0]) ? 2'b01 : 2'b0) : ((&byteen[3:2]) ? 2'b01 : 2'b0);                                 
--      end
--   end else begin
--      if ((|byteen[7:6]) & (|byteen[5:4])) begin                                                                                     
--         size[1:0] = 2'b10;
--      end else begin
--         size[1:0] = (|byteen[5:4]) ? ((&byteen[5:4]) ? 2'b01 : 2'b0) : ((&byteen[7:6]) ? 2'b01 : 2'b0);                                 
--      end
--   end
--
--   return size[1:0];   
--endfunction // if
--
--// Function to get the lower three bits of address
--function automatic logic [2:0] get_wrbuf_addr;
--   input logic [1:0] size;
--   input logic [2:0] curr_addr;
--
--   logic [2:0]       merged_addr;
--
--   merged_addr[2:0] = {((size[1:0] != 2'b11) & curr_addr[2]),   // Gate addr bit 2 if size not DW
--                       ((size[1]   != 1'b1) & curr_addr[1]),   // Gate addr bit 1 if size not DW/W
--                       ((size[1:0] == 2'b0)  & curr_addr[0])};  // Gate addr bit 0 if size not DW/W/HW
--
--   return merged_addr[2:0];
--endfunction
--
--
--module lsu_bus_write_buffer (
--   input logic                          lsu_wrbuf_c1_clk,
--   input logic                          lsu_freeze_c2_dc3_clk,
--   input logic                          lsu_c2_dc4_clk,
--   input logic                          lsu_c2_dc5_clk,
--   input logic                          lsu_free_c2_clk,
--   input logic                          lsu_busm_clk,
--   input logic                          dec_tlu_wb_coalescing_disable,
--   input logic                          clk, 
--   input logic                          rst_l,
--
--   input logic                          lsu_busreq_dc2,
--   input lsu_pkt_t                      lsu_pkt_dc1,
--   input lsu_pkt_t                      lsu_pkt_dc2,
--   input lsu_pkt_t                      lsu_pkt_dc3,
--   input lsu_pkt_t                      lsu_pkt_dc5,
--   input logic [31:0]                   lsu_addr_dc2,
--   input logic [31:0]                   end_addr_dc2,
--   input logic [31:0]                   lsu_addr_dc5,
--   input logic [31:0]                   end_addr_dc5,
--   input logic [3:0]                    ldst_byteen_dc5,
--   input logic [31:0]                   store_data_dc5, // only need lower 32 bits though
--   input logic                          is_sideeffects_dc5,
--   input logic                          lsu_commit_dc5,
--   input logic                          is_aligned_dc5,
--   input logic                          lsu_freeze_dc3,
--   //input logic                          read_buffer_stall,
--   input logic                          write_buffer_block_any,       // Block the write buffer if there are outstanding non-blocking loads
--   input logic                          lsu_read_buffer_empty_any,        // Used for clock enable
--   input logic                          flush_dc2_up,
--   input logic                          flush_dc3,
--                             
--   input logic                          ldst_dual_dc1,
--   input logic                          ldst_dual_dc2,
--   input logic                          ldst_dual_dc3,
--   input logic                          ldst_dual_dc4,
--   input logic                          ldst_dual_dc5,
--
--   input logic [15:0]                   ldst_byteen_ext_dc2,
--   input logic [15:0]                   ldst_byteen_ext_dc5,
-- 
--   output logic                         store_freeze_dc3, 
--   output logic                         lsu_stbusreq_dc5,
--   output logic                         store_bus_error_any,
--   output logic [31:0]                  store_bus_error_addr,
--   output logic                         lsu_write_buffer_full_any,
--   output logic                         lsu_write_buffer_empty_any,
--			     
--   output logic [7:0]                   ld_byte_hit_wrbuf_lo, ld_byte_hit_wrbuf_hi,
--   output logic [63:0]                  ld_fwddata_wrbuf_lo, ld_fwddata_wrbuf_hi,
--   
--   // AXI Write Channels
--   output logic                         lsu_axi_awvalid,
--   input  logic                         lsu_axi_awready,
--   output logic [`RV_LSU_BUS_TAG-1:0]   lsu_axi_awid,
--   output logic [31:0]                  lsu_axi_awaddr,
--   output logic [3:0]                   lsu_axi_awregion,
--   output logic [7:0]                   lsu_axi_awlen,
--   output logic [2:0]                   lsu_axi_awsize,
--   output logic [1:0]                   lsu_axi_awburst,
--   output logic                         lsu_axi_awlock,
--   output logic [3:0]                   lsu_axi_awcache,
--   output logic [2:0]                   lsu_axi_awprot,
--   output logic [3:0]                   lsu_axi_awqos,
--                             
--   output logic                         lsu_axi_wvalid,                                       
--   input  logic                         lsu_axi_wready,
--   output logic [63:0]                  lsu_axi_wdata,
--   output logic [7:0]                   lsu_axi_wstrb,
--   output logic                         lsu_axi_wlast,
--
--   input  logic                         lsu_axi_bvalid,
--   output logic                         lsu_axi_bready,
--   input  logic [1:0]                   lsu_axi_bresp,
--   input  logic [`RV_LSU_BUS_TAG-1:0]   lsu_axi_bid,
--
--   input logic                          lsu_bus_clk_en,
--   input logic                          lsu_bus_clk_en_q,
--   input logic                          scan_mode
--
--);
--
--`include "global.h"
--   
--   // States for entries
--   // For St: IDLE -> WAIT -> CMD -> RESP -> IDLE
--   typedef enum logic [2:0] {IDLE=3'b000, WAIT=3'b001, CMD=3'b010, CMD_ADDR=3'b011, CMD_DATA=3'b100, RESP=3'b101} state_t;
--
--   localparam DEPTH = LSU_WRBUF_DEPTH;
--   localparam DEPTH_LOG2 = $clog2(DEPTH);
--   localparam WATERMARK = 0;   // Not tested for anything other than 0 (will need fence to drain write buffer if it's non zero)
--   
--   state_t [DEPTH-1:0]       busfifo_state;
--   state_t [DEPTH-1:0]       busfifo_nxtstate;
--   logic [DEPTH-1:0]         busfifo_state_en;
--   logic [DEPTH-1:0]         busfifo_bus_state_en;
--
--   logic [DEPTH-1:0]         busfifo_wr_en;
--   logic [DEPTH-1:0]         busfifo_data_en;
--   logic [DEPTH-1:0][31:0]   busfifo_addr;
--   logic [DEPTH-1:0][63:0]   busfifo_data;
--   logic [DEPTH-1:0][7:0]    busfifo_byteen;
--   logic [DEPTH-1:0][1:0]    busfifo_size;
--   logic [DEPTH-1:0]         busfifo_sideeffects;
--   
--   logic [DEPTH-1:0][7:0]    busfifo_byteen_in;
--   logic [DEPTH-1:0][1:0]    busfifo_size_in;
--   logic [DEPTH-1:0][63:0]   busfifo_data_in;
--   logic [DEPTH-1:0][31:0]   busfifo_addr_in;
--   logic [DEPTH-1:0][31:0]   busfifo_addr_in_temp;
--   //logic [DEPTH-1:0]         store_bus_error_vec;
--   
--   logic [DEPTH-1:0] 	     store_hitvec_hi_dc5, store_hitvec_lo_dc5;
--   logic                     store_merge_hi_dc5, store_merge_lo_dc5, store_merge_all_dc5;
--   logic                     store_busreq_hi_dc5, store_busreq_lo_dc5;
--   
--   logic [127:0]             store_data_ext_dc5;
--   logic [63:0]              store_data_hi_dc5, store_data_lo_dc5;
--   logic [7:0] 	             ldst_byteen_hi_dc5, ldst_byteen_lo_dc5;
--   logic [7:0]               ldst_byteen_mask_lo_dc5;
--   
--   logic [7:0]             ldst_byteen_hi_dc2, ldst_byteen_lo_dc2;
--   logic [DEPTH-1:0]       ld_addr_hitvec_lo, ld_addr_hitvec_hi;
--   logic [DEPTH-1:0][7:0]  ld_byte_hitvec_lo, ld_byte_hitvec_hi;
--   logic [DEPTH-1:0][63:0] ld_fwddatavec_lo, ld_fwddatavec_hi;
--
--   logic                     lsu_stbusreq_dc2, lsu_stbusreq_dc3, lsu_stbusreq_dc4;
--
--   logic                     CmdPtrEn, WrPtrEn;
--   logic [DEPTH_LOG2-1:0]    WrPtr, WrPtrPlus1, WrPtrPlus2, NxtWrPtr;
--   logic [DEPTH_LOG2-1:0]    WrPtrLo, WrPtrHi;
--   logic [DEPTH_LOG2-1:0]    CmdPtr, CmdPtrQ;
--   logic [DEPTH_LOG2-1:0]    RspPtr;
--
--   logic                     found;
--   logic [DEPTH-1:0]         wrbuf_avl_any;
--   logic [3:0]               wrbuf_numvld_any, wrbuf_numvld_anyQ;
--   logic [3:0] 	             wrbuf_specvld_any;
--   logic [1:0] 	             wrbuf_specvld_dc1, wrbuf_specvld_dc2, wrbuf_specvld_dc3, wrbuf_specvld_dc4, wrbuf_specvld_dc5;
--   
--   logic                     store_freeze_en, store_freeze_rst;
--
--   logic                     lsu_axi_awvalid_q, lsu_axi_awready_q;
--   logic                     lsu_axi_wvalid_q, lsu_axi_wready_q;
--   logic                     lsu_axi_bvalid_q, lsu_axi_bready_q;
--   logic [LSU_BUS_TAG-1:0]   lsu_axi_bid_q;
--   logic [1:0]               lsu_axi_bresp_q;
--   logic [1:0] 		     store_bus_error_lo;
--   logic [1:0] 		     store_bus_error_lw;
--   logic [1:0] 		     store_bus_error_uw;
--   
--
--   //assign store_data_ext_dc5[127:0] = {96'b0, store_data_dc5[31:0]} << {8*lsu_addr_dc5[2:0]};
--   assign store_data_ext_dc5[127:0] = {96'b0, store_data_dc5[31:0]} << {lsu_addr_dc5[2:0],3'b0};
--   assign store_data_hi_dc5[63:0]   = store_data_ext_dc5[127:64];
--   assign store_data_lo_dc5[63:0]   = store_data_ext_dc5[63:0];
--   assign ldst_byteen_hi_dc5[7:0]   = ldst_byteen_ext_dc5[15:8];
--   assign ldst_byteen_lo_dc5[7:0]   = ldst_byteen_ext_dc5[7:0];
--
--   assign ldst_byteen_mask_lo_dc5[7:0] = 8'hff << lsu_addr_dc5[2:0];
--
--   
--   // Hit logic for coalescing
--   assign store_merge_hi_dc5 = 1'b0;  //|store_hitvec_hi_dc5[DEPTH-1:0];
--
--   assign store_merge_lo_dc5 = |store_hitvec_lo_dc5[DEPTH-1:0];
--   assign store_busreq_hi_dc5 = lsu_stbusreq_dc5 & lsu_commit_dc5 & ldst_dual_dc5;
--   assign store_busreq_lo_dc5 = lsu_stbusreq_dc5 & lsu_commit_dc5;
--   assign store_merge_all_dc5 = (store_busreq_lo_dc5 & store_merge_lo_dc5) & (~store_busreq_hi_dc5 | store_merge_hi_dc5);
--   for (genvar i=0; i<DEPTH; i++) begin
--      // Entry shouldn't coalesce if it's draining. Only coalescing no overwrite
--      // Coalescing is done only to the last entry and only to top bytes (so done only for lo entry)
--      assign store_hitvec_hi_dc5[i] = '0;
--      assign store_hitvec_lo_dc5[i] = (lsu_addr_dc5[31:3] == busfifo_addr[i][31:3]) & ~(|(busfifo_byteen[i][7:0] & ldst_byteen_mask_lo_dc5[7:0])) & ~dec_tlu_wb_coalescing_disable & ~is_sideeffects_dc5 &
--        			      ((busfifo_state[i] == WAIT)| (busfifo_state[i] == CMD)) & (i != CmdPtr[DEPTH_LOG2-1:0]) & (i != CmdPtrQ[DEPTH_LOG2-1:0]) & lsu_stbusreq_dc5 & lsu_commit_dc5;
--   end
--   
--   // Generate the busfifo inputs
--   always_comb begin
--      for (int i=0; i<DEPTH; i++) begin
--         busfifo_byteen_in[i] = '0;
--         busfifo_size_in[i] = '0;
--         busfifo_addr_in_temp[i]  = '0;
--         busfifo_addr_in[i]  = '0;
--	 
--         // Non-coalescing case
--         if ((DEPTH_LOG2'(i) == WrPtrLo) & ~store_merge_lo_dc5) begin
--            busfifo_byteen_in[i][7:0] = ldst_byteen_ext_dc5[7:0];
--            busfifo_addr_in_temp[i][31:0]  = lsu_addr_dc5[31:0];
--         end else if ((DEPTH_LOG2'(i) == WrPtrHi) & ~store_merge_hi_dc5) begin
--            busfifo_byteen_in[i][7:0] = ldst_byteen_ext_dc5[15:8];
--            busfifo_addr_in_temp[i][31:0]  = end_addr_dc5[31:0];
--         end     
--
--         // Coalescing case
--	 if (store_hitvec_hi_dc5[i]) begin
--            busfifo_byteen_in[i][7:0] = busfifo_byteen[i][7:0] | ldst_byteen_hi_dc5[7:0];  // Merge existing byteen with coming store
--            busfifo_addr_in_temp[i][31:0]  = end_addr_dc5[31:0];                                // Overwrite the address
--	 end 
--         else if (store_hitvec_lo_dc5[i]) begin
--            busfifo_byteen_in[i][7:0] = busfifo_byteen[i][7:0] | ldst_byteen_lo_dc5[7:0];  // Merge existing byteen with coming store
--            busfifo_addr_in_temp[i][31:0]  = lsu_addr_dc5[31:0];                                // Overwrite the address 
--	 end
--
--         busfifo_size_in[i][1:0]   = get_wrbuf_size(busfifo_byteen_in[i]);
--         busfifo_addr_in[i][31:0]  = {busfifo_addr_in_temp[i][31:3], get_wrbuf_addr(busfifo_size_in[i], busfifo_addr_in_temp[i][2:0])};
--      end 
--   end
--
--   // Generate the busfifo data input for coalescing and non-coalescing
--   for (genvar i=0; i<DEPTH; i++) begin
--      for (genvar j=0; j<8; j++) begin
--         assign busfifo_data_in[i][(8*j)+7:(8*j)] = ((store_hitvec_hi_dc5[i] | (i == WrPtrHi)) & ldst_byteen_hi_dc5[j]) ? store_data_hi_dc5[(8*j)+7:(8*j)] :
--						    ((store_hitvec_lo_dc5[i] | (i == WrPtrLo)) & ldst_byteen_lo_dc5[j]) ? store_data_lo_dc5[(8*j)+7:(8*j)] :
--                                                                                                                          busfifo_data[i][(8*j)+7:(8*j)];
--      end
--   end
--
--   // Write Buffer hit logic. Used to block the bus loads behind the writes
--   assign ldst_byteen_hi_dc2[7:0]   = ldst_byteen_ext_dc2[15:8];
--   assign ldst_byteen_lo_dc2[7:0]   = ldst_byteen_ext_dc2[7:0];
--   for (genvar i=0; i<DEPTH; i++) begin
--      assign ld_addr_hitvec_lo[i] = (lsu_addr_dc2[31:3] == busfifo_addr[i][31:3]) & (busfifo_state[i] != IDLE) & lsu_busreq_dc2;
--      assign ld_addr_hitvec_hi[i] = (end_addr_dc2[31:3] == busfifo_addr[i][31:3]) & (busfifo_state[i] != IDLE) & lsu_busreq_dc2;
--      //assign ld_addr_hitvec_lo[i] = (lsu_addr_dc2[31:3] == busfifo_addr[i][31:3]) & ((busfifo_state[i] == WAIT) | (busfifo_state[i] == CMD)) & lsu_busreq_dc2;
--      //assign ld_addr_hitvec_hi[i] = (end_addr_dc2[31:3] == busfifo_addr[i][31:3]) & ((busfifo_state[i] == WAIT) | (busfifo_state[i] == CMD)) & lsu_busreq_dc2;
--      for (genvar j=0; j<8; j++) begin
--         assign ld_byte_hitvec_lo[i][j] = ld_addr_hitvec_lo[i] & busfifo_byteen[i][j] & ldst_byteen_lo_dc2[j];
--         assign ld_byte_hitvec_hi[i][j] = ld_addr_hitvec_hi[i] & busfifo_byteen[i][j] & ldst_byteen_hi_dc2[j];
--
--         assign ld_fwddatavec_lo[i][(8*j)+7:(8*j)] = {8{ld_byte_hitvec_lo[i][j]}} & busfifo_data[i][(8*j)+7:(8*j)];
--         assign ld_fwddatavec_hi[i][(8*j)+7:(8*j)] = {8{ld_byte_hitvec_hi[i][j]}} & busfifo_data[i][(8*j)+7:(8*j)];
--      end
--   end
--
--   // Final fwd byte hit
--   always_comb begin
--      ld_byte_hit_wrbuf_lo[7:0] = '0;
--      ld_byte_hit_wrbuf_hi[7:0] = '0;
--      for (int i=0; i<DEPTH; i++) begin
--         ld_byte_hit_wrbuf_lo[7:0] |= ld_byte_hitvec_lo[i];
--         ld_byte_hit_wrbuf_hi[7:0] |= ld_byte_hitvec_hi[i];
--      end
--   end
--
--   // Final fwd data
--   always_comb begin
--      ld_fwddata_wrbuf_lo[63:0] = '0;
--      ld_fwddata_wrbuf_hi[63:0] = '0;
--      for (int i=0; i<DEPTH; i++) begin
--         // Byte0
--         if (ld_byte_hitvec_hi[DEPTH_LOG2'(WrPtr[DEPTH_LOG2-1:0] + DEPTH_LOG2'(i))][0]) begin
--            ld_fwddata_wrbuf_hi[7:0] = ld_fwddatavec_hi[DEPTH_LOG2'(WrPtr[DEPTH_LOG2-1:0] + DEPTH_LOG2'(i))][7:0];
--	 end
--         if (ld_byte_hitvec_lo[DEPTH_LOG2'(WrPtr[DEPTH_LOG2-1:0] + DEPTH_LOG2'(i))][0]) begin
--            ld_fwddata_wrbuf_lo[7:0] = ld_fwddatavec_lo[DEPTH_LOG2'(WrPtr[DEPTH_LOG2-1:0] + DEPTH_LOG2'(i))][7:0];
--	 end
--
--         // Byte1
--         if (ld_byte_hitvec_hi[DEPTH_LOG2'(WrPtr[DEPTH_LOG2-1:0] + DEPTH_LOG2'(i))][1]) begin
--            ld_fwddata_wrbuf_hi[15:8] = ld_fwddatavec_hi[DEPTH_LOG2'(WrPtr[DEPTH_LOG2-1:0] + DEPTH_LOG2'(i))][15:8];
--	 end
--         if (ld_byte_hitvec_lo[DEPTH_LOG2'(WrPtr[DEPTH_LOG2-1:0] + DEPTH_LOG2'(i))][1]) begin
--            ld_fwddata_wrbuf_lo[15:8] = ld_fwddatavec_lo[DEPTH_LOG2'(WrPtr[DEPTH_LOG2-1:0] + DEPTH_LOG2'(i))][15:8];
--	 end
--
--         // Byte2
--         if (ld_byte_hitvec_hi[DEPTH_LOG2'(WrPtr[DEPTH_LOG2-1:0] + DEPTH_LOG2'(i))][2]) begin
--            ld_fwddata_wrbuf_hi[23:16] = ld_fwddatavec_hi[DEPTH_LOG2'(WrPtr[DEPTH_LOG2-1:0] + DEPTH_LOG2'(i))][23:16];
--	 end
--         if (ld_byte_hitvec_lo[DEPTH_LOG2'(WrPtr[DEPTH_LOG2-1:0] + DEPTH_LOG2'(i))][2]) begin
--            ld_fwddata_wrbuf_lo[23:16] = ld_fwddatavec_lo[DEPTH_LOG2'(WrPtr[DEPTH_LOG2-1:0] + DEPTH_LOG2'(i))][23:16];
--	 end
--
--         // Byte3
--         if (ld_byte_hitvec_hi[DEPTH_LOG2'(WrPtr[DEPTH_LOG2-1:0] + DEPTH_LOG2'(i))][3]) begin
--            ld_fwddata_wrbuf_hi[31:24] = ld_fwddatavec_hi[DEPTH_LOG2'(WrPtr[DEPTH_LOG2-1:0] + DEPTH_LOG2'(i))][31:24];
--	 end
--         if (ld_byte_hitvec_lo[DEPTH_LOG2'(WrPtr[DEPTH_LOG2-1:0] + DEPTH_LOG2'(i))][3]) begin
--            ld_fwddata_wrbuf_lo[31:24] = ld_fwddatavec_lo[DEPTH_LOG2'(WrPtr[DEPTH_LOG2-1:0] + DEPTH_LOG2'(i))][31:24];
--	 end
--
--         // Byte4
--         if (ld_byte_hitvec_hi[DEPTH_LOG2'(WrPtr[DEPTH_LOG2-1:0] + DEPTH_LOG2'(i))][4]) begin
--            ld_fwddata_wrbuf_hi[39:32] = ld_fwddatavec_hi[DEPTH_LOG2'(WrPtr[DEPTH_LOG2-1:0] + DEPTH_LOG2'(i))][39:32];
--	 end
--         if (ld_byte_hitvec_lo[DEPTH_LOG2'(WrPtr[DEPTH_LOG2-1:0] + DEPTH_LOG2'(i))][4]) begin
--            ld_fwddata_wrbuf_lo[39:32] = ld_fwddatavec_lo[DEPTH_LOG2'(WrPtr[DEPTH_LOG2-1:0] + DEPTH_LOG2'(i))][39:32];
--	 end
--
--         // Byte5
--         if (ld_byte_hitvec_hi[DEPTH_LOG2'(WrPtr[DEPTH_LOG2-1:0] + DEPTH_LOG2'(i))][5]) begin
--            ld_fwddata_wrbuf_hi[47:40] = ld_fwddatavec_hi[DEPTH_LOG2'(WrPtr[DEPTH_LOG2-1:0] + DEPTH_LOG2'(i))][47:40];
--	 end
--         if (ld_byte_hitvec_lo[DEPTH_LOG2'(WrPtr[DEPTH_LOG2-1:0] + DEPTH_LOG2'(i))][5]) begin
--            ld_fwddata_wrbuf_lo[47:40] = ld_fwddatavec_lo[DEPTH_LOG2'(WrPtr[DEPTH_LOG2-1:0] + DEPTH_LOG2'(i))][47:40];
--	 end
--
--         // Byte6
--         if (ld_byte_hitvec_hi[DEPTH_LOG2'(WrPtr[DEPTH_LOG2-1:0] + DEPTH_LOG2'(i))][6]) begin
--            ld_fwddata_wrbuf_hi[55:48] = ld_fwddatavec_hi[DEPTH_LOG2'(WrPtr[DEPTH_LOG2-1:0] + DEPTH_LOG2'(i))][55:48];
--	 end
--         if (ld_byte_hitvec_lo[DEPTH_LOG2'(WrPtr[DEPTH_LOG2-1:0] + DEPTH_LOG2'(i))][6]) begin
--            ld_fwddata_wrbuf_lo[55:48] = ld_fwddatavec_lo[DEPTH_LOG2'(WrPtr[DEPTH_LOG2-1:0] + DEPTH_LOG2'(i))][55:48];
--	 end
--
--         // Byte7
--         if (ld_byte_hitvec_hi[DEPTH_LOG2'(WrPtr[DEPTH_LOG2-1:0] + DEPTH_LOG2'(i))][7]) begin
--            ld_fwddata_wrbuf_hi[63:56] = ld_fwddatavec_hi[DEPTH_LOG2'(WrPtr[DEPTH_LOG2-1:0] + DEPTH_LOG2'(i))][63:56];
--	 end
--         if (ld_byte_hitvec_lo[DEPTH_LOG2'(WrPtr[DEPTH_LOG2-1:0] + DEPTH_LOG2'(i))][7]) begin
--            ld_fwddata_wrbuf_lo[63:56] = ld_fwddatavec_lo[DEPTH_LOG2'(WrPtr[DEPTH_LOG2-1:0] + DEPTH_LOG2'(i))][63:56];
--	 end
--
--      end
--   end
--   
--
--   // Update the WrPtr logic
--   // Don't update the WrPtr for both hi/lo coalesce since we will not write a new entry only coalesce to existing one
--   assign WrPtrEn = (lsu_stbusreq_dc5 & lsu_commit_dc5) & ~store_merge_all_dc5;
--   assign NxtWrPtr[DEPTH_LOG2-1:0] = (lsu_stbusreq_dc5 & ldst_dual_dc5 & ~(store_merge_lo_dc5 | store_merge_hi_dc5)) ? WrPtrPlus2[DEPTH_LOG2-1:0] : 
--                                                                                                                       WrPtrPlus1[DEPTH_LOG2-1:0];
--   assign WrPtrLo[DEPTH_LOG2-1:0] = WrPtr[DEPTH_LOG2-1:0];
--   assign WrPtrHi[DEPTH_LOG2-1:0] = (store_merge_lo_dc5 | store_merge_hi_dc5) ? WrPtr[DEPTH_LOG2-1:0] : WrPtrPlus1[DEPTH_LOG2-1:0];
--   assign WrPtrPlus1[DEPTH_LOG2-1:0] = WrPtr[DEPTH_LOG2-1:0] + 1'b1;
--   assign WrPtrPlus2[DEPTH_LOG2-1:0] = WrPtr[DEPTH_LOG2-1:0] + 2'b10;
--
--   assign CmdPtrEn                = ((busfifo_state[CmdPtrQ] == CMD) | (busfifo_state[CmdPtrQ] == CMD_ADDR) | (busfifo_state[CmdPtrQ] == CMD_DATA)) & busfifo_bus_state_en[CmdPtrQ] & (busfifo_nxtstate[CmdPtrQ] == RESP); 
--   assign CmdPtr[DEPTH_LOG2-1:0]  = CmdPtrEn  ? (CmdPtrQ[DEPTH_LOG2-1:0] +  1'b1) : CmdPtrQ[DEPTH_LOG2-1:0];
--    
--   assign lsu_axi_awvalid                = ((busfifo_state[CmdPtr] == CMD) | (busfifo_state[CmdPtr] == CMD_ADDR)) & ~(busfifo_bus_state_en[CmdPtr] & (busfifo_nxtstate[CmdPtr] == CMD_DATA));
--   assign lsu_axi_awid[LSU_BUS_TAG-1:0]  = LSU_BUS_TAG'(CmdPtr);
--   assign lsu_axi_awaddr[31:0]           = busfifo_addr[CmdPtr][31:0];
--   assign lsu_axi_awsize[2:0]            = {1'b0,busfifo_size[CmdPtr][1:0]};
--   assign lsu_axi_awcache[3:0]           = busfifo_sideeffects[CmdPtr] ? 4'b0 : 4'b1111; 
--   assign lsu_axi_awprot[2:0]            = 3'b0;            
--   assign lsu_axi_awregion[3:0]          = busfifo_addr[CmdPtr][31:28];
--   assign lsu_axi_awlen[7:0]             = '0;
--   assign lsu_axi_awburst[1:0]           = 2'b01;
--   assign lsu_axi_awqos[3:0]             = '0;
--   assign lsu_axi_awlock                 = '0;
--   
--   assign lsu_axi_wvalid                 = ((busfifo_state[CmdPtr] == CMD) | (busfifo_state[CmdPtr] == CMD_DATA)) & ~(busfifo_bus_state_en[CmdPtr] & (busfifo_nxtstate[CmdPtr] == CMD_ADDR));
--   assign lsu_axi_wdata[63:0]            = busfifo_data[CmdPtr];
--   assign lsu_axi_wstrb[7:0]             = busfifo_byteen[CmdPtr];
--   assign lsu_axi_wlast                  = '1;
--   
--   assign lsu_axi_bready                 = 1'b1;
--
--   // Per entry FSM
--   // Incoming bus signals are flopped before using. So, FSM transitions are a cycle late
--   // FSM goes from DRAIN -> PEND after first command is sent
--   // FSM stays in DRAIN for minimum 2 cycles since FSM looks at flopped bus signals
--   // cmd_done/data_done stays high for exactly one cycle and data_pending stays high for the duration of last data sent after last command is sent
--   for (genvar i=0; i<DEPTH; i++) begin
--      
--      always_comb begin
--         busfifo_nxtstate[i] = IDLE;
--         busfifo_bus_state_en[i] = '0;
--	 
--         case (busfifo_state[i])
--            IDLE: begin
--                     busfifo_nxtstate[i] = WAIT;
--
--   	    end
--            WAIT: begin
--                     busfifo_nxtstate[i] = CMD;
--            end
--            CMD: begin
--                      busfifo_nxtstate[i] = ((lsu_axi_awvalid_q & lsu_axi_awready_q) & (lsu_axi_wvalid_q & lsu_axi_wready_q)) ? RESP : (lsu_axi_awvalid_q & lsu_axi_awready_q) ? CMD_DATA : CMD_ADDR;
--                      busfifo_bus_state_en[i] = (CmdPtrQ == i) & ((lsu_axi_awvalid_q & lsu_axi_awready_q) | (lsu_axi_wvalid_q & lsu_axi_wready_q));
--
--   	    end
--            CMD_ADDR: begin
--                     busfifo_nxtstate[i] = RESP;
--                     busfifo_bus_state_en[i] = (CmdPtrQ == i) & lsu_axi_awvalid_q & lsu_axi_awready_q;
--             end
--            CMD_DATA: begin
--                     busfifo_nxtstate[i] = RESP;
--                     busfifo_bus_state_en[i] = (CmdPtrQ == i) & lsu_axi_wvalid_q & lsu_axi_wready_q;
--             end
--            RESP: begin
--                     busfifo_nxtstate[i] = IDLE;
--                     busfifo_bus_state_en[i] = (lsu_axi_bid_q[LSU_BUS_TAG-1:0] == LSU_BUS_TAG'(i)) & lsu_axi_bvalid_q & lsu_axi_bready_q; 
--    	    end
--            default: begin
--                      busfifo_nxtstate[i] = IDLE;
--                      busfifo_bus_state_en[i] = '0;
--            end
--         endcase
--      end
--
--      always_comb begin
--         busfifo_wr_en[i] = '0;
--	 busfifo_state_en[i]  = '0;
--         case (busfifo_state[i])
--            IDLE: begin
--                     busfifo_state_en[i] = lsu_stbusreq_dc5 & lsu_commit_dc5 & ~store_merge_all_dc5 & (((i == WrPtrLo) & ~store_merge_lo_dc5) | 
--                                                                                                       ((i == WrPtrHi) & ldst_dual_dc5 & ~store_merge_hi_dc5));
--	             busfifo_wr_en[i] = busfifo_state_en[i];
--   	    end
--            WAIT: begin
--                     busfifo_state_en[i] = lsu_bus_clk_en;
--                     busfifo_wr_en[i]    = (store_hitvec_lo_dc5[i] | store_hitvec_hi_dc5[i]);
--            end
--            CMD: begin
--                     busfifo_state_en[i] = busfifo_bus_state_en[i] & lsu_bus_clk_en;
--                     busfifo_wr_en[i]    = (store_hitvec_lo_dc5[i] | store_hitvec_hi_dc5[i]);
--   	    end
--            CMD_ADDR: begin
--                     busfifo_state_en[i] = busfifo_bus_state_en[i] & lsu_bus_clk_en;
--            end
--            CMD_DATA: begin
--                     busfifo_state_en[i] = busfifo_bus_state_en[i] & lsu_bus_clk_en;
--            end
--            RESP: begin
--                     busfifo_state_en[i] = busfifo_bus_state_en[i] & lsu_bus_clk_en; 
--   	    end
--            default: begin
--                     busfifo_wr_en[i] = '0;
--                     busfifo_state_en[i]  = '0;
--            end
--         endcase
--      end
--  
--      rvdffs #(.WIDTH(3)) busfifo_state_ff (.din(busfifo_nxtstate[i]), .dout({busfifo_state[i]}), .en(busfifo_state_en[i]), .clk(lsu_free_c2_clk), .*);
--      rvdffe #(.WIDTH(32)) busfifo_addrff (.din(busfifo_addr_in[i]), .dout(busfifo_addr[i]), .en(busfifo_wr_en[i]), .*);
--      rvdffs #(.WIDTH(8)) busfifo_byteenff (.din(busfifo_byteen_in[i]), .dout(busfifo_byteen[i]), .en(busfifo_wr_en[i]), .clk(lsu_wrbuf_c1_clk), .*);
--      rvdffs #(.WIDTH(2)) busfifo_sizeff (.din(busfifo_size_in[i]), .dout(busfifo_size[i]), .en(busfifo_wr_en[i]), .clk(lsu_wrbuf_c1_clk), .*);
--      rvdffs #(.WIDTH(1)) busfifo_sideeffectsff (.din(is_sideeffects_dc5), .dout(busfifo_sideeffects[i]), .en(busfifo_wr_en[i]), .clk(lsu_wrbuf_c1_clk), .*);
--      rvdffe #(.WIDTH(64)) busfifo_dataff (.din(busfifo_data_in[i]), .dout(busfifo_data[i]), .en(busfifo_wr_en[i]), .*);
--   end
--   
--   // Generate available entries for full checking
--   always_comb begin
--      wrbuf_avl_any[DEPTH-1:0] = '0;
--      found = 0;
--      for (int i=0; i<DEPTH; i++) begin
--         found |= (busfifo_state[DEPTH_LOG2'(DEPTH_LOG2'(i)+WrPtr)] != IDLE);
--         wrbuf_avl_any[DEPTH_LOG2'(DEPTH_LOG2'(i)+WrPtr)] = ~found;
--      end 
--   end
--
--   // Write buffer full logic
--   always_comb begin
--      wrbuf_numvld_any[3:0] = '0;
--      for (int i=0; i<DEPTH; i++) begin
--         //wrbuf_numvld_any[4:0] += {4'b0, (busfifo_state[i] != IDLE)};
--         wrbuf_numvld_any[3:0] += {3'b0, ~wrbuf_avl_any[i]};
--      end
--   end
--
--   assign wrbuf_specvld_dc1[1:0] = {(lsu_pkt_dc1.valid & lsu_pkt_dc1.store), 1'b0};   // always count 2 speculatively. Timing for pointer chasing is showing up otherwise
--   assign wrbuf_specvld_dc2[1:0] = {1'b0,lsu_stbusreq_dc2} << ldst_dual_dc2;
--   assign wrbuf_specvld_dc3[1:0] = {1'b0,lsu_stbusreq_dc3} << ldst_dual_dc3;
--   assign wrbuf_specvld_dc4[1:0] = {1'b0,lsu_stbusreq_dc4} << ldst_dual_dc4;
--   assign wrbuf_specvld_dc5[1:0] = {1'b0,lsu_stbusreq_dc5} << ldst_dual_dc5;
--   assign wrbuf_specvld_any[3:0] = wrbuf_numvld_any[3:0] +  {2'b0,wrbuf_specvld_dc1[1:0]} + {2'b0,wrbuf_specvld_dc2[1:0]} + {2'b0,wrbuf_specvld_dc3[1:0]} + {2'b0,wrbuf_specvld_dc4[1:0]} + {2'b0,wrbuf_specvld_dc5[1:0]};
--
--   assign lsu_write_buffer_full_any = (wrbuf_specvld_any[3:0] > (DEPTH - 2)) | (busfifo_state[WrPtr] != IDLE);
--   assign lsu_write_buffer_empty_any = ~((|busfifo_state[DEPTH-1:0]) | (lsu_stbusreq_dc3 & ~store_freeze_dc3) | lsu_stbusreq_dc4 | lsu_stbusreq_dc5);
--
--   assign store_freeze_en = write_buffer_block_any & lsu_stbusreq_dc2 & ~flush_dc2_up & ~lsu_freeze_dc3;
--   assign store_freeze_rst = flush_dc3 | (lsu_read_buffer_empty_any & store_freeze_dc3);
--   
--   //assign store_freeze_dc3 = 1'b0;
--   assign lsu_stbusreq_dc2 = lsu_busreq_dc2 & lsu_pkt_dc2.store;
--   //assign store_bus_error_any = |store_bus_error_vec[DEPTH-1:0]; The Error address needs to be re-computed based on the byteens and the address [31:2]
--   assign RspPtr[DEPTH_LOG2-1:0]     = DEPTH_LOG2'(lsu_axi_bid_q[LSU_BUS_TAG-1:0]);
--   assign store_bus_error_any        = lsu_axi_bvalid_q & lsu_axi_bready_q & lsu_axi_bresp_q[1] & lsu_bus_clk_en_q;
--   assign store_bus_error_lw[1:0]    = busfifo_byteen[RspPtr][0] ? busfifo_addr[RspPtr][1:0] :  busfifo_byteen[RspPtr][1] ? 2'b01 : busfifo_byteen[RspPtr][2] ? 2'b10 : 2'b11; 
--   assign store_bus_error_uw[1:0]    = busfifo_byteen[RspPtr][4] ? busfifo_addr[RspPtr][1:0] :  busfifo_byteen[RspPtr][5] ? 2'b01 : busfifo_byteen[RspPtr][6] ? 2'b10 : 2'b11;
--   assign store_bus_error_lo[1:0]    = |busfifo_byteen[RspPtr][3:0] ? store_bus_error_lw[1:0] : store_bus_error_uw[1:0];   
--   assign store_bus_error_addr[31:0] = {busfifo_addr[RspPtr][31:2], store_bus_error_lo[1:0]};
--   
--   // Fifo flops
--   rvdffs #(.WIDTH(DEPTH_LOG2)) WrPtrff (.din(NxtWrPtr[DEPTH_LOG2-1:0]), .dout(WrPtr[DEPTH_LOG2-1:0]), .en(WrPtrEn), .clk(lsu_c2_dc5_clk), .*);
--   rvdff #(.WIDTH(DEPTH_LOG2))  lsu_CmdPtrff (.din(CmdPtr[DEPTH_LOG2-1:0]), .dout(CmdPtrQ[DEPTH_LOG2-1:0]), .clk(lsu_busm_clk), .*);
--
--   rvdff #(.WIDTH(1)) axi_awvalid_ff (.din(lsu_axi_awvalid), .dout(lsu_axi_awvalid_q), .clk(lsu_busm_clk), .*);
--   rvdff #(.WIDTH(1)) axi_awready_ff (.din(lsu_axi_awready), .dout(lsu_axi_awready_q), .clk(lsu_busm_clk), .*);
--   rvdff #(.WIDTH(1)) axi_wvalid_ff (.din(lsu_axi_wvalid), .dout(lsu_axi_wvalid_q), .clk(lsu_busm_clk), .*);
--   rvdff #(.WIDTH(1)) axi_wready_ff (.din(lsu_axi_wready), .dout(lsu_axi_wready_q), .clk(lsu_busm_clk), .*);
--   rvdff #(.WIDTH(1)) axi_bvalid_ff (.din(lsu_axi_bvalid), .dout(lsu_axi_bvalid_q), .clk(lsu_busm_clk), .*);
--   rvdff #(.WIDTH(1)) axi_bready_ff (.din(lsu_axi_bready), .dout(lsu_axi_bready_q), .clk(lsu_busm_clk), .*);
--   rvdff #(.WIDTH(2)) axi_bresp_ff (.din(lsu_axi_bresp), .dout(lsu_axi_bresp_q), .clk(lsu_busm_clk), .*);
--   rvdff #(.WIDTH(LSU_BUS_TAG)) axi_bid_ff (.din(lsu_axi_bid), .dout(lsu_axi_bid_q), .clk(lsu_busm_clk), .*);
--
--   rvdffsc #(.WIDTH(1)) store_freeze_dc3ff (.din(1'b1), .dout(store_freeze_dc3), .en(store_freeze_en), .clear(store_freeze_rst), .clk(lsu_free_c2_clk), .*);
--   rvdff #(.WIDTH(4)) wrbuf_numvld_anyff (.din(wrbuf_numvld_any[3:0]), .dout(wrbuf_numvld_anyQ[3:0]), .clk(lsu_free_c2_clk), .*);
--   rvdff #(.WIDTH(1)) lsu_stbusreq_dc3ff (.din(lsu_stbusreq_dc2), .dout(lsu_stbusreq_dc3), .clk(lsu_freeze_c2_dc3_clk), .*);
--   rvdff #(.WIDTH(1)) lsu_stbusreq_dc4ff (.din(lsu_stbusreq_dc3 & ~store_freeze_dc3), .dout(lsu_stbusreq_dc4), .clk(lsu_free_c2_clk), .*);
--   rvdff #(.WIDTH(1)) lsu_stbusreq_dc5ff (.din(lsu_stbusreq_dc4), .dout(lsu_stbusreq_dc5), .clk(lsu_free_c2_clk), .*);
--
--`ifdef ASSERT_ON
--
--   property hitvec_when_nomerging;
--      @(posedge clk) disable iff(~rst_l) dec_tlu_wb_coalescing_disable |-> ((store_hitvec_lo_dc5[DEPTH-1:0] == 'b0) & (store_hitvec_hi_dc5[DEPTH-1:0] == 'b0));
--   endproperty
--   assert_hitvec_when_nomerging: assert property (hitvec_when_nomerging);
--
--`endif
--
--endmodule // lsu_bus_write_buffer
+ // SPDX-License-Identifier: Apache-2.0
+ // Copyright 2019 Western Digital Corporation or its affiliates.
+ //
 diff --git a/design/lsu/lsu_clkdomain.sv b/design/lsu/lsu_clkdomain.sv
-index 2ccd92c..1684ae4 100644
+index 14bef2e..b8f99e2 100644
 --- a/design/lsu/lsu_clkdomain.sv
 +++ b/design/lsu/lsu_clkdomain.sv
-@@ -23,6 +23,7 @@
- //
- // //********************************************************************************
- 
+@@ -1,3 +1,4 @@
 +`include "common_defines.vh"
- 
- module lsu_clkdomain 
-    import swerv_types::*;
+ // SPDX-License-Identifier: Apache-2.0
+ // Copyright 2019 Western Digital Corporation or its affiliates.
+ //
 diff --git a/design/lsu/lsu_dccm_ctl.sv b/design/lsu/lsu_dccm_ctl.sv
-index 6a62db0..6fa731d 100644
+index 303a6fe..0dc1b65 100644
 --- a/design/lsu/lsu_dccm_ctl.sv
 +++ b/design/lsu/lsu_dccm_ctl.sv
-@@ -25,6 +25,7 @@
- // DC1 -> DC2 -> DC3 -> DC4 (Commit)
- // 
- // //********************************************************************************
+@@ -1,3 +1,4 @@
 +`include "common_defines.vh"
- 
- module lsu_dccm_ctl  
-    import swerv_types::*;
+ // SPDX-License-Identifier: Apache-2.0
+ // Copyright 2019 Western Digital Corporation or its affiliates.
+ //
 diff --git a/design/lsu/lsu_dccm_mem.sv b/design/lsu/lsu_dccm_mem.sv
-index 30a6ae4..d9c9f60 100644
+index ed376ee..64dc183 100644
 --- a/design/lsu/lsu_dccm_mem.sv
 +++ b/design/lsu/lsu_dccm_mem.sv
-@@ -25,6 +25,7 @@
- // DC1 -> DC2 -> DC3 -> DC4 (Commit)
- // 
- // //********************************************************************************
+@@ -1,3 +1,4 @@
 +`include "common_defines.vh"
- 
- module lsu_dccm_mem 
-    import swerv_types::*;
+ // SPDX-License-Identifier: Apache-2.0
+ // Copyright 2019 Western Digital Corporation or its affiliates.
+ //
 diff --git a/design/lsu/lsu_ecc.sv b/design/lsu/lsu_ecc.sv
-index 33c38d4..e716905 100644
+index 508c770..23fac72 100644
 --- a/design/lsu/lsu_ecc.sv
 +++ b/design/lsu/lsu_ecc.sv
-@@ -25,6 +25,7 @@
- // DC1 -> DC2 -> DC3 -> DC4 (Commit)
- // 
- //********************************************************************************
+@@ -1,3 +1,4 @@
 +`include "common_defines.vh"
- module lsu_ecc 
-    import swerv_types::*;
- (
+ // SPDX-License-Identifier: Apache-2.0
+ // Copyright 2019 Western Digital Corporation or its affiliates.
+ //
 diff --git a/design/lsu/lsu_lsc_ctl.sv b/design/lsu/lsu_lsc_ctl.sv
-index c22efdb..c087714 100644
+index 4891a1a..da6aeb6 100644
 --- a/design/lsu/lsu_lsc_ctl.sv
 +++ b/design/lsu/lsu_lsc_ctl.sv
-@@ -25,6 +25,7 @@
- // DC1 -> DC2 -> DC3 -> DC4 (Commit)
- // 
- //********************************************************************************
+@@ -1,3 +1,4 @@
 +`include "common_defines.vh"
- module lsu_lsc_ctl 
-    import swerv_types::*;
- (
+ // SPDX-License-Identifier: Apache-2.0
+ // Copyright 2019 Western Digital Corporation or its affiliates.
+ //
 diff --git a/design/lsu/lsu_stbuf.sv b/design/lsu/lsu_stbuf.sv
-index 851c05e..e77cee0 100644
+index dea32c4..90eba7d 100644
 --- a/design/lsu/lsu_stbuf.sv
 +++ b/design/lsu/lsu_stbuf.sv
-@@ -26,6 +26,7 @@
- // 
- // //********************************************************************************
- 
+@@ -1,3 +1,4 @@
 +`include "common_defines.vh"
- 
- module lsu_stbuf
-    import swerv_types::*;
+ // SPDX-License-Identifier: Apache-2.0
+ // Copyright 2019 Western Digital Corporation or its affiliates.
+ //
 diff --git a/design/lsu/lsu_trigger.sv b/design/lsu/lsu_trigger.sv
-index 37d783d..03ac0a5 100644
+index 67eb7de..63f6fe3 100644
 --- a/design/lsu/lsu_trigger.sv
 +++ b/design/lsu/lsu_trigger.sv
-@@ -22,6 +22,7 @@
- // Comments:
- //
- //********************************************************************************
+@@ -1,3 +1,4 @@
 +`include "common_defines.vh"
- module lsu_trigger 
-    import swerv_types::*;
- (
+ // SPDX-License-Identifier: Apache-2.0
+ // Copyright 2019 Western Digital Corporation or its affiliates.
+ //
 diff --git a/design/mem.sv b/design/mem.sv
-index d7e5066..fdbf4c9 100644
+index 5cc4808..457cfe2 100644
 --- a/design/mem.sv
 +++ b/design/mem.sv
-@@ -14,6 +14,7 @@
- // See the License for the specific language governing permissions and
- // limitations under the License.
- //********************************************************************************
+@@ -1,3 +1,4 @@
 +`include "common_defines.vh"
- 
- module mem 
-    import swerv_types::*;
+ //********************************************************************************
+ // SPDX-License-Identifier: Apache-2.0
+ // Copyright 2019 Western Digital Corporation or its affiliates.
 diff --git a/design/pic_ctrl.sv b/design/pic_ctrl.sv
-index c40d396..577ba1f 100644
+index 204da31..5a72d4d 100644
 --- a/design/pic_ctrl.sv
 +++ b/design/pic_ctrl.sv
-@@ -19,6 +19,7 @@
- // Function: Programmable Interrupt Controller 
- // Comments: 
- //********************************************************************************
+@@ -1,3 +1,4 @@
 +`include "common_defines.vh"
- 
- module pic_ctrl
-                   (
+ //********************************************************************************
+ // SPDX-License-Identifier: Apache-2.0
+ // Copyright 2019 Western Digital Corporation or its affiliates.
 diff --git a/design/swerv.sv b/design/swerv.sv
-index e438070..bb0a8cc 100644
+index 4d0bcd2..4bfb66c 100644
 --- a/design/swerv.sv
 +++ b/design/swerv.sv
-@@ -20,6 +20,7 @@
- // Comments: 
- //
- //********************************************************************************
+@@ -1,3 +1,4 @@
 +`include "common_defines.vh"
- module swerv 
-    import swerv_types::*;
- (
-@@ -377,6 +378,14 @@ module swerv
-    input logic 	           jtag_trst_n, // JTAG Reset
-    output logic            jtag_tdo, // JTAG TDO
-    
-+   // inputs from the JTAG - these will become input ports to the echx
-+   input logic                  dmi_reg_en,                // read or write
-+   input logic [6:0]             dmi_reg_addr,              // address of DM register
-+   input logic                   dmi_reg_wr_en,             // write instruction
-+   input logic [31:0] 	   dmi_reg_wdata,             // write data
-+   // outputs from the dbg back to jtag
-+   output logic [31:0] 	   dmi_reg_rdata,
-+			    
- 			    
-    input logic [`RV_PIC_TOTAL_INT:1]           extintsrc_req,
-    input logic                   timer_int,
-@@ -972,6 +981,7 @@ module swerv
-       .*
-    );
-  
-+   /*
-    // inputs from the JTAG - these will become input ports to the echx
-    logic                   dmi_reg_en;                // read or write
-    logic [6:0]             dmi_reg_addr;              // address of DM register
-@@ -1002,10 +1012,11 @@ module swerv
-            .rd_data     (dmi_reg_rdata),  // 32 bit Read data from  Processor                       
-            .reg_wr_data (dmi_reg_wdata),  // 32 bit Write data to Processor                      
-            .reg_wr_addr (dmi_reg_addr),   // 32 bit Write address to Processor                   
--           .reg_en      (dmi_reg_en),     // 1 bit  Write interface bit to Processor                                   
--           .reg_wr_en   (dmi_reg_wr_en),   // 1 bit  Write enable to Processor               
-+           .reg_en      (dmi_reg_op[0]),     // 1 bit  Write interface bit to Processor                                   
-+           .reg_wr_en   (dmi_reg_op[1]),   // 1 bit  Write enable to Processor               
-            .dmi_hard_reset   (dmi_hard_reset)   //a hard reset of the DTM, causing the DTM to forget about any outstanding DMI transactions
- ); 
-+*/
-    
-    // -----------------   DEBUG END -----------------------------
- 
+ // SPDX-License-Identifier: Apache-2.0
+ // Copyright 2019 Western Digital Corporation or its affiliates.
+ //
 diff --git a/design/swerv_wrapper.sv b/design/swerv_wrapper.sv
-index 351cf79..bef828d 100644
+index ed9097e..4500c60 100644
 --- a/design/swerv_wrapper.sv
 +++ b/design/swerv_wrapper.sv
-@@ -20,6 +20,7 @@
- // Comments: 
- //
- //********************************************************************************
+@@ -1,3 +1,4 @@
 +`include "common_defines.vh"
- `include "build.h"
- //`include "def.sv"
- module swerv_wrapper  
-@@ -309,6 +310,15 @@ module swerv_wrapper
-    input logic 			     jtag_tdi, // JTAG tdi
-    input logic 			     jtag_trst_n, // JTAG Reset
-    output logic 		     jtag_tdo, // JTAG TDO
-+
-+   // inputs from the JTAG - these will become input ports to the echx
-+   input logic                   dmi_reg_en,                // read or write
-+   input logic [6:0]             dmi_reg_addr,              // address of DM register
-+   input logic                   dmi_reg_wr_en,             // write instruction
-+   input logic [31:0] 	   dmi_reg_wdata,             // write data
-+   // outputs from the dbg back to jtag
-+   output logic [31:0] 	   dmi_reg_rdata,
-+	
+ // SPDX-License-Identifier: Apache-2.0
+ // Copyright 2019 Western Digital Corporation or its affiliates.
+ //
+@@ -305,11 +306,20 @@ module swerv_wrapper
+    output logic [1:0] dec_tlu_perfcnt3,
+ 
+    // ports added by the soc team
++`ifdef USE_JTAG
+    input logic                       jtag_tck, // JTAG clk
+    input logic                       jtag_tms, // JTAG TMS
+    input logic                       jtag_tdi, // JTAG tdi
+    input logic                       jtag_trst_n, // JTAG Reset
+    output logic                      jtag_tdo, // JTAG TDO
++`else
++   input logic                       dmi_reg_en,    // read or write
++   input logic [6:0]                 dmi_reg_addr,  // address of DM register
++   input logic                       dmi_reg_wr_en, // write instruction
++   input logic [31:0]                dmi_reg_wdata, // write data
++   output logic [31:0]               dmi_reg_rdata, // outputs from the dbg back to jtag
++   input  logic                      dmi_hard_reset,
++`endif
     // external MPC halt/run interface
     input logic mpc_debug_halt_req, // Async halt request
     input logic mpc_debug_run_req, // Async run request
+@@ -394,12 +404,14 @@ module swerv_wrapper
+    logic        icm_clk_override;
+    logic        dec_tlu_core_ecc_disable;
+ 
++`ifdef USE_JTAG
+    logic        dmi_reg_en;
+    logic [6:0]  dmi_reg_addr;
+    logic        dmi_reg_wr_en;
+    logic [31:0] dmi_reg_wdata;
+    logic [31:0] dmi_reg_rdata;
+    logic        dmi_hard_reset;
++`endif
+ 
+ 
+    // Instantiate the swerv core
+@@ -413,6 +425,7 @@ module swerv_wrapper
+         .*
+         );
+ 
++`ifdef USE_JTAG
+   // Instantiate the JTAG/DMI
+    dmi_wrapper  dmi_wrapper (
+            // JTAG signals
+@@ -434,6 +447,7 @@ module swerv_wrapper
+            .reg_wr_en   (dmi_reg_wr_en),   // 1 bit  Write enable to Processor
+            .dmi_hard_reset   (dmi_hard_reset)   //a hard reset of the DTM, causing the DTM to forget about any outstanding DMI transactions
+    );
++`endif
+ 
+ endmodule
+ 
 diff --git a/design/swerv_wrapper_verilog.v b/design/swerv_wrapper_verilog.v
 new file mode 100644
-index 0000000..18e25a0
+index 0000000..0ad5efb
 --- /dev/null
 +++ b/design/swerv_wrapper_verilog.v
-@@ -0,0 +1,506 @@
+@@ -0,0 +1,510 @@
 +// Verilog wrapper for SweRV
 +// 
-+// Copyright 2019 Carsten Heinz
++// Copyright 2022 Carsten Heinz
 +// 
 +// Licensed under the Apache License, Version 2.0 (the "License");
 +// you may not use this file except in compliance with the License.
@@ -2581,7 +472,7 @@ index 0000000..18e25a0
 +	output wire [2:0]                      lsu_axi_awprot,
 +	output wire [3:0]                      lsu_axi_awqos,
 +
-+	output wire                            lsu_axi_wvalid,                                       
++	output wire                            lsu_axi_wvalid,
 +	input  wire                            lsu_axi_wready,
 +	output wire [63:0]                     lsu_axi_wdata,
 +	output wire [7:0]                      lsu_axi_wstrb,
@@ -2592,7 +483,7 @@ index 0000000..18e25a0
 +	input  wire [1:0]                      lsu_axi_bresp,
 +	input  wire [`RV_LSU_BUS_TAG-1:0]      lsu_axi_bid,
 +
-+	// AXI Read Channels                    
++	// AXI Read Channels
 +	output wire                            lsu_axi_arvalid,
 +	input  wire                            lsu_axi_arready,
 +	output wire [`RV_LSU_BUS_TAG-1:0]      lsu_axi_arid,
@@ -2628,7 +519,7 @@ index 0000000..18e25a0
 +	output wire [2:0]                      ifu_axi_awprot,
 +	output wire [3:0]                      ifu_axi_awqos,
 +
-+	output wire                            ifu_axi_wvalid,                                       
++	output wire                            ifu_axi_wvalid,
 +	input  wire                            ifu_axi_wready,
 +	output wire [63:0]                     ifu_axi_wdata,
 +	output wire [7:0]                      ifu_axi_wstrb,
@@ -2639,7 +530,7 @@ index 0000000..18e25a0
 +	input  wire [1:0]                      ifu_axi_bresp,
 +	input  wire [`RV_IFU_BUS_TAG-1:0]      ifu_axi_bid,
 +
-+	// AXI Read Channels                    
++	// AXI Read Channels
 +	output wire                            ifu_axi_arvalid,
 +	input  wire                            ifu_axi_arready,
 +	output wire [`RV_IFU_BUS_TAG-1:0]      ifu_axi_arid,
@@ -2675,7 +566,7 @@ index 0000000..18e25a0
 +	output wire [2:0]                      sb_axi_awprot,
 +	output wire [3:0]                      sb_axi_awqos,
 +
-+	output wire                            sb_axi_wvalid,                                       
++	output wire                            sb_axi_wvalid,
 +	input  wire                            sb_axi_wready,
 +	output wire [63:0]                     sb_axi_wdata,
 +	output wire [7:0]                      sb_axi_wstrb,
@@ -2686,7 +577,7 @@ index 0000000..18e25a0
 +	input  wire [1:0]                      sb_axi_bresp,
 +	input  wire [`RV_SB_BUS_TAG-1:0]       sb_axi_bid,
 +
-+	// AXI Read Channels                    
++	// AXI Read Channels
 +	output wire                            sb_axi_arvalid,
 +	input  wire                            sb_axi_arready,
 +	output wire [`RV_SB_BUS_TAG-1:0]       sb_axi_arid,
@@ -2719,7 +610,7 @@ index 0000000..18e25a0
 +	input  wire [7:0]                   dma_axi_awlen,
 +	input  wire [1:0]                   dma_axi_awburst,
 +
-+	input  wire                         dma_axi_wvalid,                                       
++	input  wire                         dma_axi_wvalid,
 +	output wire                         dma_axi_wready,
 +	input  wire [63:0]                  dma_axi_wdata,
 +	input  wire [7:0]                   dma_axi_wstrb,
@@ -2734,7 +625,7 @@ index 0000000..18e25a0
 +	input  wire                         dma_axi_arvalid,
 +	output wire                         dma_axi_arready,
 +	input  wire [`RV_DMA_BUS_TAG-1:0]   dma_axi_arid,
-+	input  wire [31:0]                  dma_axi_araddr,                                     
++	input  wire [31:0]                  dma_axi_araddr,
 +	input  wire [2:0]                   dma_axi_arsize,
 +	input  wire [2:0]                   dma_axi_arprot,
 +	input  wire [7:0]                   dma_axi_arlen,
@@ -2751,20 +642,19 @@ index 0000000..18e25a0
 +	// AHB bus not available in verilog wrapper yet
 +`endif
 +
-+    input wire jtag_tck, // JTAG clk
-+    input wire jtag_tms, // JTAG TMS
-+    input wire jtag_tdi, // JTAG tdi
-+    input wire jtag_trst_n, // JTAG Reset
-+    output wire jtag_tdo, // JTAG TDO
-+
-+   // inputs from the JTAG - these will become input ports to the echx
-+   input wire                   dmi_reg_en,                // read or write
-+   input wire [6:0]             dmi_reg_addr,              // address of DM register
-+   input wire dmi_reg_wr_en,             // write instruction
-+   input wire [31:0] 	   dmi_reg_wdata,             // write data
-+   // outputs from the dbg back to jtag
-+   output wire [31:0] 	   dmi_reg_rdata
-+	
++`ifdef USE_JTAG
++	input wire jtag_tck, // JTAG clk
++	input wire jtag_tms, // JTAG TMS
++	input wire jtag_tdi, // JTAG tdi
++	input wire jtag_trst_n, // JTAG Reset
++	output wire jtag_tdo // JTAG TDO
++`else
++	input wire                          dmi_reg_en,    // read or write
++	input wire [6:0]                    dmi_reg_addr,  // address of DM register
++	input wire                          dmi_reg_wr_en, // write instruction
++	input wire [31:0]                   dmi_reg_wdata, // write data
++	output wire [31:0]                  dmi_reg_rdata // outputs from the dbg back to jtag
++`endif
 +);
 +
 +wire [31:0] rv_reset_vec_w = `RV_RESET_VEC;
@@ -2785,7 +675,7 @@ index 0000000..18e25a0
 +wire lsu_bus_clk_en = 1'b1; // Clock ratio b/w cpu core clk & AHB master interface
 +wire ifu_bus_clk_en = 1'b1; // Clock ratio b/w cpu core clk & AHB master interface
 +wire dbg_bus_clk_en = 1'b1; // Clock ratio b/w cpu core clk & AHB master interface
-+wire dma_bus_clk_en = 1'b1; // Clock ratio b/w cpu core clk & AHB slave interface	      
++wire dma_bus_clk_en = 1'b1; // Clock ratio b/w cpu core clk & AHB slave interface
 +
 +wire timer_int = 1'b0;
 +wire [`RV_PIC_TOTAL_INT:1] extintsrc_req = 0;
@@ -2794,7 +684,7 @@ index 0000000..18e25a0
 +wire dec_tlu_perfcnt1;
 +wire dec_tlu_perfcnt2;
 +wire dec_tlu_perfcnt3;
-+  
++
 +wire i_cpu_halt_req = 1'b0; // Async halt req to CPU
 +wire o_cpu_halt_ack; // core response to halt
 +wire o_cpu_halt_status; // 1'b1 indicates core is halted
@@ -2808,9 +698,11 @@ index 0000000..18e25a0
 +(
 +	.clk(clk),
 +	.rst_l(rst_n),
++	.dbg_rst_l(rst_n),
 +	.rst_vec(rst_vec),
 +	.nmi_int(nmi_int),
 +	.nmi_vec(nmi_vec),
++	.jtag_id(0),
 +
 +	.trace_rv_i_insn_ip(trace_rv_i_insn_ip),
 +	.trace_rv_i_address_ip(trace_rv_i_address_ip),
@@ -2836,7 +728,7 @@ index 0000000..18e25a0
 +	.lsu_axi_awprot(lsu_axi_awprot),
 +	.lsu_axi_awqos(lsu_axi_awqos),
 +
-+	.lsu_axi_wvalid(lsu_axi_wvalid),                                       
++	.lsu_axi_wvalid(lsu_axi_wvalid),
 +	.lsu_axi_wready(lsu_axi_wready),
 +	.lsu_axi_wdata(lsu_axi_wdata),
 +	.lsu_axi_wstrb(lsu_axi_wstrb),
@@ -2883,7 +775,7 @@ index 0000000..18e25a0
 +	.ifu_axi_awprot(ifu_axi_awprot),
 +	.ifu_axi_awqos(ifu_axi_awqos),
 +
-+	.ifu_axi_wvalid(ifu_axi_wvalid),                                       
++	.ifu_axi_wvalid(ifu_axi_wvalid),
 +	.ifu_axi_wready(ifu_axi_wready),
 +	.ifu_axi_wdata(ifu_axi_wdata),
 +	.ifu_axi_wstrb(ifu_axi_wstrb),
@@ -2930,7 +822,7 @@ index 0000000..18e25a0
 +	.sb_axi_awprot(sb_axi_awprot),
 +	.sb_axi_awqos(sb_axi_awqos),
 +
-+	.sb_axi_wvalid(sb_axi_wvalid),                                       
++	.sb_axi_wvalid(sb_axi_wvalid),
 +	.sb_axi_wready(sb_axi_wready),
 +	.sb_axi_wdata(sb_axi_wdata),
 +	.sb_axi_wstrb(sb_axi_wstrb),
@@ -2963,7 +855,7 @@ index 0000000..18e25a0
 +	.sb_axi_rlast(sb_axi_rlast),
 +
 +
-+	//DMA - 
++	//DMA
 +	.dma_axi_awvalid(dma_axi_awvalid),
 +	.dma_axi_awready(dma_axi_awready),
 +	.dma_axi_awid(dma_axi_awid),
@@ -2973,7 +865,7 @@ index 0000000..18e25a0
 +	.dma_axi_awlen(dma_axi_awlen),
 +	.dma_axi_awburst(dma_axi_awburst),
 +
-+	.dma_axi_wvalid(dma_axi_wvalid),                                       
++	.dma_axi_wvalid(dma_axi_wvalid),
 +	.dma_axi_wready(dma_axi_wready),
 +	.dma_axi_wdata(dma_axi_wdata),
 +	.dma_axi_wstrb(dma_axi_wstrb),
@@ -2987,7 +879,7 @@ index 0000000..18e25a0
 +	.dma_axi_arvalid(dma_axi_arvalid),
 +	.dma_axi_arready(dma_axi_arready),
 +	.dma_axi_arid(dma_axi_arid),
-+	.dma_axi_araddr(dma_axi_araddr),                                     
++	.dma_axi_araddr(dma_axi_araddr),
 +	.dma_axi_arsize(dma_axi_arsize),
 +	.dma_axi_arprot(dma_axi_arprot),
 +	.dma_axi_arlen(dma_axi_arlen),
@@ -3007,7 +899,7 @@ index 0000000..18e25a0
 +	.lsu_bus_clk_en(lsu_bus_clk_en), // Clock ratio b/w cpu core clk & AHB master interface
 +	.ifu_bus_clk_en(ifu_bus_clk_en), // Clock ratio b/w cpu core clk & AHB master interface
 +	.dbg_bus_clk_en(dbg_bus_clk_en), // Clock ratio b/w cpu core clk & AHB master interface
-+	.dma_bus_clk_en(dma_bus_clk_en), // Clock ratio b/w cpu core clk & AHB slave interface	       
++	.dma_bus_clk_en(dma_bus_clk_en), // Clock ratio b/w cpu core clk & AHB slave interface
 +
 +	.timer_int(timer_int),
 +	.extintsrc_req(extintsrc_req),
@@ -3018,17 +910,20 @@ index 0000000..18e25a0
 +	.dec_tlu_perfcnt3(dec_tlu_perfcnt3),
 +
 +	// ports added by the soc team
++`ifdef USE_JTAG
 +	.jtag_tck(jtag_tck), // JTAG clk
 +	.jtag_tms(jtag_tms), // JTAG TMS
 +	.jtag_tdi(jtag_tdi), // JTAG tdi
 +	.jtag_trst_n(jtag_trst_n), // JTAG Reset
 +	.jtag_tdo(jtag_tdo), // JTAG TDO
-+
-+    .dmi_reg_en(dmi_reg_en),
-+    .dmi_reg_addr(dmi_reg_addr),
-+    .dmi_reg_wr_en(dmi_reg_wr_en),
-+    .dmi_reg_wdata(dmi_reg_wdata),
-+    .dmi_reg_rdata(dmi_reg_rdata),
++`else
++	.dmi_reg_en(dmi_reg_en),
++	.dmi_reg_addr(dmi_reg_addr),
++	.dmi_reg_wr_en(dmi_reg_wr_en),
++	.dmi_reg_wdata(dmi_reg_wdata),
++	.dmi_reg_rdata(dmi_reg_rdata),
++	.dmi_hard_reset(0),
++`endif
 +
 +	// MPC interface, not used
 +	.mpc_debug_halt_req(0), // Async halt request
