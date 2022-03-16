@@ -2,7 +2,7 @@
 SIZE?=0x4000
 STACK_START!=printf "0x%08x" $$(($(SIZE) + $(SIZE)))
 
-RV_FLAGS ?= -Wall
+RV_FLAGS ?= -Wall -Wl,--build-id=none
 
 CROSS_COMPILE ?= riscv64-linux-gnu-
 
