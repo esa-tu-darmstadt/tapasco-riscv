@@ -430,7 +430,7 @@ index ed9097e..4500c60 100644
  
 diff --git a/design/swerv_wrapper_verilog.v b/design/swerv_wrapper_verilog.v
 new file mode 100644
-index 0000000..0ad5efb
+index 0000000..a1c9c6c
 --- /dev/null
 +++ b/design/swerv_wrapper_verilog.v
 @@ -0,0 +1,510 @@
@@ -455,6 +455,7 @@ index 0000000..0ad5efb
 +module swerv_wrapper_verilog (
 +	input wire clk,
 +	input wire rst_n,
++	input wire timer_int,
 +
 +`ifdef RV_BUILD_AXI4
 +	//-------------------------- LSU AXI signals--------------------------
@@ -677,7 +678,6 @@ index 0000000..0ad5efb
 +wire dbg_bus_clk_en = 1'b1; // Clock ratio b/w cpu core clk & AHB master interface
 +wire dma_bus_clk_en = 1'b1; // Clock ratio b/w cpu core clk & AHB slave interface
 +
-+wire timer_int = 1'b0;
 +wire [`RV_PIC_TOTAL_INT:1] extintsrc_req = 0;
 +
 +wire dec_tlu_perfcnt0; // toggles when slot0 perf counter 0 has an event inc
