@@ -51,6 +51,9 @@ if 0 {
     set_property physical_name dmi_reg_en [ipx::get_port_maps REQ_ACCESS -of_objects [ipx::get_bus_interfaces DMI -of_objects [ipx::current_core]]]
 }
 
+# change pin type to interrupt
+ipx::infer_bus_interface timer_int xilinx.com:signal:interrupt_rtl:1.0 [ipx::current_core]
+
 ipx::create_xgui_files $core
 ipx::update_checksums $core
 ipx::save_core $core
