@@ -41,6 +41,12 @@ if {$maxi_ports == 2} {
 create_bd_addr_seg -range 0x00010000 -offset 0x00000000 [get_bd_addr_spaces S_AXI_CTRL] [get_bd_addr_segs AXIGate_0/saxi/reg0] SEG_AXIGate_0_reg0
 create_bd_addr_seg -range $lmem -offset $lmem [get_bd_addr_spaces S_AXI_BRAM] [get_bd_addr_segs ps_dmem_ctrl/S_AXI/Mem0] SEG_ps_dmem_ctrl_Mem0
 create_bd_addr_seg -range $lmem -offset 0x00000000 [get_bd_addr_spaces S_AXI_BRAM] [get_bd_addr_segs ps_imem_ctrl/S_AXI/Mem0] SEG_ps_imem_ctrl_Mem0
-
-
 create_specific_addr_segs
+
+if { ${add_module} eq "true" } {
+	assign_bd_address
+	set_property range ${in_if_range} [get_bd_addr_segs [lsearch -inline [get_bd_addr_segs -of [get_bd_cells $project_obj]] *$name*]]
+	set_property offset ${in_if_offset} [get_bd_addr_segs [lsearch -inline [get_bd_addr_segs -of [get_bd_cells $project_obj]] *$name*]]
+	set_property range ${in_if_range} [get_bd_addr_segs [lsearch -inline [get_bd_addr_segs -of [get_bd_cells AXIGate_0]] *$name*]]
+	set_property offset ${in_if_offset} [get_bd_addr_segs [lsearch -inline [get_bd_addr_segs -of [get_bd_cells AXIGate_0]] *$name*]]
+}
