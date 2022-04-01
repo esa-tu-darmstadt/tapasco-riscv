@@ -68,5 +68,14 @@ connect_bd_net [get_bd_pins smartconnect_0/aresetn] [get_bd_pins rst_CLK_100M/in
 
 #INTR
 if {${module_has_intr} == "true"} {
-	connect_bd_net [get_bd_pins -filter {TYPE=="intr"} -of [get_bd_cells $name]] [get_bd_pins -filter {TYPE=="intr"} -of [get_bd_cells $project_obj]]
+	if {$project_name == "swerv_pe"} {
+		connect_bd_net [get_bd_pins -filter {TYPE=="intr"} -of [get_bd_cells $name]] [get_bd_pins -filter {TYPE=="intr"} -of [get_bd_cells $project_obj]]
+	}
+	if {$project_name == "orca_pe"} {
+		startgroup
+		set_property -dict [list CONFIG.ENABLE_EXCEPTIONS {1} CONFIG.ENABLE_EXT_INTERRUPTS {1}] [get_bd_cells $project_obj]
+                endgroup
+		connect_bd_net [get_bd_pins -filter {TYPE=="intr"} -of [get_bd_cells $name]] [get_bd_pins -filter {TYPE=="intr"} -of [get_bd_cells $project_obj]]
+        }
+
 }
