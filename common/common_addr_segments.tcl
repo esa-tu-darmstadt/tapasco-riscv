@@ -45,8 +45,13 @@ create_specific_addr_segs
 
 if { ${add_module} eq "true" } {
 	assign_bd_address
-	set_property range ${in_if_range} [get_bd_addr_segs [lsearch -inline [get_bd_addr_segs -of [get_bd_cells $project_obj]] *$name*]]
-	set_property offset ${in_if_offset} [get_bd_addr_segs [lsearch -inline [get_bd_addr_segs -of [get_bd_cells $project_obj]] *$name*]]
-	set_property range ${in_if_range} [get_bd_addr_segs [lsearch -inline [get_bd_addr_segs -of [get_bd_cells AXIGate_0]] *$name*]]
-	set_property offset ${in_if_offset} [get_bd_addr_segs [lsearch -inline [get_bd_addr_segs -of [get_bd_cells AXIGate_0]] *$name*]]
+	if { ${change_range_n_offset} eq "true" } {
+		set_property range ${in_if_range} [get_bd_addr_segs [lsearch -inline [get_bd_addr_segs -of [get_bd_cells $project_obj]] *$name*]]
+		set_property offset ${in_if_offset} [get_bd_addr_segs [lsearch -inline [get_bd_addr_segs -of [get_bd_cells $project_obj]] *$name*]]
+		set_property range ${in_if_range} [get_bd_addr_segs [lsearch -inline [get_bd_addr_segs -of [get_bd_cells AXIGate_0]] *$name*]]
+		set_property offset ${in_if_offset} [get_bd_addr_segs [lsearch -inline [get_bd_addr_segs -of [get_bd_cells AXIGate_0]] *$name*]]
+		set_property range ${out_if_range} [get_bd_addr_segs [lsearch -inline [get_bd_addr_segs -of [get_bd_cells $name]] *dmaOffset*]]
+        	set_property offset ${out_if_offset} [get_bd_addr_segs [lsearch -inline [get_bd_addr_segs -of [get_bd_cells $name]] *dmaOffset*]]
+
+	}
 }

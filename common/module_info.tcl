@@ -6,6 +6,8 @@
 set moddir ""
 
 #input interface information
+#set if you need to change the ranges and offsets with true/false
+set change_range_n_offset "false"
 #supported IF Types: "AXI_APB" "AXI4_LITE"
 set if_type ""
 set in_if_range ""
@@ -16,7 +18,7 @@ set out_if_range ""
 set out_if_offset ""
 
 #registers
-#set if module has INTR to true/false
+#set if your module has an intr with true/false
 set module_has_intr "false"
 
 
