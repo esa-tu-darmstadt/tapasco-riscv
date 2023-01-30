@@ -1,5 +1,5 @@
 diff --git a/core/cva5_config.sv b/core/cva5_config.sv
-index 2b4d9cf..87cc623 100755
+index 2b4d9cf..df1c9b7 100755
 --- a/core/cva5_config.sv
 +++ b/core/cva5_config.sv
 @@ -155,19 +155,19 @@ package cva5_config;
@@ -11,9 +11,10 @@ index 2b4d9cf..87cc623 100755
 +        INCLUDE_S_MODE : 0,
 +        INCLUDE_U_MODE : 0,
          INCLUDE_MUL : 1,
-         INCLUDE_DIV : 1,
+-        INCLUDE_DIV : 1,
 -        INCLUDE_IFENCE : 1,
 -        INCLUDE_CSRS : 1,
++        INCLUDE_DIV : 0,
 +        INCLUDE_IFENCE : 0,
 +        INCLUDE_CSRS : 0,
          INCLUDE_AMO : 0,
@@ -64,10 +65,10 @@ index 2b4d9cf..87cc623 100755
              ENTRIES : 512,
 diff --git a/core/cva5_wrapper.sv b/core/cva5_wrapper.sv
 new file mode 100644
-index 0000000..99252e2
+index 0000000..5880d96
 --- /dev/null
 +++ b/core/cva5_wrapper.sv
-@@ -0,0 +1,229 @@
+@@ -0,0 +1,230 @@
 +/*
 + * Copyright © 2022 Carsten Heinz
 + *
@@ -255,7 +256,8 @@ index 0000000..99252e2
 +assign m_axi.rlast = m_axi_rlast;
 +
 +avalon_interface m_avalon();
-+wishbone_interface m_wishbone();
++wishbone_interface dwishbone();
++wishbone_interface iwishbone();
 +
 +l2_requester_interface l2[L2_NUM_PORTS-1:0]();
 +assign l2[1].request_push = 0;
@@ -274,8 +276,8 @@ index 0000000..99252e2
 +
 +	.m_axi(m_axi),
 +	.m_avalon(m_avalon),
-+	.dwishbone(m_wishbone),
-+    .iwishbone(m_wishbone),
++	.dwishbone(dwishbone),
++	.iwishbone(iwishbone),
 +	.l2(l2[0]),
 +
 +	.s_interrupt(0),
@@ -627,4 +629,4 @@ index 0000000..ad3acd4
 +ipx::archive_core openhwgroup_risc-v_$name.zip $core
 +ipx::unload_core component_1
 +
----
+--
