@@ -1,8 +1,8 @@
 diff --git a/core/cva5_config.sv b/core/cva5_config.sv
-index c7d5550..19d71d5 100755
+index 2b4d9cf..87cc623 100755
 --- a/core/cva5_config.sv
 +++ b/core/cva5_config.sv
-@@ -149,19 +149,19 @@ package cva5_config;
+@@ -155,19 +155,19 @@ package cva5_config;
      localparam cpu_config_t EXAMPLE_CONFIG = '{
          //ISA options
          INCLUDE_M_MODE : 1,
@@ -11,10 +11,9 @@ index c7d5550..19d71d5 100755
 +        INCLUDE_S_MODE : 0,
 +        INCLUDE_U_MODE : 0,
          INCLUDE_MUL : 1,
--        INCLUDE_DIV : 1,
+         INCLUDE_DIV : 1,
 -        INCLUDE_IFENCE : 1,
 -        INCLUDE_CSRS : 1,
-+        INCLUDE_DIV : 0,
 +        INCLUDE_IFENCE : 0,
 +        INCLUDE_CSRS : 0,
          INCLUDE_AMO : 0,
@@ -29,7 +28,7 @@ index c7d5550..19d71d5 100755
              NON_STANDARD_OPTIONS : '{
                  COUNTER_W : 33,
                  MCYCLE_WRITEABLE : 1,
-@@ -205,22 +205,22 @@ package cva5_config;
+@@ -222,13 +222,13 @@ package cva5_config;
          },
          INCLUDE_ILOCAL_MEM : 1,
          ILOCAL_MEM_ADDR : '{
@@ -45,6 +44,10 @@ index c7d5550..19d71d5 100755
 +            L : 32'h00000000,
 +            H : 32'h0FFFFFFF
          },
+         INCLUDE_IBUS : 0,
+         IBUS_ADDR : '{
+@@ -237,12 +237,12 @@ package cva5_config;
+         },
          INCLUDE_PERIPHERAL_BUS : 1,
          PERIPHERAL_BUS_ADDR : '{
 -            L : 32'h60000000,
@@ -59,21 +62,12 @@ index c7d5550..19d71d5 100755
          BP : '{
              WAYS : 2,
              ENTRIES : 512,
-@@ -285,7 +285,7 @@ package cva5_config;
-     ////////////////////////////////////////////////////
-     //Trace Options
-     //Trace interface is necessary for verilator simulation
--    localparam ENABLE_TRACE_INTERFACE = 1;
-+    localparam ENABLE_TRACE_INTERFACE = 0;
- 
- 
-     ////////////////////////////////////////////////////
 diff --git a/core/cva5_wrapper.sv b/core/cva5_wrapper.sv
 new file mode 100644
-index 0000000..0cb6a56
+index 0000000..99252e2
 --- /dev/null
 +++ b/core/cva5_wrapper.sv
-@@ -0,0 +1,228 @@
+@@ -0,0 +1,229 @@
 +/*
 + * Copyright © 2022 Carsten Heinz
 + *
@@ -280,7 +274,8 @@ index 0000000..0cb6a56
 +
 +	.m_axi(m_axi),
 +	.m_avalon(m_avalon),
-+	.m_wishbone(m_wishbone),
++	.dwishbone(m_wishbone),
++    .iwishbone(m_wishbone),
 +	.l2(l2[0]),
 +
 +	.s_interrupt(0),
@@ -576,7 +571,7 @@ index 0000000..944ebef
 +
 +endmodule
 diff --git a/core/writeback.sv b/core/writeback.sv
-index 29d39ca..ea404a2 100644
+index c4aae11..18a33bb 100644
 --- a/core/writeback.sv
 +++ b/core/writeback.sv
 @@ -58,7 +58,7 @@ module writeback
@@ -632,3 +627,4 @@ index 0000000..ad3acd4
 +ipx::archive_core openhwgroup_risc-v_$name.zip $core
 +ipx::unload_core component_1
 +
+---
