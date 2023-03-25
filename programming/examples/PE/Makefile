@@ -15,6 +15,11 @@ else
 	MABI?=ilp32
 endif
 
+GCCVERSIONGTEQ12 := $(shell expr `${CROSS_COMPILE}gcc -dumpversion | cut -f1 -d.` \>= 12)
+ifeq (${GCCVERSIONGTEQ12},1)
+	MARCH:=$(MARCH)_zicsr
+endif
+
 PROGRAM?=simple_sum
 RV_FLAGS+= -march=$(MARCH) -mabi=$(MABI) -nostdlib -g
 
