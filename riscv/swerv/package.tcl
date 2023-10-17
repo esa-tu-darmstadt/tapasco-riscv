@@ -12,7 +12,7 @@ set_property file_type {Verilog Header} [get_files swerv_eh1/configs/snapshots/d
 # optionally remove unneeded files
 
 update_compile_order -fileset sources_1
-set_property top swerv_wrapper_verilog [current_fileset]
+set_property top veer_wrapper_verilog [current_fileset]
 update_compile_order -fileset sources_1
 
 ipx::package_project -root_dir [pwd]/swerv_eh1 -import_files -force
