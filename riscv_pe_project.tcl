@@ -81,6 +81,13 @@ if {[string equal [get_filesets -quiet sources_1] ""]} {
 
 # Set IP repository paths
 set obj [get_filesets sources_1]
+variable add_module
+variable moddir
+if { ${add_module} eq "true" } {
+        source common/module_info.tcl
+  }
+puts $add_module
+puts $moddir
 source common/ip_repo_path.tcl
 set ip_paths [get_property "ip_repo_paths" $obj]
 puts $ip_paths
@@ -93,6 +100,8 @@ update_ip_catalog -rebuild
 proc cr_bd_riscv_pe { parentCell lmem } {
   variable project_name
   variable cache
+  variable add_module
+  variable moddir
   variable maxi_ports
   # CHANGE DESIGN NAME HERE
   set design_name ${project_name}
@@ -144,6 +153,11 @@ proc cr_bd_riscv_pe { parentCell lmem } {
   
   source common/connect_common_ports.tcl
   
+  # Connect modules
+
+  if { ${add_module} eq "true" } {	
+  	source common/add_module.tcl
+  }
   
   # Create address segments
   source common/common_addr_segments.tcl
