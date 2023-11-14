@@ -31,7 +31,7 @@ If you provide a setup with these components (and their own dependencies) the pr
 * [Western Digital's SweRV](https://github.com/westerndigitalcorporation/swerv_eh1)
 * [OpenHW Group's cva5](https://github.com/openhwgroup/cva5) (formerly _Taiga_)
 * [OpenHW Group's cva6](https://github.com/openhwgroup/cva6) (formerly _Ariane_, RV64)
-* [PicoRV32](https://github.com/cliffordwolf/picorv32)
+* [PicoRV32](https://github.com/YosysHQ/picorv32)
 
 ## Building and using a PE in TaPaSCo
 First clone this repository.

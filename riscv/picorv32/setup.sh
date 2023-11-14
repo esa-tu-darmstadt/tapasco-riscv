@@ -2,7 +2,7 @@
 
 if [ ! -d "riscv/picorv32/picorv32" ]; then
 	cd riscv/picorv32
-	git clone https://github.com/cliffordwolf/picorv32.git
+	git clone https://github.com/YosysHQ/picorv32.git
 	cd picorv32
 else
 	cd riscv/picorv32/picorv32
