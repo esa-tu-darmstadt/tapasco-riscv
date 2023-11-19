@@ -28,7 +28,7 @@ list:
 %_pe: %_setup
 	vivado -nolog -nojournal -mode batch -source riscv_pe_project.tcl -tclargs --part $(PYNQ) --bram $(BRAM_SIZE) --cache $(CACHE) --maxi $(MAXI) --project_name $@
 	@PE_ID=$$(($$(echo $(PE_LIST) | sed s/$@.*// | wc -w) + 1742)); \
-	tapasco -v import IP/$@/esa.informatik.tu-darmstadt.de_tapasco_$@_1.0.zip as $$PE_ID --skipEvaluation
+	tapasco -v import IP/$@/esa.informatik.tu-darmstadt.de_tapasco_$@_1.0.zip as $$PE_ID
 
 %_setup: riscv/%/setup.sh
 	$<
