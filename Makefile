@@ -49,3 +49,5 @@ clean: uninstall
 	rm -rf riscv/cva5/{cva5,openhwgroup_risc-v_cva5.zip}
 	rm -rf riscv/vexriscv/{SpinalHDL,VexRiscv}
 	rm -rf riscv/cva6/cva6
+	rm -rf riscv/taiga32_bsv/Taiga-bsv
+	rm -rf riscv/taiga64_bsv/Taiga-bsv

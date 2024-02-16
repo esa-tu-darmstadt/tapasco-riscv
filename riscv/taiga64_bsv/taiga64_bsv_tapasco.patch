@@ -1,0 +1,13 @@
+diff --git a/core/Makefile b/core/Makefile
+index 7553ef6..dca81a6 100644
+--- a/core/Makefile
++++ b/core/Makefile
+@@ -18,7 +18,7 @@ EXTRA_BSV_LIBS:=
+ EXTRA_LIBRARIES:=
+ RUN_FLAGS:=
+ 
+-PROJECT_NAME=Taiga
++PROJECT_NAME=taiga64_bsv
+ 
+ ifeq ($(RUN_TEST),)
+ RUN_TEST=TestsMainTest

@@ -12,4 +12,6 @@ set cpu_vlnv [list \
   "cva6_pe"                     {openhwgroup:cva6:cva6:0.1} \
   "swerv_eh2_pe"                {wdc:swerv_eh2:swerv_eh2:1.4} \
   "cva5_pe"                     {openhwgroup:cva5:cva5} \
+  "taiga32_bsv_pe"              {esa.informatik.tu-darmstadt.de:user:taiga32_bsv:1.0}\
+  "taiga64_bsv_pe"              {esa.informatik.tu-darmstadt.de:user:taiga64_bsv:1.0}\
 ]
