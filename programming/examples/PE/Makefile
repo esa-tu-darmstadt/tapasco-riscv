@@ -21,7 +21,7 @@ ifeq (${GCCVERSIONGTEQ12},1)
 endif
 
 PROGRAM?=simple_sum
-RV_FLAGS+= -march=$(MARCH) -mabi=$(MABI) -nostdlib -g
+RV_FLAGS+= -march=$(MARCH) -mabi=$(MABI) -static -nostdlib -g
 
 ifeq ($(CCM),1)
 	# CCM is active, so we need to configure for different cores
