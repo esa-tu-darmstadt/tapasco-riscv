@@ -7,8 +7,8 @@ connect_bd_intf_net -intf_net axi_interconnect_0_M00_AXI [get_bd_intf_pins RVCon
 connect_bd_intf_net -intf_net axi_interconnect_1_M00_AXI [get_bd_intf_pins axi_interconnect_1/M00_AXI] [get_bd_intf_pins ps_imem_ctrl/S_AXI]
 connect_bd_intf_net -intf_net axi_interconnect_1_M01_AXI [get_bd_intf_pins axi_interconnect_1/M01_AXI] [get_bd_intf_pins ps_dmem_ctrl/S_AXI]
 
-connect_bd_intf_net -intf_net ps_dmem_ctrl_BRAM_PORTA [get_bd_intf_pins dmem/BRAM_PORTB] [get_bd_intf_pins ps_dmem_ctrl/BRAM_PORTA]
-connect_bd_intf_net -intf_net ps_imem_ctrl_BRAM_PORTA [get_bd_intf_pins imem/BRAM_PORTB] [get_bd_intf_pins ps_imem_ctrl/BRAM_PORTA]
+connect_bd_intf_net -intf_net ps_dmem_ctrl_BRAM_PORTA [get_bd_intf_pins dmem/BRAM_PORTA] [get_bd_intf_pins ps_dmem_ctrl/BRAM_PORTA]
+connect_bd_intf_net -intf_net ps_imem_ctrl_BRAM_PORTA [get_bd_intf_pins imem/BRAM_PORTA] [get_bd_intf_pins ps_imem_ctrl/BRAM_PORTA]
 
 lappend axi_mem_slaves [get_bd_intf_pins dmaOffset/S_AXI]
 
@@ -23,20 +23,22 @@ if {[info exists axi_io_port]} {
 	lappend axi_mem_slaves [get_bd_intf_pins axi_interconnect_0/S01_AXI]
 }
 
-if {[info exists dbram]} {
-	connect_bd_intf_net $dbram [get_bd_intf_pins dmem/BRAM_PORTA]
-} {
-	lappend axi_mem_slaves [get_bd_intf_pins rv_dmem_ctrl/S_AXI]
-	connect_bd_intf_net -intf_net rv_dmem_ctrl_BRAM_PORTA [get_bd_intf_pins dmem/BRAM_PORTA] [get_bd_intf_pins rv_dmem_ctrl/bram]
-}
-if {[info exists ibram]} {
-	connect_bd_intf_net $ibram [get_bd_intf_pins imem/BRAM_PORTA]
-} elseif {[info exists iaxi]} {
-	connect_bd_intf_net [get_bd_intf_pins imem/BRAM_PORTA] [get_bd_intf_pins rv_imem_ctrl/bram]
-	connect_bd_intf_net [get_bd_intf_pins rv_imem_ctrl/S_AXI] $iaxi
-} {
-	connect_bd_intf_net [get_bd_intf_pins imem/BRAM_PORTA] [get_bd_intf_pins rv_imem_ctrl/bram]
-	lappend axi_mem_slaves [get_bd_intf_pins rv_imem_ctrl/S_AXI]
+if {$core_localmem} {
+	if {[info exists dbram]} {
+		connect_bd_intf_net $dbram [get_bd_intf_pins dmem/BRAM_PORTB]
+	} {
+		lappend axi_mem_slaves [get_bd_intf_pins rv_dmem_ctrl/S_AXI]
+		connect_bd_intf_net -intf_net rv_dmem_ctrl_BRAM_PORTA [get_bd_intf_pins dmem/BRAM_PORTB] [get_bd_intf_pins rv_dmem_ctrl/bram]
+	}
+	if {[info exists ibram]} {
+		connect_bd_intf_net $ibram [get_bd_intf_pins imem/BRAM_PORTB]
+	} elseif {[info exists iaxi]} {
+		connect_bd_intf_net [get_bd_intf_pins imem/BRAM_PORTB] [get_bd_intf_pins rv_imem_ctrl/bram]
+		connect_bd_intf_net [get_bd_intf_pins rv_imem_ctrl/S_AXI] $iaxi
+	} {
+		connect_bd_intf_net [get_bd_intf_pins imem/BRAM_PORTB] [get_bd_intf_pins rv_imem_ctrl/bram]
+		lappend axi_mem_slaves [get_bd_intf_pins rv_imem_ctrl/S_AXI]
+	}
 }
 
 # configure and connect axi_mem_intercon_1
@@ -58,8 +60,12 @@ if {[info exists axi_mem_port]} {
 } {
 	set cpu_dmem [get_bd_intf_pins -of_objects [get_bd_intf_nets -of_objects [get_bd_intf_pins axi_mem_intercon_1/S00_AXI]] -filter {MODE == Master}]
 }
-set data_width [get_property CONFIG.DATA_WIDTH $cpu_dmem]
-set addr_width [get_property CONFIG.ADDR_WIDTH $cpu_dmem]
+if {![info exists data_width]} {
+	set data_width {32}
+}
+if {![info exists addr_width]} {
+	set addr_width {32}
+}
 puts "Configure data path to ${addr_width}-bit address width and ${data_width}-bit data width."
 set_property CONFIG.BYTES_PER_WORD [expr $data_width / 8] [get_bd_cells dmaOffset]
 set_property CONFIG.DATA_WIDTH $data_width [get_bd_intf_ports M_AXI]
@@ -71,8 +77,10 @@ if {$maxi_ports == 2} {
 	set_property CONFIG.ADDRESS_WIDTH $addr_width [get_bd_cells dmaOffset2]
 	set_property CONFIG.ADDR_WIDTH $addr_width [get_bd_intf_ports M_AXI2]
 }
-set_property CONFIG.BYTES_PER_WORD [expr $data_width / 8] [get_bd_cells rv_dmem_ctrl]
-set_property CONFIG.BYTES_PER_WORD [expr $data_width / 8] [get_bd_cells rv_imem_ctrl]
+if {$core_localmem} {
+	set_property CONFIG.BYTES_PER_WORD [expr $data_width / 8] [get_bd_cells rv_dmem_ctrl]
+	set_property CONFIG.BYTES_PER_WORD [expr $data_width / 8] [get_bd_cells rv_imem_ctrl]
+}
 # keep second BRAM port in sync, otherwise problems with larger sizes
 set_property CONFIG.DATA_WIDTH $data_width [get_bd_cells ps_dmem_ctrl]
 set_property CONFIG.DATA_WIDTH $data_width [get_bd_cells ps_imem_ctrl]

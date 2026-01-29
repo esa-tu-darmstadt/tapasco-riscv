@@ -118,10 +118,12 @@ if {$maxi_ports == 2} {
  ] [get_bd_intf_pins /RVController_0/saxi]
 
   # Create instance: axi_interconnect_0, and set properties
-  set axi_interconnect_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:axi_interconnect:2.1 axi_interconnect_0 ]
+  set axi_interconnect_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:smartconnect:1.0 axi_interconnect_0 ]
   set_property -dict [ list \
    CONFIG.NUM_MI {1} \
    CONFIG.NUM_SI {2} \
+   CONFIG.NUM_CLKS {1} \
+   CONFIG.HAS_ARESETN {1} \
  ] $axi_interconnect_0
  
  # Create instance: dmaOffset, and set properties
