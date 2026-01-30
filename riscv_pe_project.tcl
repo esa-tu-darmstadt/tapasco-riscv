@@ -133,6 +133,7 @@ proc cr_bd_riscv_pe { parentCell lmem } {
   # Set parent object as current
   current_bd_instance $parentObj
 
+  source common/bus_util.tcl
 
   source common/place_tapasco_control.tcl
 

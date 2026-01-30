@@ -5,6 +5,9 @@ set cpu_clk [get_bd_pins cva5_0/clk]
 # Create interface connections
 set axi_io_port [get_bd_intf_pins cva5_0/m_axi]
 set axi_mem_port [get_bd_intf_pins cva5_0/m_axi_cache]
+connect_bd_intf_net -intf_net cva5_axi_mem $axi_mem_port [get_bd_intf_pins axi_mem_intercon_1/S00_AXI]
+set data_width [get_property CONFIG.DATA_WIDTH [get_bd_intf_pins cva5_0/m_axi_cache]]
+set addr_width [get_property CONFIG.ADDR_WIDTH [get_bd_intf_pins cva5_0/m_axi_cache]]
 
 set ibram [get_bd_intf_pins cva5_0/instruction_bram]
 set dbram [get_bd_intf_pins cva5_0/data_bram]

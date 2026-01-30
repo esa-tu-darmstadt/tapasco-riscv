@@ -1,18 +1,21 @@
 SHELL=/bin/bash
 
+#Settings for 7-series, UltraScale(+)
 PYNQ=xc7z020clg400-1
 TAPASCO_PLATFORM=
 VERSAL=false
 
+#Versal V80
 #PYNQ=xcv80-lsva4737-2MHP-e-S
 #TAPASCO_PLATFORM=-p v80
 #VERSAL=true
 
+#BRAM_SIZE sets the size in bytes for the data and instruction BRAMs. The combined size will be 2x BRAM_SIZE.
+#Set BRAM_SIZE to 0 to disable local memory. Note: that does NOT set the core's boot address to external memory.
 BRAM_SIZE?=0x4000
 XLEN?=32
 CACHE?=false
 MAXI?=1
-LOCALMEM?=true
 
 ifndef TAPASCO_HOME
 $(error TAPASCO_HOME is not set, make sure to source setup.sh in TaPaSCo dir)
@@ -35,7 +38,7 @@ list:
 	@echo $(CORE_LIST)
 
 %_pe: %_setup
-	vivado -nolog -nojournal -mode batch -source riscv_pe_project.tcl -tclargs --part $(PYNQ) --bram $(BRAM_SIZE) --cache $(CACHE) --maxi $(MAXI) --localmem $(LOCALMEM) --versal $(VERSAL) --project_name $@
+	vivado -nolog -nojournal -mode batch -source riscv_pe_project.tcl -tclargs --part $(PYNQ) --bram $(BRAM_SIZE) --cache $(CACHE) --maxi $(MAXI) --versal $(VERSAL) --project_name $@
 	@PE_ID=$$(($$(echo $(PE_LIST) | sed s/$@.*// | wc -w) + 1742)); \
 	tapasco -v import IP/$@/esa.informatik.tu-darmstadt.de_tapasco_$@_1.0.zip as $$PE_ID ${TAPASCO_PLATFORM}
 

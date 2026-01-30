@@ -11,6 +11,7 @@
  ] [get_bd_intf_pins /picorv32_0/mem_axi]
 
   # PicoRV32 only has one AXI master port, attach both memories to axi_mem_intercon_1
+  set axi_mem_port [get_bd_intf_pins piccolo_0/core_mem_master]
   connect_bd_intf_net [get_bd_intf_pins picorv32_0/mem_axi] [get_bd_intf_pins axi_mem_intercon_1/S00_AXI]
 
   # Create port connections
@@ -22,8 +23,10 @@ proc create_specific_addr_segs {} {
   variable lmem
   # Create address segments
   create_bd_addr_seg -range 0x00010000 -offset 0x11000000 [get_bd_addr_spaces picorv32_0/mem_axi] [get_bd_addr_segs RVController_0/saxi/reg0] SEG_RVController_0_reg0
-  create_bd_addr_seg -range $lmem -offset $lmem [get_bd_addr_spaces picorv32_0/mem_axi] [get_bd_addr_segs rv_dmem_ctrl/S_AXI/Mem0] SEG_rv_dmem_ctrl_Mem0
-  create_bd_addr_seg -range $lmem -offset 0x00000000 [get_bd_addr_spaces picorv32_0/mem_axi] [get_bd_addr_segs rv_imem_ctrl/S_AXI/Mem0] SEG_rv_imem_ctrl_Mem0
+  if { $lmem > 0 } {
+    create_bd_addr_seg -range $lmem -offset $lmem [get_bd_addr_spaces picorv32_0/mem_axi] [get_bd_addr_segs rv_dmem_ctrl/S_AXI/Mem0] SEG_rv_dmem_ctrl_Mem0
+    create_bd_addr_seg -range $lmem -offset 0x00000000 [get_bd_addr_spaces picorv32_0/mem_axi] [get_bd_addr_segs rv_imem_ctrl/S_AXI/Mem0] SEG_rv_imem_ctrl_Mem0
+  }
 }
 
 proc get_external_mem_addr_space {} {

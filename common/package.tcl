@@ -26,8 +26,10 @@ ipx::remove_bus_parameter PHASE [ipx::get_bus_interfaces CLK -of_objects $core]
 set_property name ARESET_N [ipx::get_bus_interfaces RST.ARESET_N -of_objects $core]
 
 # Memory
-ipx::remove_address_block Mem1 [ipx::get_memory_maps S_AXI_BRAM -of_objects $core]
-set_property range [expr {$lmem * 2}] [ipx::get_address_blocks Mem0 -of_objects [ipx::get_memory_maps S_AXI_BRAM -of_objects $core]]
+if {$lmem > 0} {
+	ipx::remove_address_block Mem1 [ipx::get_memory_maps S_AXI_BRAM -of_objects $core]
+	set_property range [expr {$lmem * 2}] [ipx::get_address_blocks Mem0 -of_objects [ipx::get_memory_maps S_AXI_BRAM -of_objects $core]]
+}
 
 # Finish up
 set_property core_revision 1 $core
