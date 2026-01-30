@@ -16,6 +16,7 @@
  ] [get_bd_intf_pins /VexRiscvAxi4_0/iBusAxi]
 
   # Create interface connections
+  set axi_mem_port [get_bd_intf_pins VexRiscvAxi4_0/dBusAxi]
   connect_bd_intf_net -intf_net VexRiscvAxi4_0_dBusAxi [get_bd_intf_pins VexRiscvAxi4_0/dBusAxi] [get_bd_intf_pins axi_mem_intercon_1/S00_AXI]
   set iaxi [get_bd_intf_pins VexRiscvAxi4_0/iBusAxi]
 
@@ -27,8 +28,10 @@ proc create_specific_addr_segs {} {
   variable lmem
   # Create address segments
   create_bd_addr_seg -range 0x00010000 -offset 0x11000000 [get_bd_addr_spaces VexRiscvAxi4_0/dBusAxi] [get_bd_addr_segs RVController_0/saxi/reg0] SEG_RVController_0_reg0
-  create_bd_addr_seg -range $lmem -offset $lmem [get_bd_addr_spaces VexRiscvAxi4_0/dBusAxi] [get_bd_addr_segs rv_dmem_ctrl/S_AXI/Mem0] SEG_rv_dmem_ctrl_Mem0
-  create_bd_addr_seg -range $lmem -offset 0x00000000 [get_bd_addr_spaces VexRiscvAxi4_0/iBusAxi] [get_bd_addr_segs rv_imem_ctrl/S_AXI/Mem0] SEG_rv_imem_ctrl_Mem0
+  if { $lmem > 0 } {
+    create_bd_addr_seg -range $lmem -offset $lmem [get_bd_addr_spaces VexRiscvAxi4_0/dBusAxi] [get_bd_addr_segs rv_dmem_ctrl/S_AXI/Mem0] SEG_rv_dmem_ctrl_Mem0
+    create_bd_addr_seg -range $lmem -offset 0x00000000 [get_bd_addr_spaces VexRiscvAxi4_0/iBusAxi] [get_bd_addr_segs rv_imem_ctrl/S_AXI/Mem0] SEG_rv_imem_ctrl_Mem0
+  }
 }
 
 proc get_external_mem_addr_space {} {

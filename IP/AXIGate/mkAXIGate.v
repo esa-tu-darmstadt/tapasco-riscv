@@ -453,7 +453,7 @@ module mkAXIGate(CLK,
   assign maxi_bready = wr_m_out$FULL_N ;
 
   // submodule rd_m_in
-  SizedFIFO #(.p1width(32'd35),
+  AXIGate_SizedFIFO #(.p1width(32'd35),
 	      .p2depth(32'd8),
 	      .p3cntr_width(32'd3),
 	      .guarded(32'd1)) rd_m_in(.RST(RST_N),
@@ -467,7 +467,7 @@ module mkAXIGate(CLK,
 				       .EMPTY_N(rd_m_in$EMPTY_N));
 
   // submodule rd_m_out
-  SizedFIFO #(.p1width(32'd34),
+  AXIGate_SizedFIFO #(.p1width(32'd34),
 	      .p2depth(32'd8),
 	      .p3cntr_width(32'd3),
 	      .guarded(32'd1)) rd_m_out(.RST(RST_N),
@@ -481,7 +481,7 @@ module mkAXIGate(CLK,
 					.EMPTY_N(rd_m_out$EMPTY_N));
 
   // submodule rd_s_in
-  SizedFIFO #(.p1width(32'd35),
+  AXIGate_SizedFIFO #(.p1width(32'd35),
 	      .p2depth(32'd8),
 	      .p3cntr_width(32'd3),
 	      .guarded(32'd1)) rd_s_in(.RST(RST_N),
@@ -495,7 +495,7 @@ module mkAXIGate(CLK,
 				       .EMPTY_N(rd_s_in$EMPTY_N));
 
   // submodule rd_s_out
-  SizedFIFO #(.p1width(32'd34),
+  AXIGate_SizedFIFO #(.p1width(32'd34),
 	      .p2depth(32'd8),
 	      .p3cntr_width(32'd3),
 	      .guarded(32'd1)) rd_s_out(.RST(RST_N),
@@ -509,7 +509,7 @@ module mkAXIGate(CLK,
 					.EMPTY_N(rd_s_out$EMPTY_N));
 
   // submodule wr_m_in
-  SizedFIFO #(.p1width(32'd71),
+  AXIGate_SizedFIFO #(.p1width(32'd71),
 	      .p2depth(32'd8),
 	      .p3cntr_width(32'd3),
 	      .guarded(32'd1)) wr_m_in(.RST(RST_N),
@@ -523,7 +523,7 @@ module mkAXIGate(CLK,
 				       .EMPTY_N(wr_m_in$EMPTY_N));
 
   // submodule wr_m_out
-  SizedFIFO #(.p1width(32'd2),
+  AXIGate_SizedFIFO #(.p1width(32'd2),
 	      .p2depth(32'd8),
 	      .p3cntr_width(32'd3),
 	      .guarded(32'd1)) wr_m_out(.RST(RST_N),
@@ -537,7 +537,7 @@ module mkAXIGate(CLK,
 					.EMPTY_N(wr_m_out$EMPTY_N));
 
   // submodule wr_s_in
-  SizedFIFO #(.p1width(32'd71),
+  AXIGate_SizedFIFO #(.p1width(32'd71),
 	      .p2depth(32'd8),
 	      .p3cntr_width(32'd3),
 	      .guarded(32'd1)) wr_s_in(.RST(RST_N),
@@ -551,7 +551,7 @@ module mkAXIGate(CLK,
 				       .EMPTY_N(wr_s_in$EMPTY_N));
 
   // submodule wr_s_out
-  SizedFIFO #(.p1width(32'd2),
+  AXIGate_SizedFIFO #(.p1width(32'd2),
 	      .p2depth(32'd8),
 	      .p3cntr_width(32'd3),
 	      .guarded(32'd1)) wr_s_out(.RST(RST_N),

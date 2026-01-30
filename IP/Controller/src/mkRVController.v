@@ -363,7 +363,7 @@ module mkRVController(CLK,
   assign saxi_bresp = wr_s_out$EMPTY_N ? wr_s_out$D_OUT : 2'd0 ;
 
   // submodule rd_s_in
-  SizedFIFO #(.p1width(32'd35),
+  RVController_SizedFIFO #(.p1width(32'd35),
 	      .p2depth(32'd8),
 	      .p3cntr_width(32'd3),
 	      .guarded(32'd1)) rd_s_in(.RST(RST_N),
@@ -377,7 +377,7 @@ module mkRVController(CLK,
 				       .EMPTY_N(rd_s_in$EMPTY_N));
 
   // submodule rd_s_out
-  SizedFIFO #(.p1width(32'd34),
+  RVController_SizedFIFO #(.p1width(32'd34),
 	      .p2depth(32'd8),
 	      .p3cntr_width(32'd3),
 	      .guarded(32'd1)) rd_s_out(.RST(RST_N),
@@ -391,7 +391,7 @@ module mkRVController(CLK,
 					.EMPTY_N(rd_s_out$EMPTY_N));
 
   // submodule wr_s_in
-  SizedFIFO #(.p1width(32'd71),
+  RVController_SizedFIFO #(.p1width(32'd71),
 	      .p2depth(32'd8),
 	      .p3cntr_width(32'd3),
 	      .guarded(32'd1)) wr_s_in(.RST(RST_N),
@@ -405,7 +405,7 @@ module mkRVController(CLK,
 				       .EMPTY_N(wr_s_in$EMPTY_N));
 
   // submodule wr_s_out
-  SizedFIFO #(.p1width(32'd2),
+  RVController_SizedFIFO #(.p1width(32'd2),
 	      .p2depth(32'd8),
 	      .p3cntr_width(32'd3),
 	      .guarded(32'd1)) wr_s_out(.RST(RST_N),

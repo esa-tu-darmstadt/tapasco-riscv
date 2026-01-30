@@ -94,6 +94,7 @@ proc cr_bd_riscv_pe { parentCell lmem } {
   variable project_name
   variable cache
   variable maxi_ports
+  variable versal_embmem
   # CHANGE DESIGN NAME HERE
   set design_name ${project_name}
 
@@ -131,6 +132,7 @@ proc cr_bd_riscv_pe { parentCell lmem } {
   # Set parent object as current
   current_bd_instance $parentObj
 
+  source common/bus_util.tcl
 
   source common/place_tapasco_control.tcl
 

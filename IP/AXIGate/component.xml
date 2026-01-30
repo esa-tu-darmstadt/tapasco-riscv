@@ -1116,19 +1116,19 @@
     <spirit:fileSet>
       <spirit:name>xilinx_anylanguagesynthesis_view_fileset</spirit:name>
       <spirit:file>
-        <spirit:name>SizedFIFO.v</spirit:name>
+        <spirit:name>AXIGate_SizedFIFO.v</spirit:name>
         <spirit:fileType>verilogSource</spirit:fileType>
       </spirit:file>
       <spirit:file>
         <spirit:name>mkAXIGate.v</spirit:name>
         <spirit:fileType>verilogSource</spirit:fileType>
-        <spirit:userFileType>CHECKSUM_18227af8</spirit:userFileType>
+        <spirit:userFileType>CHECKSUM_c8d90a4f</spirit:userFileType>
       </spirit:file>
     </spirit:fileSet>
     <spirit:fileSet>
       <spirit:name>xilinx_anylanguagebehavioralsimulation_view_fileset</spirit:name>
       <spirit:file>
-        <spirit:name>SizedFIFO.v</spirit:name>
+        <spirit:name>AXIGate_SizedFIFO.v</spirit:name>
         <spirit:fileType>verilogSource</spirit:fileType>
       </spirit:file>
       <spirit:file>
@@ -1181,6 +1181,7 @@
         <xilinx:family xilinx:lifeCycle="Production">kintexuplus</xilinx:family>
         <xilinx:family xilinx:lifeCycle="Production">zynquplus</xilinx:family>
         <xilinx:family xilinx:lifeCycle="Production">kintexu</xilinx:family>
+        <xilinx:family xilinx:lifeCycle="Production">versal</xilinx:family>
       </xilinx:supportedFamilies>
       <xilinx:taxonomies>
         <xilinx:taxonomy>/UserIP</xilinx:taxonomy>

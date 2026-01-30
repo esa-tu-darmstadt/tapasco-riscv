@@ -15,6 +15,7 @@ if {$maxi_ports == 2} {
     ] $M_AXI2
 }
 
+if {$lmem > 0} {
   set S_AXI_BRAM [ create_bd_intf_port -mode Slave -vlnv xilinx.com:interface:aximm_rtl:1.0 S_AXI_BRAM ]
   set_property -dict [ list \
    CONFIG.ADDR_WIDTH [expr log10($lmem*2)/log10(2)] \
@@ -45,6 +46,7 @@ if {$maxi_ports == 2} {
    CONFIG.WUSER_BITS_PER_BYTE {0} \
    CONFIG.WUSER_WIDTH {0} \
    ] $S_AXI_BRAM
+}
   set S_AXI_CTRL [ create_bd_intf_port -mode Slave -vlnv xilinx.com:interface:aximm_rtl:1.0 S_AXI_CTRL ]
   set_property -dict [ list \
    CONFIG.ADDR_WIDTH {16} \
@@ -82,9 +84,11 @@ if {$maxi_ports == 2} {
    CONFIG.POLARITY {ACTIVE_LOW} \
  ] $ARESET_N
   set CLK [ create_bd_port -dir I -type clk CLK ]
-  set_property -dict [ list \
-   CONFIG.ASSOCIATED_BUSIF {S_AXI_BRAM:S_AXI_CTRL:M_AXI} \
- ] $CLK
+  if {$lmem > 0} {
+    set_property CONFIG.ASSOCIATED_BUSIF {S_AXI_BRAM:S_AXI_CTRL:M_AXI} $CLK
+  } {
+    set_property CONFIG.ASSOCIATED_BUSIF {S_AXI_CTRL:M_AXI} $CLK
+  }
   set interrupt [ create_bd_port -dir O -type intr interrupt ]
 
   # Create instance: AXIGate_0, and set properties
@@ -118,10 +122,13 @@ if {$maxi_ports == 2} {
  ] [get_bd_intf_pins /RVController_0/saxi]
 
   # Create instance: axi_interconnect_0, and set properties
-  set axi_interconnect_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:axi_interconnect:2.1 axi_interconnect_0 ]
+  # Connects the AXI4-Lite AXI_CTRL ports -> Smartconnect will be in Low-Area mode (no FIFOs)
+  set axi_interconnect_0 [ create_bd_cell -type ip -vlnv xilinx.com:ip:smartconnect:1.0 axi_interconnect_0 ]
   set_property -dict [ list \
    CONFIG.NUM_MI {1} \
    CONFIG.NUM_SI {2} \
+   CONFIG.NUM_CLKS {1} \
+   CONFIG.HAS_ARESETN {1} \
  ] $axi_interconnect_0
  
  # Create instance: dmaOffset, and set properties
