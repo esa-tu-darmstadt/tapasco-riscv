@@ -509,7 +509,7 @@
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>viewChecksum</spirit:name>
-            <spirit:value>67641715</spirit:value>
+            <spirit:value>f3bab496</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -525,7 +525,7 @@
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>viewChecksum</spirit:name>
-            <spirit:value>67641715</spirit:value>
+            <spirit:value>f3bab496</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -1493,7 +1493,7 @@
       <spirit:file>
         <spirit:name>src/axi_ctrl.v</spirit:name>
         <spirit:fileType>verilogSource</spirit:fileType>
-        <spirit:userFileType>CHECKSUM_67641715</spirit:userFileType>
+        <spirit:userFileType>CHECKSUM_f3bab496</spirit:userFileType>
         <spirit:userFileType>IMPORTED_FILE</spirit:userFileType>
       </spirit:file>
     </spirit:fileSet>
