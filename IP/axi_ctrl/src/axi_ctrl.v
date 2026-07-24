@@ -176,6 +176,8 @@ end else begin // AXI4 FULL
     reg[8:0] arlen_reg;
     reg [ADDRESS_WIDTH-1:0] araddr_reg, awaddr_reg;
     reg [ID_WIDTH-1:0] rid, wid;
+    reg rdata_repeat;
+    reg [BYTES_PER_WORD*8-1:0] rdata_prev;
     
     assign bram_clk = CLK;
     assign bram_rst = !RST_N;
@@ -183,7 +185,7 @@ end else begin // AXI4 FULL
     assign S_AXI_wready = wready;
     assign S_AXI_arready = arready;
     assign S_AXI_rvalid = (arlen_reg > 0);
-    assign S_AXI_rdata = bram_dout;
+    assign S_AXI_rdata = rdata_repeat ? rdata_prev : bram_dout;
     assign S_AXI_rlast = (arlen_reg == 1);
     assign S_AXI_rid = rid;
     
@@ -192,23 +194,29 @@ end else begin // AXI4 FULL
             arlen_reg <= 0;
             araddr_reg <= 0;
             rid <= 0;
+            rdata_repeat <= 0;
+            rdata_prev <= 0;
         end else begin
+            //rdata_repeat: Set when a read handshake is still pending after a cycle
+            rdata_repeat <= (arlen_reg > 0) && !S_AXI_rready;
+            //rdata_prev: Store BRAM read data when a handshake does not complete immediately
+            rdata_prev <= (rdata_repeat || S_AXI_rready) ? rdata_prev : bram_dout;
             rid <= (S_AXI_arvalid && arready) ? S_AXI_arid : rid;
+            //arlen_reg: Remaining number of R handshakes for the burst
+            // - Init to arlen+1
+            // - Decrease on completed read handshake
+            // - Keep if read handshake did not complete, or if arlen_reg is already 0
             arlen_reg <= (S_AXI_arvalid && arready) ? (S_AXI_arlen + 1) :
-                            ((arlen_reg > 0) ? arlen_reg - 1 : 0);
-            araddr_reg <= (S_AXI_arvalid && arready) ? (S_AXI_araddr + BYTES_PER_WORD) : (araddr_reg + BYTES_PER_WORD);
-        end
-    end
-
-    always @(posedge CLK) begin
-        if (!RST_N) begin
-            status[0] <= 0;
-        end else begin
-            if (S_AXI_rvalid && !S_AXI_rready) begin
-                status[0] <= 1;
-                $display("AXI master should accept data within one cycle.");
-                $finish;
-            end
+                           ((arlen_reg > 0 && S_AXI_rready) ? (arlen_reg - 1) : arlen_reg);
+            //araddr_reg: Address to give to BRAM in the next cycle, to affect bram_dout in two cycles
+            // - On AR handshake, init to addr+size, as addr is read combinationally
+            // - On R handshake, increase by 4
+            //   -> address for next cycle R handshake is currently applied to bram_addr
+            //      (if that handshake is delayed, data will be preserved in rdata_prev)
+            //   -> update araddr_reg with the address for the R handshake after that
+            // - Otherwise, keep araddr_reg as-is
+            araddr_reg <= (S_AXI_arvalid && arready) ? (S_AXI_araddr + BYTES_PER_WORD) :
+                            (S_AXI_rready ? (araddr_reg + BYTES_PER_WORD) : araddr_reg);
         end
     end
 
@@ -314,6 +322,7 @@ end else begin // AXI4 FULL
 
         always @(posedge CLK) begin
             if (!RST_N) begin
+                status[0] <= 0;
                 status[1] <= 0;
                 status[2] <= 0;
                 status[3] <= 0;
@@ -321,44 +330,39 @@ end else begin // AXI4 FULL
                 write_addr_set <= 0;
             end else begin
                 if (S_AXI_arvalid && S_AXI_awvalid) begin
-                    status[1] <= 1;
+                    status[0] <= 1;
                     // This is a simplification
                     $display("AXI full master never read and write in same cycle.");
                     $finish;
                 end
                 if (S_AXI_arvalid && S_AXI_arlen != 0 && S_AXI_arburst != 2'b01) begin
-                    status[2] <= 1;
+                    status[1] <= 1;
                     // This is a simplification
                     $display("We only support INCR read bursts.");
                     $finish;
                 end
                 if (S_AXI_awvalid && S_AXI_awlen != 0 && S_AXI_awburst != 2'b01) begin
-                    status[3] <= 1;
+                    status[2] <= 1;
                     // This is a simplification
                     $display("We only support INCR write bursts.");
                     $finish;
                 end
                 if (S_AXI_arvalid && S_AXI_arlen != 0 && S_AXI_arsize != $clog2(BYTES_PER_WORD)) begin
-                    status[2] <= 1;
+                    status[3] <= 1;
                     // This is a simplification
                     $display("We do not support narrow burst transfers (read).");
                     $finish;
                 end
                 if (S_AXI_awvalid && S_AXI_awlen != 0 && S_AXI_awsize != $clog2(BYTES_PER_WORD)) begin
-                    status[3] <= 1;
+                    status[4] <= 1;
                     // This is a simplification
                     $display("We only support narrow burst transfers (write).");
                     $finish;
                 end
                 if (S_AXI_awvalid && awready && arlen_reg != 0) begin
-                    status[4] <= 1;
+                    status[5] <= 1;
                     $display("Internal error: Read was interrupted by write.");
                     $finish;
-                end
-                if (!write_addr_set && !S_AXI_awvalid && S_AXI_wvalid) begin
-                    //status[5] <= 1;
-                    //$display("write data should not be there before address.");
-                    //$finish;
                 end
                 if (write_addr_set && S_AXI_awvalid && awready) begin
                     status[6] <= 1;
